@@ -137,7 +137,7 @@ public class Controller {
 		return svcService.dogetajuincuti(extensionRequest);
 	}
         
-        @RequestMapping("/cuaca/key={kota}")
+        @RequestMapping("/cuaca/{kota}")
         @PostMapping
         public ExtensionResult doGetCuaca(@PathVariable String kota ,@RequestBody ExtensionRequest extensionRequest){
             return svcService.doGetCuaca(kota, extensionRequest);
