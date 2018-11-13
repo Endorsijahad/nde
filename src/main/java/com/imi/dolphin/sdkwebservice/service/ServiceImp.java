@@ -44,6 +44,12 @@ import com.imi.dolphin.sdkwebservice.param.ParamSdk;
 import com.imi.dolphin.sdkwebservice.property.AppProperties;
 import com.imi.dolphin.sdkwebservice.token.Token;
 import com.imi.dolphin.sdkwebservice.util.OkHttpUtil;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -769,5 +775,41 @@ public class ServiceImp implements IService {
 		extensionResult.setValue(output);
 		return extensionResult;
 	}
+
+    @Override
+    public ExtensionResult doGetCuaca(String kota, ExtensionRequest extensionRequest) {
+        String uri = "https://api.openweathermap.org/data/2.5/weather?q="+ kota +"&appid=beb536b6a3f98bb2bfde28ac6d99c6fc";
+        URL url;
+        String inline = "";
+        Map<String, String> output = new HashMap<>();
+        ExtensionResult extensionResult = new ExtensionResult();
+            try {
+                url = new URL(uri);
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.connect();
+                int responsecode = conn.getResponseCode();
+                if(responsecode == 200)
+                {
+                    Scanner sc = new Scanner(url.openStream());
+                    while(sc.hasNext())
+                    {
+                        inline += sc.nextLine();
+                    }
+                    sc.close();
+                }
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(ServiceImp.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ServiceImp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        output.put(OUTPUT, inline);
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
 
 }

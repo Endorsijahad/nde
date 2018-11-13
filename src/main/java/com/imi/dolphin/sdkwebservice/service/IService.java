@@ -54,4 +54,6 @@ public interface IService {
 	ExtensionResult dogetFormcuti(ExtensionRequest extensionRequest);
 
 	ExtensionResult dogetajuincuti(ExtensionRequest extensionRequest);
+
+    public ExtensionResult doGetCuaca(String kota, ExtensionRequest extensionRequest);
 }
