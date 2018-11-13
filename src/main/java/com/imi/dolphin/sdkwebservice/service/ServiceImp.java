@@ -798,9 +798,10 @@ public class ServiceImp implements IService {
                     }
                     sc.close();
                 }
-//                JSONObject obj = new JSONObject(inline);
-//                String temp = obj.getString("name");
-//                inline = temp;
+                JSONObject obj = new JSONObject(inline);
+                JSONObject main = obj.getJSONObject("main");
+                int temp = main.getInt("temp");
+                inline = temp+"";
             } catch (MalformedURLException ex) {
                 Logger.getLogger(ServiceImp.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
