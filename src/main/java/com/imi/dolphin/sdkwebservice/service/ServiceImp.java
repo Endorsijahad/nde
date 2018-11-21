@@ -457,8 +457,10 @@ public class ServiceImp implements IService {
     @Override
     public ExtensionResult doSendLocation(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
+        Double latitude = extensionRequest.getIntent().getTicket().getLatitude();
+        Double longitude = extensionRequest.getIntent().getTicket().getLongitude();
         QuickReplyBuilder quickReplyBuilder = new QuickReplyBuilder.Builder("Kirim lokasi kakak ya")
-                .add("location", "location").build();
+                .add("" + latitude, "" + longitude).build();
         output.put(OUTPUT, quickReplyBuilder.string());
         ExtensionResult extensionResult = new ExtensionResult();
         extensionResult.setAgent(false);
@@ -695,7 +697,7 @@ public class ServiceImp implements IService {
         // 1.get data dari form
         // ambil token
         Bearer = getToken();
-        
+
         // request API dolphin
         System.out.println("bearer = " + Bearer);
 
@@ -749,7 +751,7 @@ public class ServiceImp implements IService {
         System.out.println("recipient 1 : " + recipient1);
         System.out.println("recipient 2 : " + recipient2);
 
-        // String recipient1 = appProperties.getEmailrecipient1();
+        //String recipient1 = appProperties.getEmailrecipient1();
         // String recipient2 = appProperties.getEmailrecipient2();
         MailModel mailModel = new MailModel(recipient1, "Surat Ijin Cuti", bodyAtasan);
         MailModel mailModel2 = new MailModel(recipient2, "Surat Ijin Cuti", bodyHrd);
@@ -777,8 +779,10 @@ public class ServiceImp implements IService {
     }
 
     @Override
-    public ExtensionResult doGetCuaca(String kota, ExtensionRequest extensionRequest) {
-        String uri = "https://api.openweathermap.org/data/2.5/weather?q=" + kota + "&appid=beb536b6a3f98bb2bfde28ac6d99c6fc";
+    public ExtensionResult doGetCuaca(String kota1, ExtensionRequest extensionRequest) {
+        String kota2 = getEasyMapValueByName(extensionRequest, "tempat");
+        String uri = "https://api.openweathermap.org/data/2.5/weather?q=" + kota2 + "&appid=beb536b6a3f98bb2bfde28ac6d99c6fc";
+        
         URL url;
         String inline = "";
         Map<String, String> output = new HashMap<>();
@@ -813,5 +817,5 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
-
+//leo leo
 }

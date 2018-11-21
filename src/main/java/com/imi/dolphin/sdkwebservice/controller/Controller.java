@@ -107,7 +107,7 @@ public class Controller {
 		return svcService.doTransferToAgent(extensionRequest);
 	}
 	
-	@RequestMapping("/sendLocation")
+            @RequestMapping("/sendLocation")
 	@PostMapping
 	public ExtensionResult doBuildSendLocation(@RequestBody ExtensionRequest extensionRequest) {
 		return svcService.doSendLocation(extensionRequest);
