@@ -779,9 +779,9 @@ public class ServiceImp implements IService {
     }
 
     @Override
-    public ExtensionResult doGetCuaca(String kota1, ExtensionRequest extensionRequest) {
-        String kota2 = getEasyMapValueByName(extensionRequest, "tempat");
-        String uri = "https://api.openweathermap.org/data/2.5/weather?q=" + kota2 + "&appid=beb536b6a3f98bb2bfde28ac6d99c6fc";
+    public ExtensionResult doGetCuaca(ExtensionRequest extensionRequest) {
+        String kota = getEasyMapValueByName(extensionRequest, "tempat");
+        String uri = "https://api.openweathermap.org/data/2.5/weather?q=" + kota + "&appid=beb536b6a3f98bb2bfde28ac6d99c6fc";
         
         URL url;
         String inline = "";
