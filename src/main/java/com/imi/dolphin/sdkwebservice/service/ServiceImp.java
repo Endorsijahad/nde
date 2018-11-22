@@ -27,6 +27,8 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.DatabindContext;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.imi.dolphin.sdkwebservice.builder.ButtonBuilder;
 import com.imi.dolphin.sdkwebservice.builder.CarouselBuilder;
 import com.imi.dolphin.sdkwebservice.builder.FormBuilder;
@@ -67,6 +69,12 @@ public class ServiceImp implements IService {
     private static final String SAMPLE_IMAGE_PATH = "https://goo.gl/SHdL8D";
     private static final String Image_cuti = "https://image.ibb.co/eAshTV/bot.jpg";
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final String CONSTANT_SPLIT_SYNTAX = "&split&";
+    private static final String API_PARAM_NAME_COLLNAME = "?collName=";
+    private static final String API_PARAM_NAME_FIELDNAME = "&fieldName=";
+    private static final String API_PARAM_NAME_LATLONG = "&latlong=";
+    private static final String API_PARAM_NAME_DISTANCE = "&d=";
+    private static final String API_PARAM_NAME_COUNT = "&count=";
     @Autowired
     AppProperties appProperties;
 
@@ -782,7 +790,7 @@ public class ServiceImp implements IService {
     public ExtensionResult doGetCuaca(ExtensionRequest extensionRequest) {
         String kota = getEasyMapValueByName(extensionRequest, "tempat");
         String uri = "https://api.openweathermap.org/data/2.5/weather?q=" + kota + "&appid=beb536b6a3f98bb2bfde28ac6d99c6fc";
-        
+
         URL url;
         String inline = "";
         Map<String, String> output = new HashMap<>();
@@ -810,6 +818,144 @@ public class ServiceImp implements IService {
             Logger.getLogger(ServiceImp.class.getName()).log(Level.SEVERE, null, ex);
         }
         output.put("cuaca", inline);
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult getCarLocation(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        ExtensionResult extensionResult = new ExtensionResult();
+        StringBuilder sb = new StringBuilder();
+        StringBuilder urlBuilder = new StringBuilder();
+        /*
+		 * 
+		 * Get datas from application.properties
+		 * user can set on application.properties
+		 * URL, path, Collection Name, fieldName, distance, and number of result
+		 * 
+		 * 
+         */
+        String url = appProperties.getUrl();
+        String path = appProperties.getPath();
+
+        String collName = appProperties.getCollName();
+        String fieldName = appProperties.getFieldName();
+        int distance = Integer.parseInt(appProperties.getDistance());
+        int count = Integer.parseInt(appProperties.getCount());
+        String atmImagePath = appProperties.getAtmUrl();
+        String googleMapquery = appProperties.getGoogleMapUrl();
+        String buttonTitlePayload = appProperties.getButtonTitlePayload();
+
+        String errorAtmNotFoundMessage = appProperties.getAtmNotFoundMessage();
+
+        String location = getEasyMapValueByName(extensionRequest, "location");
+        String bearer = getToken();
+        /*
+		 * 
+		 * Split latitude and longitude from google_map
+		 * 
+         */
+        String[] explodedLoc = location.split(";");
+        String lati = explodedLoc[0];
+        String longi = explodedLoc[1];
+        lati = lati.replace(" ", ".");
+        longi = longi.replace(" ", ".");
+        String loc = lati + ";" + longi;
+
+        /*
+		 * Build Url using String builder
+		 * 
+         */
+        urlBuilder.append(url);
+        urlBuilder.append(path);
+        urlBuilder.append(API_PARAM_NAME_COLLNAME + collName);
+        urlBuilder.append(API_PARAM_NAME_FIELDNAME + fieldName);
+        urlBuilder.append(API_PARAM_NAME_LATLONG + loc);
+        urlBuilder.append(API_PARAM_NAME_DISTANCE + distance);
+        urlBuilder.append(API_PARAM_NAME_COUNT + count);
+
+        String URL = urlBuilder.toString();
+
+        /*
+		 * request to dolphin API to get Location Data collection Name : location
+		 * 
+		 * @param collName
+		 * 
+		 * @param fieldName
+		 * 
+		 * @param latitude
+		 * 
+		 * @param longitude
+		 * 
+		 * @param distance
+		 * 
+		 * @param start, count
+         */
+        OkHttpUtil okHttpUtil = new OkHttpUtil();
+        okHttpUtil.init(true);
+
+        try {
+            Request request = new Request.Builder().url(URL).addHeader("Authorization", "Bearer " + bearer).get()
+                    .build();
+            Response response = okHttpUtil.getClient().newCall(request).execute();
+
+            /*
+			 * parsing JSONObjek parsing JSONArray form JSONObjek dataArr from jsonObjek
+             */
+            JSONObject jsonObjek = new JSONObject(response.body().string());
+            String status = jsonObjek.getString("status");
+
+            if (status.equalsIgnoreCase("success")) {
+                JSONArray dataArr = jsonObjek.getJSONArray("data");
+                // System.out.println("Kie data array : "+dataArr);
+
+                JsonParser parser = new JsonParser();
+
+                /*
+				 * for each element named el in dataArr { create element named jsonEl as json
+				 * string create jsonObjek named elObj from json string get string from elObj
+				 * named branch_name, branch_address and google_map
+				 * 
+                 */
+                dataArr.forEach(el -> {
+                    String jsonEl = el.toString();
+                    JsonObject elObj = parser.parse(jsonEl).getAsJsonObject();
+                    String branch_name = elObj.get("branch_name").getAsString();
+                    String branch_address = elObj.get("branch_address").getAsString();
+                    String google_map = elObj.get("google_map").getAsString().replace(" ", "");
+
+                    //Buat Button 
+                    ButtonTemplate button = new ButtonTemplate();
+                    button.setTitle(branch_name);
+                    button.setSubTitle(branch_address);
+                    button.setPictureLink(atmImagePath);
+                    button.setPicturePath(atmImagePath);
+                    List<EasyMap> actions = new ArrayList<>();
+                    EasyMap bookAction = new EasyMap();
+                    bookAction.setName(buttonTitlePayload);
+                    bookAction.setValue(googleMapquery + google_map);
+                    actions.add(bookAction);
+                    button.setButtonValues(actions);
+                    ButtonBuilder buttonBuilder = new ButtonBuilder(button);
+
+                    String btnBuilder = buttonBuilder.build().toString();
+                    sb.append(btnBuilder).append(CONSTANT_SPLIT_SYNTAX);
+
+                });
+            } else if (status.equalsIgnoreCase("error")) {
+                sb.append(errorAtmNotFoundMessage);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        output.put(OUTPUT, sb.toString());
         extensionResult.setAgent(false);
         extensionResult.setRepeat(false);
         extensionResult.setSuccess(true);

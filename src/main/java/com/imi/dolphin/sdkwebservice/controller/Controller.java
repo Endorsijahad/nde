@@ -142,4 +142,10 @@ public class Controller {
         public ExtensionResult doGetCuaca(@RequestBody ExtensionRequest extensionRequest){
             return svcService.doGetCuaca(extensionRequest);
         }
+        
+        @RequestMapping("/carlocation")
+        @PostMapping
+        public ExtensionResult getCarLocation(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.getCarLocation(extensionRequest);
+        }
 }

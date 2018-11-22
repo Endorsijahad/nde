@@ -73,9 +73,144 @@ public class AppProperties {
 	
 	@Value("${dolphin.form.id.cuti}")
 	String formIdCuti;
+
+	@Value("${dolphin.url.api}")
+	String url;
+
+	@Value("${dolphin.url.path}")
+	String path;
+
+	@Value("${dolphin.url.param.collName}")
+	String collName;
+
+	@Value("${dolphin.url.param.fieldName}")
+	String fieldName;
+
+	@Value("${dolphin.url.param.distance}")
+	String distance;
+
+	@Value("${dolphin.url.param.start}")
+	String start;
+
+	@Value("${dolphin.url.param.count}")
+	String count;
 	
+	@Value("${dolphin.google.map.url.query}")
+	String googleMapUrl;
 	
+	@Value("${dolphin.atm.image.url}")
+	String atmUrl;
 	
+	@Value("${dolphin.error.atm.not.found}")
+	String atmNotFoundMessage;
+	
+	@Value("${dolphin.button.title}")
+	String buttonTitlePayload;
+	
+        public String getButtonTitlePayload() {
+		return buttonTitlePayload;
+	}
+
+	public void setButtonTitlePayload(String buttonTitlePayload) {
+		this.buttonTitlePayload = buttonTitlePayload;
+	}
+
+	public String getAtmNotFoundMessage() {
+		return atmNotFoundMessage;
+	}
+
+	public void setAtmNotFoundMessage(String atmNotFoundMessage) {
+		this.atmNotFoundMessage = atmNotFoundMessage;
+	}
+
+	public String getGoogleMapUrl() {
+		return googleMapUrl;
+	}
+
+	public void setGoogleMapUrl(String googleMapUrl) {
+		this.googleMapUrl = googleMapUrl;
+	}
+
+	public String getAtmUrl() {
+		return atmUrl;
+	}
+
+	public void setAtmUrl(String atmUrl) {
+		this.atmUrl = atmUrl;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public String getCollName() {
+		return collName;
+	}
+
+	public void setCollName(String collName) {
+		this.collName = collName;
+	}
+
+	public String getFieldName() {
+		return fieldName;
+	}
+
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
+	}
+
+	public String getDistance() {
+		return distance;
+	}
+
+	public void setDistance(String distance) {
+		this.distance = distance;
+	}
+
+	public String getStart() {
+		return start;
+	}
+
+	public void setStart(String start) {
+		this.start = start;
+	}
+
+	public String getCount() {
+		return count;
+	}
+
+	public void setCount(String count) {
+		this.count = count;
+	}
+
+	public String getServicePort() {
+		return servicePort;
+	}
+
+	public void setServicePort(String servicePort) {
+		this.servicePort = servicePort;
+	}
+
+	public String getFormId() {
+		return formId;
+	}
+
+	public void setFormId(String formId) {
+		this.formId = formId;
+	}
+        
 	public String getFormIdCuti() {
 		return formIdCuti;
 	}
@@ -140,30 +275,12 @@ public class AppProperties {
 		this.emailrecipient2 = emailrecipient2;
 	}
 
-	
-
 	public String getNamerecipient2() {
 		return namerecipient2;
 	}
 
 	public void setNamerecipient2(String namerecipient2) {
 		this.namerecipient2 = namerecipient2;
-	}
-
-	public String getServicePort() {
-		return servicePort;
-	}
-
-	public void setServicePort(String servicePort) {
-		this.servicePort = servicePort;
-	}
-
-	public String getFormId() {
-		return formId;
-	}
-
-	public void setFormId(String formId) {
-		this.formId = formId;
 	}
 
 	public String getMailUsername() {
