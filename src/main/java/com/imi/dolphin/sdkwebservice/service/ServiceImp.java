@@ -819,7 +819,7 @@ public class ServiceImp implements IService {
             JSONArray arr = obj.getJSONArray("weather");
             for (int i = 0; i < arr.length(); i++) {
                 String description = arr.getJSONObject(i).getString("description");
-                inline = description + "suhunya" +temp +"";
+                inline = description + " suhunya " +temp+"";
             }
            
         } catch (MalformedURLException ex) {
