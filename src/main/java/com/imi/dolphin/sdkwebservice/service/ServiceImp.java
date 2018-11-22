@@ -810,14 +810,18 @@ public class ServiceImp implements IService {
             }
 //            JSONObject obj = new JSONObject(inline);
 //            JSONObject main = obj.getJSONObject("main");
-//            int temp = main.getInt("pressure");
+//            int temp = main.getInt("temp");
 //            inline = temp + "";
-            
-            JSONObject obj = new JSONObject(inline);
-            JSONArray main = obj.getJSONArray("weather");
-            String temp = main.getString(2);
-            inline = temp + "";
 
+            JSONObject obj = new JSONObject(inline);
+            int pageName = obj.getJSONObject("coord").getInt("lon");
+
+            JSONArray arr = obj.getJSONArray("weather");
+            for (int i = 0; i < arr.length(); i++) {
+                String description = arr.getJSONObject(i).getString("description");
+                inline = description + "";
+            }
+           
         } catch (MalformedURLException ex) {
             Logger.getLogger(ServiceImp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
