@@ -54,4 +54,8 @@ public interface IService {
 	ExtensionResult dogetFormcuti(ExtensionRequest extensionRequest);
 
 	ExtensionResult dogetajuincuti(ExtensionRequest extensionRequest);
+
+        ExtensionResult doGetCuaca( ExtensionRequest extensionRequest);
+        
+        ExtensionResult doGetLocation(ExtensionRequest extensionRequest);
 }

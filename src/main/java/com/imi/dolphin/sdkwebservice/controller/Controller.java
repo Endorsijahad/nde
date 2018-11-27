@@ -23,6 +23,7 @@ import com.imi.dolphin.sdkwebservice.model.ExtensionResult;
 import com.imi.dolphin.sdkwebservice.property.AppProperties;
 import com.imi.dolphin.sdkwebservice.service.IMailService;
 import com.imi.dolphin.sdkwebservice.service.IService;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * 
@@ -135,4 +136,16 @@ public class Controller {
 	public ExtensionResult dogetajuincuti(@RequestBody ExtensionRequest extensionRequest) {
 		return svcService.dogetajuincuti(extensionRequest);
 	}
+        
+        @RequestMapping("/cuaca")
+        @PostMapping
+        public ExtensionResult doGetCuaca(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doGetCuaca(extensionRequest);
+        }
+        
+        @RequestMapping("/location")
+        @PostMapping
+        public ExtensionResult doGetLocation(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doGetLocation(extensionRequest);
+        }
 }
