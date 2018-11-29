@@ -363,21 +363,21 @@ public class ServiceImp implements IService {
         Map<String, String> output = new HashMap<>();
 
         ButtonTemplate button = new ButtonTemplate();
-        button.setPictureLink(SAMPLE_IMAGE_PATH);
-        button.setPicturePath(SAMPLE_IMAGE_PATH);
-        button.setTitle("This is title");
-        button.setSubTitle("This is subtitle");
+        button.setPictureLink(appProperties.getAtmUrl());
+        button.setPicturePath(appProperties.getAtmUrl());
+        button.setTitle("Go 1");
+        button.setSubTitle("Button Carousel 1");
         List<EasyMap> actions = new ArrayList<>();
         EasyMap bookAction = new EasyMap();
-        bookAction.setName("Label");
-        bookAction.setValue("Payload");
+        bookAction.setName("Go 1");
+        bookAction.setValue("Thanks");
         actions.add(bookAction);
         button.setButtonValues(actions);
         ButtonBuilder buttonBuilder = new ButtonBuilder(button);
 
         ButtonTemplate button2 = new ButtonTemplate();
-        button2.setPictureLink(SAMPLE_IMAGE_PATH);
-        button2.setPicturePath(SAMPLE_IMAGE_PATH);
+        button2.setPictureLink(appProperties.getAtmUrl());
+        button2.setPicturePath(appProperties.getAtmUrl());
         button2.setTitle("This is title 2");
         button2.setSubTitle("This is subtitle 2");
         List<EasyMap> actions2 = new ArrayList<>();
@@ -389,24 +389,24 @@ public class ServiceImp implements IService {
         ButtonBuilder buttonBuilder2 = new ButtonBuilder(button2);
 
         ButtonTemplate button3 = new ButtonTemplate();
-        button3.setPictureLink(SAMPLE_IMAGE_PATH);
-        button3.setPicturePath(SAMPLE_IMAGE_PATH);
+        button3.setPictureLink(appProperties.getAtmUrl());
+        button3.setPicturePath(appProperties.getAtmUrl());
         button3.setTitle("This is title 3");
         button3.setSubTitle("This is subtitle 3");
         button3.setButtonValues(actions2);
         ButtonBuilder buttonBuilder3 = new ButtonBuilder(button3);
 
         ButtonTemplate button4 = new ButtonTemplate();
-        button4.setPictureLink(SAMPLE_IMAGE_PATH);
-        button4.setPicturePath(SAMPLE_IMAGE_PATH);
+        button4.setPictureLink(appProperties.getAtmUrl());
+        button4.setPicturePath(appProperties.getAtmUrl());
         button4.setTitle("This is title 4");
         button4.setSubTitle("This is subtitle 4");
         button4.setButtonValues(actions2);
         ButtonBuilder buttonBuilder4 = new ButtonBuilder(button4);
 
         ButtonTemplate button5 = new ButtonTemplate();
-        button5.setPictureLink(SAMPLE_IMAGE_PATH);
-        button5.setPicturePath(SAMPLE_IMAGE_PATH);
+        button5.setPictureLink(appProperties.getAtmUrl());
+        button5.setPicturePath(appProperties.getAtmUrl());
         button5.setTitle("This is title 5");
         button5.setSubTitle("This is subtitle 5");
         button5.setButtonValues(actions2);
@@ -828,5 +828,38 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
-
+    
+    @Override
+    public ExtensionResult doGetTerdekat(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        ExtensionResult extensionResult = new ExtensionResult();
+        StringBuilder sb = new StringBuilder();
+        String ask = getEasyMapValueByName(extensionRequest, "pertanyaan");
+        String longlat = getEasyMapValueByName(extensionRequest, "longlat");
+        
+        String[] arrAsk = ask.split(" ");
+        ask = "";
+        
+        for(int i = 0; i < arrAsk.length; i++){
+            ask += arrAsk[i];
+            if(i != arrAsk.length - 1)
+                ask+= "+";
+        }
+        String[] arrLoglat = longlat.split(";");
+        String lat = arrLoglat[0];
+        String longi = arrLoglat[1];
+        longlat = lat + "," + longi;
+        
+        sb.append("https://www.google.com/maps/search/");
+        sb.append(ask).append("/@");
+        sb.append(longlat).append(",12z");
+        
+        output.put(OUTPUT, sb.toString());
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
 }

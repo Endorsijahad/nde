@@ -58,4 +58,6 @@ public interface IService {
         ExtensionResult doGetCuaca( ExtensionRequest extensionRequest);
         
         ExtensionResult doGetLocation(ExtensionRequest extensionRequest);
+        
+        ExtensionResult doGetTerdekat(ExtensionRequest extensionRequest);
 }

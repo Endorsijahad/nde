@@ -148,4 +148,10 @@ public class Controller {
         public ExtensionResult doGetLocation(@RequestBody ExtensionRequest extensionRequest){
             return svcService.doGetLocation(extensionRequest);
         }
+        
+        @RequestMapping("/terdekat")
+        @PostMapping
+        public ExtensionResult doGetTerdekat(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doGetTerdekat(extensionRequest);
+        }
 }
