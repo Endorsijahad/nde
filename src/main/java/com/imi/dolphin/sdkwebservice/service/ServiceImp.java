@@ -295,13 +295,13 @@ public class ServiceImp implements IService {
     @Override
     public ExtensionResult getForms(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
-        FormBuilder formBuilder = new FormBuilder("FORM ID");
+        FormBuilder formBuilder = new FormBuilder(appProperties.getFormIdTest());
 
         ButtonTemplate button = new ButtonTemplate();
-        button.setTitle("Title is here");
+        button.setTitle("Test Form");
         button.setSubTitle("Subtitle is here");
-        button.setPictureLink("Picture link");
-        button.setPicturePath("Picture path");
+        button.setPictureLink(appProperties.getAtmUrl());
+        button.setPicturePath(appProperties.getAtmUrl());
         List<EasyMap> actions = new ArrayList<>();
         EasyMap bookAction = new EasyMap();
         bookAction.setName("Label here");
