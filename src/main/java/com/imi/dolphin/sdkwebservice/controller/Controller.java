@@ -148,4 +148,10 @@ public class Controller {
         public ExtensionResult getCarLocation(@RequestBody ExtensionRequest extensionRequest){
             return svcService.getCarLocation(extensionRequest);
         }
+        
+        @RequestMapping("/getSomethings")
+        @PostMapping
+        public ExtensionResult doGetSomethings(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doGetTerdekat(extensionRequest);
+        }
 }

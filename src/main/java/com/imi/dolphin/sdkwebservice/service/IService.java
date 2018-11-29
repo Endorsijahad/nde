@@ -58,5 +58,7 @@ public interface IService {
         ExtensionResult getCarLocation(ExtensionRequest extensionRequest);
         
         ExtensionResult doGetCuaca(ExtensionRequest extensionRequest);
+        
+        ExtensionResult doGetTerdekat(ExtensionRequest extensionRequest);
     
 }
