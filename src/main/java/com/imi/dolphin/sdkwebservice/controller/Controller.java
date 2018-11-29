@@ -158,7 +158,7 @@ public class Controller {
         @RequestMapping("/tipeMobil")
         @PostMapping
         public ExtensionResult doGetCarType(@RequestBody ExtensionRequest extensionRequest){
-            return svcService.doGetTerdekat(extensionRequest);
+            return svcService.doGetTipeMobil(extensionRequest);
         }
         
 }
