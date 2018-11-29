@@ -154,4 +154,11 @@ public class Controller {
         public ExtensionResult doGetSomethings(@RequestBody ExtensionRequest extensionRequest){
             return svcService.doGetTerdekat(extensionRequest);
         }
+        
+        @RequestMapping("/tipeMobil")
+        @PostMapping
+        public ExtensionResult doGetCarType(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doGetTerdekat(extensionRequest);
+        }
+        
 }
