@@ -1018,8 +1018,8 @@ public class ServiceImp implements IService {
         button.setSubTitle("Astra Sport");
         List<EasyMap> actions = new ArrayList<>();
         EasyMap bookAction = new EasyMap();
-        bookAction.setName("Pilih");
-        bookAction.setValue("Sport");
+        bookAction.setName("Sport");
+        bookAction.setValue("Mobil Sport");
         actions.add(bookAction);
         button.setButtonValues(actions);
         ButtonBuilder buttonBuilder = new ButtonBuilder(button);
@@ -1031,8 +1031,8 @@ public class ServiceImp implements IService {
         button2.setSubTitle("Astra Multipurpose Vehicle");
         List<EasyMap> actions2 = new ArrayList<>();
         EasyMap bookAction2 = new EasyMap();
-        bookAction2.setName("Pilih");
-        bookAction2.setValue("Multipurpose Vehicle");
+        bookAction2.setName("Multipurpose Vehicle");
+        bookAction2.setValue("Mobil Multipurpose Vehicle");
         actions2.add(bookAction2);
         button2.setButtonValues(actions2);
         ButtonBuilder buttonBuilder2 = new ButtonBuilder(button2);
@@ -1044,8 +1044,8 @@ public class ServiceImp implements IService {
         button3.setSubTitle("Astra Hatchback");
         List<EasyMap> actions3 = new ArrayList<>();
         EasyMap bookAction3 = new EasyMap();
-        bookAction3.setName("Pilih");
-        bookAction3.setValue("Hatchback");
+        bookAction3.setName("Hatchback");
+        bookAction3.setValue("Mobil Hatchback");
         actions3.add(bookAction3);
         button3.setButtonValues(actions3);
         ButtonBuilder buttonBuilder3 = new ButtonBuilder(button3);
@@ -1057,8 +1057,8 @@ public class ServiceImp implements IService {
         button4.setSubTitle("Astra Sport Utility Vehicle");
         List<EasyMap> actions4 = new ArrayList<>();
         EasyMap bookAction4 = new EasyMap();
-        bookAction4.setName("Pilih");
-        bookAction4.setValue("Sport Utility Vehicle");
+        bookAction4.setName("Sport Utility Vehicle");
+        bookAction4.setValue("Mobil Sport Utility Vehicle");
         actions4.add(bookAction4);
         button4.setButtonValues(actions4);
         ButtonBuilder buttonBuilder4 = new ButtonBuilder(button4);
@@ -1070,8 +1070,8 @@ public class ServiceImp implements IService {
         button5.setSubTitle("Astra Commercial");
         List<EasyMap> actions5 = new ArrayList<>();
         EasyMap bookAction5 = new EasyMap();
-        bookAction5.setName("Pilih");
-        bookAction5.setValue("Commercial");
+        bookAction5.setName("Commercial");
+        bookAction5.setValue("Mobil Commercial");
         actions5.add(bookAction5);
         button5.setButtonValues(actions5);
         ButtonBuilder buttonBuilder5 = new ButtonBuilder(button5);
@@ -1083,8 +1083,8 @@ public class ServiceImp implements IService {
         button6.setSubTitle("Astra Sedan");
         List<EasyMap> actions6 = new ArrayList<>();
         EasyMap bookAction6 = new EasyMap();
-        bookAction6.setName("Pilih");
-        bookAction6.setValue("Sedan");
+        bookAction6.setName("Sedan");
+        bookAction6.setValue("Mobil Sedan");
         actions6.add(bookAction6);
         button6.setButtonValues(actions6);
         ButtonBuilder buttonBuilder6 = new ButtonBuilder(button6);
