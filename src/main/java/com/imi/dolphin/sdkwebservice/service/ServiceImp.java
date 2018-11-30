@@ -1013,7 +1013,7 @@ public class ServiceImp implements IService {
         Map<String, String> output = new HashMap<>();
 
         QuickReplyBuilder quickReplyBuilder = new QuickReplyBuilder.Builder("Type")
-                .add("Sport", "sport")
+                .add("Sport", "Sport")
                 .add("Multipurpose Vehicle", "Multipurpose Vehicle")
                 .add("Hatchback", "Hatchback")
                 .add("Sport Utility Vehicle", "Sport Utility Vehicle")
@@ -1113,6 +1113,87 @@ public class ServiceImp implements IService {
     }
 
     @Override
+    public ExtensionResult doGetMerkMobil(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+
+        ButtonTemplate button = new ButtonTemplate();
+        button.setPictureLink(appProperties.getToyotaImgUrl());
+        button.setPicturePath(appProperties.getToyotaImgUrl());
+        button.setTitle("TOYOTA");
+        button.setSubTitle("Toyota Indonesia");
+        List<EasyMap> actions = new ArrayList<>();
+        EasyMap bookAction = new EasyMap();
+        bookAction.setName("Toyota");
+        bookAction.setValue("merk Toyota");
+        actions.add(bookAction);
+        button.setButtonValues(actions);
+        ButtonBuilder buttonBuilder = new ButtonBuilder(button);
+
+        ButtonTemplate button2 = new ButtonTemplate();
+        button2.setPictureLink(appProperties.getPeugeotImgUrl());
+        button2.setPicturePath(appProperties.getPeugeotImgUrl());
+        button2.setTitle("Peugeot");
+        button2.setSubTitle("Peugeot Indonesia");
+        List<EasyMap> actions2 = new ArrayList<>();
+        EasyMap bookAction2 = new EasyMap();
+        bookAction2.setName("Peugeot");
+        bookAction2.setValue("merk Peugeot");
+        actions2.add(bookAction2);
+        button2.setButtonValues(actions2);
+        ButtonBuilder buttonBuilder2 = new ButtonBuilder(button2);
+
+        ButtonTemplate button3 = new ButtonTemplate();
+        button3.setPictureLink(appProperties.getBmwImgUrl());
+        button3.setPicturePath(appProperties.getBmwImgUrl());
+        button3.setTitle("BMW");
+        button3.setSubTitle("BMW Indonesia");
+        List<EasyMap> actions3 = new ArrayList<>();
+        EasyMap bookAction3 = new EasyMap();
+        bookAction3.setName("BMW");
+        bookAction3.setValue("merk BMW");
+        actions3.add(bookAction3);
+        button3.setButtonValues(actions3);
+        ButtonBuilder buttonBuilder3 = new ButtonBuilder(button3);
+
+        ButtonTemplate button4 = new ButtonTemplate();
+        button4.setPictureLink(appProperties.getDaihatsuImgUrl());
+        button4.setPicturePath(appProperties.getDaihatsuImgUrl());
+        button4.setTitle("Daihatsu");
+        button4.setSubTitle("Daihatsu Indonesia");
+        List<EasyMap> actions4 = new ArrayList<>();
+        EasyMap bookAction4 = new EasyMap();
+        bookAction4.setName("Daihatsu");
+        bookAction4.setValue("merk Daihatsu");
+        actions4.add(bookAction4);
+        button4.setButtonValues(actions4);
+        ButtonBuilder buttonBuilder4 = new ButtonBuilder(button4);
+
+        ButtonTemplate button5 = new ButtonTemplate();
+        button5.setPictureLink(appProperties.getIsuzuImgUrl());
+        button5.setPicturePath(appProperties.getIsuzuImgUrl());
+        button5.setTitle("Isuzu");
+        button5.setSubTitle("Isuzu Indonesia");
+        List<EasyMap> actions5 = new ArrayList<>();
+        EasyMap bookAction5 = new EasyMap();
+        bookAction5.setName("Isuzu");
+        bookAction5.setValue("merk Isuzu");
+        actions5.add(bookAction5);
+        button5.setButtonValues(actions5);
+        ButtonBuilder buttonBuilder5 = new ButtonBuilder(button5);
+        
+        CarouselBuilder carouselBuilder = new CarouselBuilder(buttonBuilder.build(), buttonBuilder2.build(),
+                buttonBuilder3.build(), buttonBuilder4.build(), buttonBuilder5.build());
+
+        output.put(OUTPUT, carouselBuilder.build());
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+    
     public ExtensionResult doGetModelMobil(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
 
