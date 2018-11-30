@@ -1046,6 +1046,7 @@ public class ServiceImp implements IService {
         EasyMap bookAction3 = new EasyMap();
         bookAction3.setName("Pilih");
         bookAction3.setValue("Hatchback");
+        actions3.add(bookAction3);
         button3.setButtonValues(actions3);
         ButtonBuilder buttonBuilder3 = new ButtonBuilder(button3);
 
@@ -1058,6 +1059,7 @@ public class ServiceImp implements IService {
         EasyMap bookAction4 = new EasyMap();
         bookAction4.setName("Pilih");
         bookAction4.setValue("Sport Utility Vehicle");
+        actions4.add(bookAction4);
         button4.setButtonValues(actions4);
         ButtonBuilder buttonBuilder4 = new ButtonBuilder(button4);
         
@@ -1070,6 +1072,7 @@ public class ServiceImp implements IService {
         EasyMap bookAction5 = new EasyMap();
         bookAction5.setName("Pilih");
         bookAction5.setValue("Commercial");
+        actions5.add(bookAction5);
         button5.setButtonValues(actions5);
         ButtonBuilder buttonBuilder5 = new ButtonBuilder(button5);
         
@@ -1082,6 +1085,7 @@ public class ServiceImp implements IService {
         EasyMap bookAction6 = new EasyMap();
         bookAction6.setName("Pilih");
         bookAction6.setValue("Sedan");
+        actions6.add(bookAction6);
         button6.setButtonValues(actions6);
         ButtonBuilder buttonBuilder6 = new ButtonBuilder(button6);
 
