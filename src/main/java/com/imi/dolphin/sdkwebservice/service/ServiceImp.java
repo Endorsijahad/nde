@@ -1100,7 +1100,7 @@ public class ServiceImp implements IService {
 //        CarouselBuilder carouselBuilder = new CarouselBuilder(buttonBuilder.build(), buttonBuilder2.build(),
 //                buttonBuilder3.build(), buttonBuilder4.build(), buttonBuilder5.build(), buttonBuilder6.build());
 
-        output.put(OUTPUT, quickReplyBuilder.toString());
+        output.put(OUTPUT, quickReplyBuilder.string());
 
         ExtensionResult extensionResult = new ExtensionResult();
         extensionResult.setAgent(false);
