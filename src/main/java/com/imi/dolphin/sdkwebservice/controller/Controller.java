@@ -161,4 +161,10 @@ public class Controller {
             return svcService.doGetTipeMobil(extensionRequest);
         }
         
+        @RequestMapping("/modelMobil")
+        @PostMapping
+        public ExtensionResult doGetCarModel(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doGetTipeMobil(extensionRequest);
+        }
+        
 }

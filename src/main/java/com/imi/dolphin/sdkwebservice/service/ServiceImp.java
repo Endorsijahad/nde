@@ -817,9 +817,9 @@ public class ServiceImp implements IService {
             JSONArray arr = obj.getJSONArray("weather");
             for (int i = 0; i < arr.length(); i++) {
                 String description = arr.getJSONObject(i).getString("description");
-                inline = description + " suhunya " +temp+"";
+                inline = description + " suhunya " + temp + "";
             }
-           
+
         } catch (MalformedURLException ex) {
             Logger.getLogger(ServiceImp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -980,24 +980,25 @@ public class ServiceImp implements IService {
         StringBuilder sb = new StringBuilder();
         String ask = getEasyMapValueByName(extensionRequest, "pertanyaan");
         String longlat = getEasyMapValueByName(extensionRequest, "longlat");
-        
+
         String[] arrAsk = ask.split(" ");
         ask = "";
-        
-        for(int i = 0; i < arrAsk.length; i++){
+
+        for (int i = 0; i < arrAsk.length; i++) {
             ask += arrAsk[i];
-            if(i != arrAsk.length - 1)
-                ask+= "+";
+            if (i != arrAsk.length - 1) {
+                ask += "+";
+            }
         }
         String[] arrLoglat = longlat.split(";");
         String lat = arrLoglat[0];
         String longi = arrLoglat[1];
         longlat = lat + "," + longi;
-        
+
         sb.append("https://www.google.com/maps/search/");
         sb.append(ask).append("/@");
         sb.append(longlat).append(",12z");
-        
+
         output.put(OUTPUT, sb.toString());
         extensionResult.setAgent(false);
         extensionResult.setRepeat(false);
@@ -1006,7 +1007,7 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
-    
+
     @Override
     public ExtensionResult doGetTipeMobil(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
@@ -1100,6 +1101,157 @@ public class ServiceImp implements IService {
 //        CarouselBuilder carouselBuilder = new CarouselBuilder(buttonBuilder.build(), buttonBuilder2.build(),
 //                buttonBuilder3.build(), buttonBuilder4.build(), buttonBuilder5.build(), buttonBuilder6.build());
 
+        output.put(OUTPUT, quickReplyBuilder.string());
+
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doGetModelMobil(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+
+        String merk = getEasyMapValueByName(extensionRequest, "merk");
+        String type = getEasyMapValueByName(extensionRequest, "type");
+        QuickReplyBuilder quickReplyBuilder = null;
+
+        switch (merk) {
+            case "Peugeot":
+                switch (type) {
+                    case "Sport":
+                        break;
+                    case "Multipurpose Vehicle":
+                        break;
+                    case "Hatchback":
+                        break;
+                    case "Sport Utility Vehicle":
+                        break;
+                    case "Commercial":
+                        break;
+                    case "Sedan":
+                        break;
+                }
+                quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
+                        .add("Peugeot 208", "Peugeot 208")
+                        .add("Peugeot 3008", "Peugeot 3008").build();
+                break;
+            case "Toyota":
+                switch (type) {
+                    case "Sport":
+                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
+                                .add("Toyota 86", "Toyota 86")
+                                .build();
+                        break;
+                    case "Multipurpose Vehicle":
+                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
+                                .add("All New Foxy", "All New Foxy")
+                                .add("Avanza", "Avanza")
+                                .add("Calya", "Calya")
+                                .add("Hatchback", "Hatchback")
+                                .add("Kijang Innova", "Kijang Innova")
+                                .add("NAV1", "NAV1")
+                                .add("New Alphard", "New Alphard")
+                                .add("New Sienta", "New Sienta")
+                                .add("New Vellfire", "New Venturer")
+                                .add("Veloz", "Veloz")
+                                .build();
+                        break;
+                    case "Hatchback":
+                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
+                                .add("New Agya", "New Agya")
+                                .add("New Yaris", "New Yaris")
+                                .build();
+                        break;
+                    case "Sport Utility Vehicle":
+                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
+                                .add("All New C-HR", "All New C-HR")
+                                .add("All New Rush", "All New Rush")
+                                .add("Fortuner TRD", "Fortuner TRD")
+                                .add("Land Cruiser", "Land Cruiser")
+                                .build();
+                        break;
+                    case "Commercial":
+                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
+                                .add("Dyna", "Dyna")
+                                .add("HiAce", "HiAce")
+                                .add("Hilux C Cab", "Hilux C Cab")
+                                .add("Hilux D Cab", "Hilux D Cab")
+                                .add("Hilux S Cab", "Hilux S Cab")
+                                .build();
+                        break;
+                    case "Sedan":
+                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
+                                .add("New Camry", "New Camry")
+                                .add("New Corolal Altis", "New Corolal Altis")
+                                .add("New Vios", "New Vios")
+                                .build();
+                        break;
+                }
+                break;
+            case "BMW":
+                switch (type) {
+                    case "Sport":
+                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
+                                .add("BMW X1", "BMW X1")
+                                .add("BMW X2", "BMW X2")
+                                .add("BMW X3", "BMW X3")
+                                .add("BMW X4", "BMW X4")
+                                .add("BMW X5", "BMW X5")
+                                .build();
+                        break;
+                    case "Multipurpose Vehicle":
+                        break;
+                    case "Hatchback":
+                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
+                                .add("BMW 1 Series 5-door", "BMW 1 Series 5-door")
+                                .build();
+                        break;
+                    case "Sport Utility Vehicle":
+                        break;
+                    case "Commercial":
+                        break;
+                    case "Sedan":
+                        break;
+                }
+                break;
+            case "Daihatsu":
+                switch (type) {
+                    case "Sport":
+                        break;
+                    case "Multipurpose Vehicle":
+                        break;
+                    case "Hatchback":
+                        break;
+                    case "Sport Utility Vehicle":
+                        break;
+                    case "Commercial":
+                        break;
+                    case "Sedan":
+                        break;
+                }
+                break;
+            case "Isuzu":
+                switch (type) {
+                    case "Sport":
+                        break;
+                    case "Multipurpose Vehicle":
+                        break;
+                    case "Hatchback":
+                        break;
+                    case "Sport Utility Vehicle":
+                        break;
+                    case "Commercial":
+                        break;
+                    case "Sedan":
+                        break;
+                }
+                break;
+        }
         output.put(OUTPUT, quickReplyBuilder.string());
 
         ExtensionResult extensionResult = new ExtensionResult();
