@@ -100,6 +100,21 @@ public class AppProperties {
 
     @Value("${dolphin.atm.image.url}")
     String atmUrl;
+    
+    @Value("${dolphin.toyota.image.url}")
+    String toyotaImgUrl;
+    
+    @Value("${dolphin.daihatsu.image.url}")
+    String daihatsuImgUrl;
+    
+    @Value("${dolphin.bmw.image.url}")
+    String bmwImgUrl;
+    
+    @Value("${dolphin.peugeot.image.url}")
+    String peugeotImgUrl;
+    
+    @Value("${dolphin.isuzu.image.url}")
+    String isuzuImgUrl;
 
     @Value("${dolphin.error.atm.not.found}")
     String atmNotFoundMessage;
@@ -140,6 +155,46 @@ public class AppProperties {
 
     public void setAtmUrl(String atmUrl) {
         this.atmUrl = atmUrl;
+    }
+
+    public String getToyotaImgUrl() {
+        return toyotaImgUrl;
+    }
+
+    public void setToyotaImgUrl(String toyotaImgUrl) {
+        this.toyotaImgUrl = toyotaImgUrl;
+    }
+
+    public String getDaihatsuImgUrl() {
+        return daihatsuImgUrl;
+    }
+
+    public void setDaihatsuImgUrl(String daihatsuImgUrl) {
+        this.daihatsuImgUrl = daihatsuImgUrl;
+    }
+
+    public String getBmwImgUrl() {
+        return bmwImgUrl;
+    }
+
+    public void setBmwImgUrl(String bmwImgUrl) {
+        this.bmwImgUrl = bmwImgUrl;
+    }
+
+    public String getPeugeotImgUrl() {
+        return peugeotImgUrl;
+    }
+
+    public void setPeugeotImgUrl(String peugeotImgUrl) {
+        this.peugeotImgUrl = peugeotImgUrl;
+    }
+
+    public String getIsuzuImgUrl() {
+        return isuzuImgUrl;
+    }
+
+    public void setIsuzuImgUrl(String isuzuImgUrl) {
+        this.isuzuImgUrl = isuzuImgUrl;
     }
 
     public String getUrl() {

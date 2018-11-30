@@ -161,4 +161,10 @@ public class Controller {
             return svcService.doGetTipeMobil(extensionRequest);
         }
         
+        @RequestMapping("/merkMobil")
+        @PostMapping
+        public ExtensionResult doGetMerkMobil(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doGetMerkMobil(extensionRequest);
+        }
+        
 }
