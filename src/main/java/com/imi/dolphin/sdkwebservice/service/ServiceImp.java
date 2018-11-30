@@ -1018,7 +1018,7 @@ public class ServiceImp implements IService {
         button.setSubTitle("Astra Sport");
         List<EasyMap> actions = new ArrayList<>();
         EasyMap bookAction = new EasyMap();
-        bookAction.setName("Pilih");
+        bookAction.setName("Sport");
         bookAction.setValue("Sport");
         actions.add(bookAction);
         button.setButtonValues(actions);
