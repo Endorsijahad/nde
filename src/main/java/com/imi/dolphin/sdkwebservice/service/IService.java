@@ -64,6 +64,9 @@ public interface IService {
         ExtensionResult doGetTipeMobil(ExtensionRequest extensionRequest);
         
         ExtensionResult doGetMerkMobil(ExtensionRequest extensionRequest);
+        
         ExtensionResult doGetModelMobil(ExtensionRequest extensionRequest);
+        
+        ExtensionResult doGetMerkMobils(ExtensionRequest extensionRequest);
     
 }

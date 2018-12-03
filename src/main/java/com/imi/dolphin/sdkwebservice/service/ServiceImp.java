@@ -1343,4 +1343,65 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
+    
+    @Override
+    public ExtensionResult doGetMerkMobils(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        StringBuilder respBuilder = new StringBuilder();
+        String url = "https://bububibap.herokuapp.com/getMerkMobil";
+        
+        List<String> merks = getMobilDinamis(url, "mobil", "merk");
+        List<ButtonBuilder> buttonBuilders = new ArrayList<>();
+        for (String merk : merks) {
+            ButtonTemplate button = new ButtonTemplate();
+            button.setPictureLink(appProperties.getToyotaImgUrl());
+            button.setPicturePath(appProperties.getToyotaImgUrl());
+            button.setTitle(merk);
+            button.setSubTitle("Astra " + merk);
+            List<EasyMap> actions = new ArrayList<>();
+            EasyMap bookAction = new EasyMap();
+            bookAction.setName(merk);
+            bookAction.setValue("merk " + merk);
+            actions.add(bookAction);
+            button.setButtonValues(actions);
+            ButtonBuilder buttonBuilder = new ButtonBuilder(button);
+            buttonBuilders.add(buttonBuilder);
+        }
+        String btnBuilders = "";
+        for (ButtonBuilder buttonBuilder : buttonBuilders) {
+            btnBuilders += buttonBuilder.build();
+            btnBuilders += "&split&";
+        }
+        CarouselBuilder carouselBuilder = new CarouselBuilder(btnBuilders);
+        output.put(OUTPUT, carouselBuilder.build());
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+    
+    private List<String> getMobilDinamis(String url, String jsonName, String key){
+        List<String> result = new ArrayList<>();
+        try {
+            OkHttpUtil okHttpUtil = new OkHttpUtil();
+            okHttpUtil.init(true);
+            Request request = new Request.Builder().url(url).get().build();
+            Response response = okHttpUtil.getClient().newCall(request).execute();
+
+            String res = "{\""+ jsonName +"\":" + response.body().string() + "}";
+
+            JSONObject jsonObject = new JSONObject(res);
+            JSONArray jSONArray = jsonObject.getJSONArray(jsonName);
+            for (int i = 0; i < jSONArray.length(); i++) {
+                JSONObject obj = (JSONObject) jSONArray.get(i);
+                result.add(obj.getString(key));
+            }
+        } catch (Exception e) {
+
+        }
+        return result;
+    }
 }

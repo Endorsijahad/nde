@@ -167,10 +167,17 @@ public class Controller {
             return svcService.doGetMerkMobil(extensionRequest);
         }
         
+        
+        
         @RequestMapping("/modelMobil")
         @PostMapping
         public ExtensionResult doGetCarModel(@RequestBody ExtensionRequest extensionRequest){
             return svcService.doGetModelMobil(extensionRequest);
         }
         
+        @RequestMapping("/merkMobils")
+        @PostMapping
+        public ExtensionResult doGetMerkMobils(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doGetMerkMobils(extensionRequest);
+        }
 }
