@@ -1344,10 +1344,14 @@ public class ServiceImp implements IService {
         return extensionResult;
     }
     
+    /**
+     * Membuat carousel berupa merk-merk mobil yang dinamis
+     * @param extensionRequest
+     * @return 
+     */
     @Override
     public ExtensionResult doGetMerkMobils(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
-        StringBuilder respBuilder = new StringBuilder();
         String url = "https://bububibap.herokuapp.com/getMerkMobil";
         
         List<String> merks = getMobilDinamis(url, "mobil", "merk");
@@ -1372,6 +1376,7 @@ public class ServiceImp implements IService {
             btnBuilders += buttonBuilder.build();
             btnBuilders += "&split&";
         }
+        
         CarouselBuilder carouselBuilder = new CarouselBuilder(btnBuilders);
         output.put(OUTPUT, carouselBuilder.build());
         ExtensionResult extensionResult = new ExtensionResult();
@@ -1383,6 +1388,13 @@ public class ServiceImp implements IService {
         return extensionResult;
     }
     
+    /**
+     * untuk mendapatkan data mobil baik itu merk, model, atau varian
+     * @param url API database yang akan digunakan
+     * @param jsonName penamaan nama JSONObject
+     * @param key adalah string yang diget dari JSONObject
+     * @return 
+     */
     private List<String> getMobilDinamis(String url, String jsonName, String key){
         List<String> result = new ArrayList<>();
         try {
