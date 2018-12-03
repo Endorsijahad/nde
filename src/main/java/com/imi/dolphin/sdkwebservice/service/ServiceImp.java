@@ -1389,6 +1389,54 @@ public class ServiceImp implements IService {
     }
     
     /**
+     * nge get model mobil 
+     * @param extensionRequest
+     * @return 
+     */
+    @Override
+    public ExtensionResult doGetModelMobils(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        
+        String tipe = getEasyMapValueByName(extensionRequest, "type");
+        String merek = getEasyMapValueByName(extensionRequest, "merk");
+        
+        String url = "https://bububibap.herokuapp.com/getModelMobil/" + tipe + "/" + merek;
+        // getModelMobil/type/merek
+        List<String> merks = getMobilDinamis(url, "mobil", "merk");
+        List<ButtonBuilder> buttonBuilders = new ArrayList<>();
+        for (String merk : merks) {
+            ButtonTemplate button = new ButtonTemplate();
+            button.setPictureLink(appProperties.getToyotaImgUrl());
+            button.setPicturePath(appProperties.getToyotaImgUrl());
+            button.setTitle(merk);
+            button.setSubTitle("Astra " + merk);
+            List<EasyMap> actions = new ArrayList<>();
+            EasyMap bookAction = new EasyMap();
+            bookAction.setName(merk);
+            bookAction.setValue("merk " + merk);
+            actions.add(bookAction);
+            button.setButtonValues(actions);
+            ButtonBuilder buttonBuilder = new ButtonBuilder(button);
+            buttonBuilders.add(buttonBuilder);
+        }
+        String btnBuilders = "";
+        for (ButtonBuilder buttonBuilder : buttonBuilders) {
+            btnBuilders += buttonBuilder.build();
+            btnBuilders += "&split&";
+        }
+        
+        CarouselBuilder carouselBuilder = new CarouselBuilder(btnBuilders);
+        output.put(OUTPUT, carouselBuilder.build());
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+    
+    /**
      * untuk mendapatkan data mobil baik itu merk, model, atau varian
      * @param url API database yang akan digunakan
      * @param jsonName penamaan nama JSONObject
