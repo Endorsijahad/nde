@@ -75,6 +75,8 @@ public class ServiceImp implements IService {
     private static final String API_PARAM_NAME_LATLONG = "&latlong=";
     private static final String API_PARAM_NAME_DISTANCE = "&d=";
     private static final String API_PARAM_NAME_COUNT = "&count=";
+    private int type_index = 0;
+
     @Autowired
     AppProperties appProperties;
 
@@ -1180,7 +1182,7 @@ public class ServiceImp implements IService {
         actions5.add(bookAction5);
         button5.setButtonValues(actions5);
         ButtonBuilder buttonBuilder5 = new ButtonBuilder(button5);
-        
+
         CarouselBuilder carouselBuilder = new CarouselBuilder(buttonBuilder.build(), buttonBuilder2.build(),
                 buttonBuilder3.build(), buttonBuilder4.build(), buttonBuilder5.build());
 
@@ -1193,7 +1195,7 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
-    
+
     public ExtensionResult doGetModelMobil(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
 
@@ -1343,17 +1345,18 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
-    
+
     /**
      * Membuat carousel berupa merk-merk mobil yang dinamis
+     *
      * @param extensionRequest
-     * @return 
+     * @return
      */
     @Override
     public ExtensionResult doGetMerkMobils(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
         String url = "https://bububibap.herokuapp.com/getMerkMobil";
-        
+
         List<String> merks = getMobilDinamis(url, "mobil", "merk");
         List<ButtonBuilder> buttonBuilders = new ArrayList<>();
         for (String merk : merks) {
@@ -1376,7 +1379,7 @@ public class ServiceImp implements IService {
             btnBuilders += buttonBuilder.build();
             btnBuilders += "&split&";
         }
-        
+
         CarouselBuilder carouselBuilder = new CarouselBuilder(btnBuilders);
         output.put(OUTPUT, carouselBuilder.build());
         ExtensionResult extensionResult = new ExtensionResult();
@@ -1387,33 +1390,35 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
-    
+
     /**
-     * nge get model mobil 
+     * nge get model mobil
+     *
      * @param extensionRequest
-     * @return 
+     * @return
      */
     @Override
     public ExtensionResult doGetModelMobils(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
-        
+
         String tipe = getEasyMapValueByName(extensionRequest, "type");
         String merek = getEasyMapValueByName(extensionRequest, "merk");
-        
-        String url = "https://bububibap.herokuapp.com/getModelMobil/" + tipe + "/" + merek;
+
+        String url = "https://bububibap.herokuapp.com/getToyota/";
         // getModelMobil/type/merek
-        List<String> merks = getMobilDinamis(url, "mobil", "merk");
+        List<List<String>> models = getModelModel(url, "mobil", "model", tipe);
         List<ButtonBuilder> buttonBuilders = new ArrayList<>();
-        for (String merk : merks) {
+        List<String> model = models.get(type_index);
+        for (String mod : model) {
             ButtonTemplate button = new ButtonTemplate();
             button.setPictureLink(appProperties.getToyotaImgUrl());
             button.setPicturePath(appProperties.getToyotaImgUrl());
-            button.setTitle(merk);
-            button.setSubTitle("Astra " + merk);
+            button.setTitle(mod);
+            button.setSubTitle(mod);
             List<EasyMap> actions = new ArrayList<>();
             EasyMap bookAction = new EasyMap();
-            bookAction.setName(merk);
-            bookAction.setValue("merk " + merk);
+            bookAction.setName(mod);
+            bookAction.setValue("model " + mod);
             actions.add(bookAction);
             button.setButtonValues(actions);
             ButtonBuilder buttonBuilder = new ButtonBuilder(button);
@@ -1424,7 +1429,7 @@ public class ServiceImp implements IService {
             btnBuilders += buttonBuilder.build();
             btnBuilders += "&split&";
         }
-        
+
         CarouselBuilder carouselBuilder = new CarouselBuilder(btnBuilders);
         output.put(OUTPUT, carouselBuilder.build());
         ExtensionResult extensionResult = new ExtensionResult();
@@ -1435,15 +1440,16 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
-    
+
     /**
      * untuk mendapatkan data mobil baik itu merk, model, atau varian
+     *
      * @param url API database yang akan digunakan
      * @param jsonName penamaan nama JSONObject
      * @param key adalah string yang diget dari JSONObject
-     * @return 
+     * @return
      */
-    private List<String> getMobilDinamis(String url, String jsonName, String key){
+    private List<String> getMobilDinamis(String url, String jsonName, String key) {
         List<String> result = new ArrayList<>();
         try {
             OkHttpUtil okHttpUtil = new OkHttpUtil();
@@ -1451,7 +1457,7 @@ public class ServiceImp implements IService {
             Request request = new Request.Builder().url(url).get().build();
             Response response = okHttpUtil.getClient().newCall(request).execute();
 
-            String res = "{\""+ jsonName +"\":" + response.body().string() + "}";
+            String res = "{\"" + jsonName + "\":" + response.body().string() + "}";
 
             JSONObject jsonObject = new JSONObject(res);
             JSONArray jSONArray = jsonObject.getJSONArray(jsonName);
@@ -1462,6 +1468,53 @@ public class ServiceImp implements IService {
         } catch (Exception e) {
 
         }
+        return result;
+    }
+
+    /**
+     * untuk mendapatkan data model mobil dinamis
+     *
+     * @param url API db user
+     * @param jsonName pernamaan json
+     * @param key model
+     * @return
+     */
+    private List<List<String>> getModelModel(String url, String jsonName, String key, String tipe) {
+        List<List<String>> result = new ArrayList<>();
+
+        try {
+            OkHttpUtil okHttpUtil = new OkHttpUtil();
+            okHttpUtil.init(true);
+            Request request = new Request.Builder().url(url).get().build();
+            Response response = okHttpUtil.getClient().newCall(request).execute();
+
+            String res = "{\"" + jsonName + "\":" + response.body().string() + "}";
+
+            JSONObject jsonObject = new JSONObject(res);
+            JSONArray jSONArray = jsonObject.getJSONArray(jsonName);
+            List<String> list = new ArrayList<>();
+            JSONObject obj = (JSONObject) jSONArray.get(0);
+            String temp = obj.getString("type");
+            List<String> types = new ArrayList<>();
+            for (int i = 0; i < jSONArray.length(); i++) {
+                obj = (JSONObject) jSONArray.get(i);
+                if (obj.getString("type").equalsIgnoreCase(temp)) {
+                    list.add(obj.getString(key));
+                } else {
+                    types.add(temp);
+                    if (temp.equals(tipe)) {
+                        type_index = result.size();
+                    }
+                    result.add(list);
+                    list = new ArrayList<>();
+                    list.add(obj.getString(key));
+                    temp = obj.getString("type");
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
         return result;
     }
 }
