@@ -1016,9 +1016,9 @@ public class ServiceImp implements IService {
 
         QuickReplyBuilder quickReplyBuilder = new QuickReplyBuilder.Builder("Type")
                 .add("Sport", "Sport")
-                .add("Multipurpose Vehicle", "Multipurpose Vehicle")
+                .add("MPV", "mpv")
                 .add("Hatchback", "Hatchback")
-                .add("Sport Utility Vehicle", "Sport Utility Vehicle")
+                .add("SUV", "suv")
                 .add("Commercial", "Commercial")
                 .add("Sedan", "Sedan").build();
 //        ButtonTemplate button = new ButtonTemplate();
@@ -1368,7 +1368,7 @@ public class ServiceImp implements IService {
             List<EasyMap> actions = new ArrayList<>();
             EasyMap bookAction = new EasyMap();
             bookAction.setName(merk);
-            bookAction.setValue("merk " + merk);
+            bookAction.setValue(merk);
             actions.add(bookAction);
             button.setButtonValues(actions);
             ButtonBuilder buttonBuilder = new ButtonBuilder(button);
