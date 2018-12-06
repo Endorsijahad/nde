@@ -656,13 +656,11 @@ public class ServiceImp implements IService {
     public ExtensionResult dogetFormcuti(ExtensionRequest extensionRequest) {
 
         Map<String, String> output = new HashMap<>();
-        String formId = appProperties.getFormIdCuti();
-        FormBuilder formBuilder = new FormBuilder(formId);
+//        String formId = appProperties.getFormIdCuti();
+        FormBuilder formBuilder = new FormBuilder(appProperties.getFormIdCuti());
         ButtonTemplate button = new ButtonTemplate();
         button.setPictureLink(Image_cuti);
         button.setPicturePath(Image_cuti);
-        button.setTitle("This is title");
-        button.setSubTitle("This is subtitle");
         button.setTitle("Form Cuti");
         button.setSubTitle("Form Cuti");
         List<EasyMap> actions = new ArrayList<>();
@@ -1021,7 +1019,6 @@ public class ServiceImp implements IService {
                 .add("SUV", "suv")
                 .add("Commercial", "Commercial")
                 .add("Sedan", "Sedan").build();
-
         output.put(OUTPUT, quickReplyBuilder.string());
 
         ExtensionResult extensionResult = new ExtensionResult();
