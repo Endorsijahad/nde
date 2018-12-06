@@ -124,6 +124,9 @@ public class AppProperties {
 
     @Value("${app.form.id.test_form}")
     String formIdTest;
+    
+    @Value("${shorten.form.cuti}")
+    String shortenFormCuti;
 
     public String getButtonTitlePayload() {
         return buttonTitlePayload;
@@ -396,5 +399,14 @@ public class AppProperties {
     public void setFormIdTest(String formIdTest) {
         this.formIdTest = formIdTest;
     }
+
+    public String getShortenFormCuti() {
+        return shortenFormCuti;
+    }
+
+    public void setShortenFormCuti(String shortenFormCuti) {
+        this.shortenFormCuti = shortenFormCuti;
+    }
+    
 
 }
