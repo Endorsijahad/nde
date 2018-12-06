@@ -71,4 +71,6 @@ public interface IService {
         
         ExtensionResult doGetModelMobils(ExtensionRequest extensionRequest);
         
+        ExtensionResult doGetFormCutiShorten(ExtensionRequest extensionRequest);
+        
 }

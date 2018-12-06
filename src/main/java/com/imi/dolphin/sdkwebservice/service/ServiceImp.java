@@ -45,6 +45,8 @@ import com.imi.dolphin.sdkwebservice.param.ParamSdk;
 import com.imi.dolphin.sdkwebservice.property.AppProperties;
 import com.imi.dolphin.sdkwebservice.token.Token;
 import com.imi.dolphin.sdkwebservice.util.OkHttpUtil;
+import fr.plaisance.bitly.Bit;
+import fr.plaisance.bitly.Bitly;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -654,6 +656,36 @@ public class ServiceImp implements IService {
 
     @Override
     public ExtensionResult dogetFormcuti(ExtensionRequest extensionRequest) {
+
+        Map<String, String> output = new HashMap<>();
+        String formId = appProperties.getFormIdCuti();
+        FormBuilder formBuilder = new FormBuilder(formId);
+        ButtonTemplate button = new ButtonTemplate();
+        button.setTitle("Form Cuti");
+        button.setSubTitle("Form Cuti");
+        button.setPictureLink(Image_cuti);
+        button.setPicturePath(Image_cuti);
+        List<EasyMap> actions = new ArrayList<>();
+        EasyMap bookAction = new EasyMap();
+        bookAction.setName("Isi Form");
+        bookAction.setValue(formBuilder.build());
+//        bookAction.setValue(appProperties.getShortenFormCuti());
+        actions.add(bookAction);
+        button.setButtonValues(actions);
+        ButtonBuilder buttonBuilder = new ButtonBuilder(button);
+
+        output.put(OUTPUT, buttonBuilder.build());
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+    
+    @Override
+    public ExtensionResult doGetFormCutiShorten(ExtensionRequest extensionRequest) {
 
         Map<String, String> output = new HashMap<>();
         String formId = appProperties.getFormIdCuti();
@@ -1435,5 +1467,13 @@ public class ServiceImp implements IService {
         }
 
         return result;
+    }
+    
+    
+    
+    private String shortenBitLy(String link){
+        Bitly bitly = Bit.ly(appProperties.getBitlyAccessToken());
+        String shortUrl = bitly.shorten(link);
+        return shortUrl;
     }
 }

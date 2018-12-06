@@ -127,6 +127,9 @@ public class AppProperties {
     
     @Value("${shorten.form.cuti}")
     String shortenFormCuti;
+    
+    @Value("${bitly.access.token}")
+    String bitlyAccessToken;
 
     public String getButtonTitlePayload() {
         return buttonTitlePayload;
@@ -406,6 +409,14 @@ public class AppProperties {
 
     public void setShortenFormCuti(String shortenFormCuti) {
         this.shortenFormCuti = shortenFormCuti;
+    }
+
+    public String getBitlyAccessToken() {
+        return bitlyAccessToken;
+    }
+
+    public void setBitlyAccessToken(String bitlyAccessToken) {
+        this.bitlyAccessToken = bitlyAccessToken;
     }
     
 
