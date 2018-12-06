@@ -657,9 +657,10 @@ public class ServiceImp implements IService {
 
         Map<String, String> output = new HashMap<>();
         String formId = appProperties.getFormIdCuti();
-        FormBuilder formBuilder = new FormBuilder(formId);
-
+//        FormBuilder formBuilder = new FormBuilder(formId);
         ButtonTemplate button = new ButtonTemplate();
+        button.setPictureLink(Image_cuti);
+        button.setPicturePath(Image_cuti);
         button.setTitle("Form Cuti");
         button.setSubTitle("Form Cuti");
         button.setPictureLink(Image_cuti);
@@ -667,7 +668,8 @@ public class ServiceImp implements IService {
         List<EasyMap> actions = new ArrayList<>();
         EasyMap bookAction = new EasyMap();
         bookAction.setName("Isi Form");
-        bookAction.setValue(formBuilder.build());
+//        bookAction.setValue(formBuilder.build());
+        bookAction.setValue(appProperties.getShortenFormCuti());
         actions.add(bookAction);
         button.setButtonValues(actions);
         ButtonBuilder buttonBuilder = new ButtonBuilder(button);
