@@ -1021,87 +1021,6 @@ public class ServiceImp implements IService {
                 .add("SUV", "suv")
                 .add("Commercial", "Commercial")
                 .add("Sedan", "Sedan").build();
-//        ButtonTemplate button = new ButtonTemplate();
-//        button.setPictureLink(appProperties.getAtmUrl());
-//        button.setPicturePath(appProperties.getAtmUrl());
-//        button.setTitle("Sport");
-//        button.setSubTitle("Astra Sport");
-//        List<EasyMap> actions = new ArrayList<>();
-//        EasyMap bookAction = new EasyMap();
-//        bookAction.setName("Sport");
-//        bookAction.setValue("Tipe Sport");
-//        actions.add(bookAction);
-//        button.setButtonValues(actions);
-//        ButtonBuilder buttonBuilder = new ButtonBuilder(button);
-//
-//        ButtonTemplate button2 = new ButtonTemplate();
-//        button2.setPictureLink(appProperties.getAtmUrl());
-//        button2.setPicturePath(appProperties.getAtmUrl());
-//        button2.setTitle("Multipurpose Vehicle");
-//        button2.setSubTitle("Astra Multipurpose Vehicle");
-//        List<EasyMap> actions2 = new ArrayList<>();
-//        EasyMap bookAction2 = new EasyMap();
-//        bookAction2.setName("Multipurpose Vehicle");
-//        bookAction2.setValue("Tipe Multipurpose Vehicle");
-//        actions2.add(bookAction2);
-//        button2.setButtonValues(actions2);
-//        ButtonBuilder buttonBuilder2 = new ButtonBuilder(button2);
-//
-//        ButtonTemplate button3 = new ButtonTemplate();
-//        button3.setPictureLink(appProperties.getAtmUrl());
-//        button3.setPicturePath(appProperties.getAtmUrl());
-//        button3.setTitle("Hatchback");
-//        button3.setSubTitle("Astra Hatchback");
-//        List<EasyMap> actions3 = new ArrayList<>();
-//        EasyMap bookAction3 = new EasyMap();
-//        bookAction3.setName("Hatchback");
-//        bookAction3.setValue("Tipe Hatchback");
-//        actions3.add(bookAction3);
-//        button3.setButtonValues(actions3);
-//        ButtonBuilder buttonBuilder3 = new ButtonBuilder(button3);
-//
-//        ButtonTemplate button4 = new ButtonTemplate();
-//        button4.setPictureLink(appProperties.getAtmUrl());
-//        button4.setPicturePath(appProperties.getAtmUrl());
-//        button4.setTitle("Sport Utility Vehicle");
-//        button4.setSubTitle("Astra Sport Utility Vehicle");
-//        List<EasyMap> actions4 = new ArrayList<>();
-//        EasyMap bookAction4 = new EasyMap();
-//        bookAction4.setName("Sport Utility Vehicle");
-//        bookAction4.setValue("Tipe Sport Utility Vehicle");
-//        actions4.add(bookAction4);
-//        button4.setButtonValues(actions4);
-//        ButtonBuilder buttonBuilder4 = new ButtonBuilder(button4);
-//        
-//        ButtonTemplate button5 = new ButtonTemplate();
-//        button5.setPictureLink(appProperties.getAtmUrl());
-//        button5.setPicturePath(appProperties.getAtmUrl());
-//        button5.setTitle("Commercial");
-//        button5.setSubTitle("Astra Commercial");
-//        List<EasyMap> actions5 = new ArrayList<>();
-//        EasyMap bookAction5 = new EasyMap();
-//        bookAction5.setName("Commercial");
-//        bookAction5.setValue("Tipe Commercial");
-//        actions5.add(bookAction5);
-//        button5.setButtonValues(actions5);
-//        ButtonBuilder buttonBuilder5 = new ButtonBuilder(button5);
-//        
-//        ButtonTemplate button6 = new ButtonTemplate();
-//        button6.setPictureLink(appProperties.getAtmUrl());
-//        button6.setPicturePath(appProperties.getAtmUrl());
-//        button6.setTitle("Sedan");
-//        button6.setSubTitle("Astra Sedan");
-//        List<EasyMap> actions6 = new ArrayList<>();
-//        EasyMap bookAction6 = new EasyMap();
-//        bookAction6.setName("Sedan");
-//        bookAction6.setValue("Tipe Sedan");
-//        actions6.add(bookAction6);
-//        button6.setButtonValues(actions6);
-//        ButtonBuilder buttonBuilder6 = new ButtonBuilder(button6);
-//
-//
-//        CarouselBuilder carouselBuilder = new CarouselBuilder(buttonBuilder.build(), buttonBuilder2.build(),
-//                buttonBuilder3.build(), buttonBuilder4.build(), buttonBuilder5.build(), buttonBuilder6.build());
 
         output.put(OUTPUT, quickReplyBuilder.string());
 
@@ -1196,6 +1115,7 @@ public class ServiceImp implements IService {
         return extensionResult;
     }
 
+    @Override
     public ExtensionResult doGetModelMobil(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
 
