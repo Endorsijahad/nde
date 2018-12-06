@@ -1289,6 +1289,7 @@ public class ServiceImp implements IService {
             bookAction.setValue(merk);
             actions.add(bookAction);
             button.setButtonValues(actions);
+            
             ButtonBuilder buttonBuilder = new ButtonBuilder(button);
             buttonBuilders.add(buttonBuilder);
         }
