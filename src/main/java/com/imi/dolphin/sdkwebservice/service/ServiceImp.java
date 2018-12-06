@@ -1413,7 +1413,7 @@ public class ServiceImp implements IService {
             ButtonTemplate button = new ButtonTemplate();
 //            button.setPictureLink(appProperties.getToyotaImgUrl());
 //            button.setPicturePath(appProperties.getToyotaImgUrl());
-//            button.setTitle(mod);
+            button.setTitle(mod);
             button.setSubTitle(mod);
             List<EasyMap> actions = new ArrayList<>();
             EasyMap bookAction = new EasyMap();
