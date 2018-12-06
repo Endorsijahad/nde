@@ -656,13 +656,14 @@ public class ServiceImp implements IService {
     public ExtensionResult dogetFormcuti(ExtensionRequest extensionRequest) {
 
         Map<String, String> output = new HashMap<>();
-//        String formId = appProperties.getFormIdCuti();
-        FormBuilder formBuilder = new FormBuilder(appProperties.getFormIdCuti());
+        String formId = appProperties.getFormIdCuti();
+        FormBuilder formBuilder = new FormBuilder(formId);
+
         ButtonTemplate button = new ButtonTemplate();
-        button.setPictureLink(Image_cuti);
-        button.setPicturePath(Image_cuti);
         button.setTitle("Form Cuti");
         button.setSubTitle("Form Cuti");
+        button.setPictureLink(Image_cuti);
+        button.setPicturePath(Image_cuti);
         List<EasyMap> actions = new ArrayList<>();
         EasyMap bookAction = new EasyMap();
         bookAction.setName("Isi Form");
