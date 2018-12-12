@@ -130,6 +130,9 @@ public class AppProperties {
     
     @Value("${bitly.access.token}")
     String bitlyAccessToken;
+    
+    @Value("${app.form.id.request_form}")
+    String formIdRequest;
 
     public String getButtonTitlePayload() {
         return buttonTitlePayload;
@@ -418,6 +421,14 @@ public class AppProperties {
     public void setBitlyAccessToken(String bitlyAccessToken) {
         this.bitlyAccessToken = bitlyAccessToken;
     }
-    
 
+    public String getFormIdRequest() {
+        return formIdRequest;
+    }
+
+    public void setFormIdRequest(String formIdRequest) {
+        this.formIdRequest = formIdRequest;
+    }
+    
+    
 }
