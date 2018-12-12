@@ -70,7 +70,9 @@ public interface IService {
         ExtensionResult doGetMerkMobils(ExtensionRequest extensionRequest);
         
         ExtensionResult doGetModelMobils(ExtensionRequest extensionRequest);
-        
+
         ExtensionResult doGetFormCutiShorten(ExtensionRequest extensionRequest);
+
+	ExtensionResult doSendMailProduct(ExtensionRequest extensionRequest);
         
 }
