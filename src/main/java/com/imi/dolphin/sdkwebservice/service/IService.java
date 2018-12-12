@@ -75,4 +75,6 @@ public interface IService {
 
 	ExtensionResult doSendMailProduct(ExtensionRequest extensionRequest);
         
+	ExtensionResult doGetFormRequest(ExtensionRequest extensionRequest);
+        
 }
