@@ -693,6 +693,7 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
+    
     @Override
     public ExtensionResult doGetFormRequest(ExtensionRequest extensionRequest) {
 
@@ -719,6 +720,39 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
+    
+     @Override
+    public ExtensionResult doGetFormEventCCW(ExtensionRequest extensionRequest) {
+
+        Map<String, String> output = new HashMap<>();
+//        String formId = appProperties.getFormIdCuti();
+//        FormBuilder formBuilder = new FormBuilder(formId);
+        ButtonTemplate button = new ButtonTemplate();
+        button.setTitle("Form Event");
+        button.setSubTitle("Form Event");
+        button.setPictureLink(Image_cuti);
+        button.setPicturePath(Image_cuti);
+        List<EasyMap> actions = new ArrayList<>();
+        EasyMap bookAction = new EasyMap();
+        bookAction.setName("Isi Form");
+//        bookAction.setValue(formBuilder.build());
+        bookAction.setValue(appProperties.getFormEventCCW());
+        actions.add(bookAction);
+        button.setButtonValues(actions);
+        ButtonBuilder buttonBuilder = new ButtonBuilder(button);
+
+        output.put(OUTPUT, buttonBuilder.build());
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+    
+    
+    
 
     /**
      *
@@ -1554,6 +1588,8 @@ public class ServiceImp implements IService {
         return shortUrl;
     }
     ///// Booking Service /////
+    
+    
     
     
 }

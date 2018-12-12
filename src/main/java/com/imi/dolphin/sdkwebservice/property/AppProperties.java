@@ -133,6 +133,9 @@ public class AppProperties {
     
     @Value("${app.form.id.request_form}")
     String formIdRequest;
+    
+    @Value("${shorten.form.event_ccw}")
+    String formEventCCW;
 
     public String getButtonTitlePayload() {
         return buttonTitlePayload;
@@ -428,6 +431,14 @@ public class AppProperties {
 
     public void setFormIdRequest(String formIdRequest) {
         this.formIdRequest = formIdRequest;
+    }
+
+    public String getFormEventCCW() {
+        return formEventCCW;
+    }
+
+    public void setFormEventCCW(String formEventCCW) {
+        this.formEventCCW = formEventCCW;
     }
     
     
