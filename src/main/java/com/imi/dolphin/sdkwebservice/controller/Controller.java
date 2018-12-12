@@ -130,6 +130,11 @@ public class Controller {
 	public ExtensionResult dogetFormcuti(@RequestBody ExtensionRequest extensionRequest) {
 		return svcService.dogetFormcuti(extensionRequest);
 	}
+	@RequestMapping("/formrequest")
+	@PostMapping
+	public ExtensionResult dogetFormrequest(@RequestBody ExtensionRequest extensionRequest) {
+		return svcService.doGetFormRequest(extensionRequest);
+	}
 	
 	@RequestMapping("/ajuincuti")
 	@PostMapping
