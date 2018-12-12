@@ -1296,6 +1296,9 @@ public class ServiceImp implements IService {
         return extensionResult;
     }
 
+    
+    
+    ///// Booking Service /////
     /**
      * Membuat carousel berupa merk-merk mobil yang dinamis
      *
@@ -1362,8 +1365,8 @@ public class ServiceImp implements IService {
         List<String> model = models.get(type_index);
         for (String mod : model) {
             ButtonTemplate button = new ButtonTemplate();
-//            button.setPictureLink(appProperties.getToyotaImgUrl());
-//            button.setPicturePath(appProperties.getToyotaImgUrl());
+    //button.setPictureLink(appProperties.getToyotaImgUrl());
+    //button.setPicturePath(appProperties.getToyotaImgUrl());
             button.setTitle(mod);
             button.setSubTitle(mod);
             List<EasyMap> actions = new ArrayList<>();
@@ -1476,4 +1479,7 @@ public class ServiceImp implements IService {
         String shortUrl = bitly.shorten(link);
         return shortUrl;
     }
+    ///// Booking Service /////
+    
+    
 }
