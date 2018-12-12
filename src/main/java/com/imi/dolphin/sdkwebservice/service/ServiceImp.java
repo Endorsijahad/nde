@@ -59,6 +59,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import org.slf4j.LoggerFactory;
+
 /**
  *
  * @author reja
@@ -66,6 +68,8 @@ import okhttp3.Response;
  */
 @Service
 public class ServiceImp implements IService {
+
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ServiceImp.class);
 
     public static final String OUTPUT = "output";
     private static final String SAMPLE_IMAGE_PATH = "https://goo.gl/SHdL8D";
@@ -654,6 +658,12 @@ public class ServiceImp implements IService {
         return bearer;
     }
 
+    /**
+     * yg mau dipake utk form cuti
+     *
+     * @param extensionRequest
+     * @return
+     */
     @Override
     public ExtensionResult dogetFormcuti(ExtensionRequest extensionRequest) {
 
@@ -683,7 +693,12 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
-    
+
+    /**
+     *
+     * @param extensionRequest
+     * @return
+     */
     @Override
     public ExtensionResult doGetFormCutiShorten(ExtensionRequest extensionRequest) {
 
@@ -704,8 +719,42 @@ public class ServiceImp implements IService {
         button.setButtonValues(actions);
         ButtonBuilder buttonBuilder = new ButtonBuilder(button);
 
+        QuickReplyBuilder quickReplyBuilder = new QuickReplyBuilder.Builder("Type")
+                .add("Get Form Cuti", bookAction.getValue()).build();
+
         output.put(OUTPUT, buttonBuilder.build());
         ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doSendMailProduct(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        String recipient1 = getEasyMapValueByName(extensionRequest, "recipient1");
+        String name = getEasyMapValueByName(extensionRequest, "name");
+        String butuh = getEasyMapValueByName(extensionRequest, "butuh");
+        ExtensionResult extensionResult = new ExtensionResult();
+        StringBuilder isiMail = new StringBuilder();
+        isiMail.append("Kepada Yth:\n")
+                .append(name)
+                .append("\nDengan Hormat,")
+                .append("\n\nNama : " + name)
+                .append("\nNIK : ")
+                .append("\nLembaga : ")
+                .append("\nPermohonan ijin untuk  :")
+                .append("\ntanggal : ")
+                .append("\nwaktu ijin : ")
+                .append("\nkeperluan : " + butuh)
+                .append("\n\nDemikian Surat cuti ini dibuat.")
+                .append("\nterima kasih");
+        MailModel mailModel = new MailModel(recipient1, "Your Details", isiMail.toString());
+        String sendMailResult = svcMailService.sendMail(mailModel);
+        output.put(OUTPUT, sendMailResult);
         extensionResult.setAgent(false);
         extensionResult.setRepeat(false);
         extensionResult.setSuccess(true);
@@ -1313,6 +1362,7 @@ public class ServiceImp implements IService {
         List<String> merks = getMobilDinamis(url, "mobil", "merk");
         List<ButtonBuilder> buttonBuilders = new ArrayList<>();
         for (String merk : merks) {
+            logger.debug("Mobil dengan merk : " + merk);
             ButtonTemplate button = new ButtonTemplate();
             button.setPictureLink(appProperties.getToyotaImgUrl());
             button.setPicturePath(appProperties.getToyotaImgUrl());
@@ -1324,7 +1374,7 @@ public class ServiceImp implements IService {
             bookAction.setValue(merk);
             actions.add(bookAction);
             button.setButtonValues(actions);
-            
+
             ButtonBuilder buttonBuilder = new ButtonBuilder(button);
             buttonBuilders.add(buttonBuilder);
         }
@@ -1471,10 +1521,8 @@ public class ServiceImp implements IService {
 
         return result;
     }
-    
-    
-    
-    private String shortenBitLy(String link){
+
+    private String shortenBitLy(String link) {
         Bitly bitly = Bit.ly(appProperties.getBitlyAccessToken());
         String shortUrl = bitly.shorten(link);
         return shortUrl;
