@@ -754,75 +754,6 @@ public class ServiceImp implements IService {
     
     
 
-    /**
-     *
-     * @param extensionRequest
-     * @return
-     */
-    @Override
-    public ExtensionResult doGetFormCutiShorten(ExtensionRequest extensionRequest) {
-
-        Map<String, String> output = new HashMap<>();
-        String formId = appProperties.getFormIdCuti();
-//        FormBuilder formBuilder = new FormBuilder(formId);
-        ButtonTemplate button = new ButtonTemplate();
-        button.setTitle("Form Cuti");
-        button.setSubTitle("Form Cuti");
-        button.setPictureLink(Image_cuti);
-        button.setPicturePath(Image_cuti);
-        List<EasyMap> actions = new ArrayList<>();
-        EasyMap bookAction = new EasyMap();
-        bookAction.setName("Isi Form");
-//        bookAction.setValue(formBuilder.build());
-        bookAction.setValue(appProperties.getShortenFormCuti());
-        actions.add(bookAction);
-        button.setButtonValues(actions);
-        ButtonBuilder buttonBuilder = new ButtonBuilder(button);
-
-        QuickReplyBuilder quickReplyBuilder = new QuickReplyBuilder.Builder("Type")
-                .add("Get Form Cuti", bookAction.getValue()).build();
-
-        output.put(OUTPUT, buttonBuilder.build());
-        ExtensionResult extensionResult = new ExtensionResult();
-        extensionResult.setAgent(false);
-        extensionResult.setRepeat(false);
-        extensionResult.setSuccess(true);
-        extensionResult.setNext(true);
-        extensionResult.setValue(output);
-        return extensionResult;
-    }
-
-    @Override
-    public ExtensionResult doSendMailProduct(ExtensionRequest extensionRequest) {
-        Map<String, String> output = new HashMap<>();
-        String recipient1 = getEasyMapValueByName(extensionRequest, "recipient1");
-        String name = getEasyMapValueByName(extensionRequest, "name");
-        String butuh = getEasyMapValueByName(extensionRequest, "butuh");
-        ExtensionResult extensionResult = new ExtensionResult();
-        StringBuilder isiMail = new StringBuilder();
-        isiMail.append("Kepada Yth:\n")
-                .append(name)
-                .append("\nDengan Hormat,")
-                .append("\n\nNama : " + name)
-                .append("\nNIK : ")
-                .append("\nLembaga : ")
-                .append("\nPermohonan ijin untuk  :")
-                .append("\ntanggal : ")
-                .append("\nwaktu ijin : ")
-                .append("\nkeperluan : " + butuh)
-                .append("\n\nDemikian Surat cuti ini dibuat.")
-                .append("\nterima kasih");
-        MailModel mailModel = new MailModel(recipient1, "Your Details", isiMail.toString());
-        String sendMailResult = svcMailService.sendMail(mailModel);
-        output.put(OUTPUT, sendMailResult);
-        extensionResult.setAgent(false);
-        extensionResult.setRepeat(false);
-        extensionResult.setSuccess(true);
-        extensionResult.setNext(true);
-        extensionResult.setValue(output);
-        return extensionResult;
-    }
-
     @Override
     public ExtensionResult dogetajuincuti(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
@@ -1150,6 +1081,12 @@ public class ServiceImp implements IService {
         return extensionResult;
     }
 
+    /**
+     * Seva.id sdk
+     * Mendapatkan tipe tipe mobil
+     * @param extensionRequest
+     * @return 
+     */
     @Override
     public ExtensionResult doGetTipeMobil(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
@@ -1172,245 +1109,9 @@ public class ServiceImp implements IService {
         return extensionResult;
     }
 
-    @Override
-    public ExtensionResult doGetMerkMobil(ExtensionRequest extensionRequest) {
-        Map<String, String> output = new HashMap<>();
-
-        ButtonTemplate button = new ButtonTemplate();
-        button.setPictureLink(appProperties.getToyotaImgUrl());
-        button.setPicturePath(appProperties.getToyotaImgUrl());
-        button.setTitle("TOYOTA");
-        button.setSubTitle("Toyota Indonesia");
-        List<EasyMap> actions = new ArrayList<>();
-        EasyMap bookAction = new EasyMap();
-        bookAction.setName("Toyota");
-        bookAction.setValue("merk Toyota");
-        actions.add(bookAction);
-        button.setButtonValues(actions);
-        ButtonBuilder buttonBuilder = new ButtonBuilder(button);
-
-        ButtonTemplate button2 = new ButtonTemplate();
-        button2.setPictureLink(appProperties.getPeugeotImgUrl());
-        button2.setPicturePath(appProperties.getPeugeotImgUrl());
-        button2.setTitle("Peugeot");
-        button2.setSubTitle("Peugeot Indonesia");
-        List<EasyMap> actions2 = new ArrayList<>();
-        EasyMap bookAction2 = new EasyMap();
-        bookAction2.setName("Peugeot");
-        bookAction2.setValue("merk Peugeot");
-        actions2.add(bookAction2);
-        button2.setButtonValues(actions2);
-        ButtonBuilder buttonBuilder2 = new ButtonBuilder(button2);
-
-        ButtonTemplate button3 = new ButtonTemplate();
-        button3.setPictureLink(appProperties.getBmwImgUrl());
-        button3.setPicturePath(appProperties.getBmwImgUrl());
-        button3.setTitle("BMW");
-        button3.setSubTitle("BMW Indonesia");
-        List<EasyMap> actions3 = new ArrayList<>();
-        EasyMap bookAction3 = new EasyMap();
-        bookAction3.setName("BMW");
-        bookAction3.setValue("merk BMW");
-        actions3.add(bookAction3);
-        button3.setButtonValues(actions3);
-        ButtonBuilder buttonBuilder3 = new ButtonBuilder(button3);
-
-        ButtonTemplate button4 = new ButtonTemplate();
-        button4.setPictureLink(appProperties.getDaihatsuImgUrl());
-        button4.setPicturePath(appProperties.getDaihatsuImgUrl());
-        button4.setTitle("Daihatsu");
-        button4.setSubTitle("Daihatsu Indonesia");
-        List<EasyMap> actions4 = new ArrayList<>();
-        EasyMap bookAction4 = new EasyMap();
-        bookAction4.setName("Daihatsu");
-        bookAction4.setValue("merk Daihatsu");
-        actions4.add(bookAction4);
-        button4.setButtonValues(actions4);
-        ButtonBuilder buttonBuilder4 = new ButtonBuilder(button4);
-
-        ButtonTemplate button5 = new ButtonTemplate();
-        button5.setPictureLink(appProperties.getIsuzuImgUrl());
-        button5.setPicturePath(appProperties.getIsuzuImgUrl());
-        button5.setTitle("Isuzu");
-        button5.setSubTitle("Isuzu Indonesia");
-        List<EasyMap> actions5 = new ArrayList<>();
-        EasyMap bookAction5 = new EasyMap();
-        bookAction5.setName("Isuzu");
-        bookAction5.setValue("merk Isuzu");
-        actions5.add(bookAction5);
-        button5.setButtonValues(actions5);
-        ButtonBuilder buttonBuilder5 = new ButtonBuilder(button5);
-
-        CarouselBuilder carouselBuilder = new CarouselBuilder(buttonBuilder.build(), buttonBuilder2.build(),
-                buttonBuilder3.build(), buttonBuilder4.build(), buttonBuilder5.build());
-
-        output.put(OUTPUT, carouselBuilder.build());
-        ExtensionResult extensionResult = new ExtensionResult();
-        extensionResult.setAgent(false);
-        extensionResult.setRepeat(false);
-        extensionResult.setSuccess(true);
-        extensionResult.setNext(true);
-        extensionResult.setValue(output);
-        return extensionResult;
-    }
-
-    @Override
-    public ExtensionResult doGetModelMobil(ExtensionRequest extensionRequest) {
-        Map<String, String> output = new HashMap<>();
-
-        String merk = getEasyMapValueByName(extensionRequest, "merk");
-        String type = getEasyMapValueByName(extensionRequest, "type");
-        QuickReplyBuilder quickReplyBuilder = null;
-
-        switch (merk) {
-            case "Peugeot":
-                switch (type) {
-                    case "Sport":
-                        break;
-                    case "Multipurpose Vehicle":
-                        break;
-                    case "Hatchback":
-                        break;
-                    case "Sport Utility Vehicle":
-                        break;
-                    case "Commercial":
-                        break;
-                    case "Sedan":
-                        break;
-                }
-                quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
-                        .add("Peugeot 208", "Peugeot 208")
-                        .add("Peugeot 3008", "Peugeot 3008").build();
-                break;
-            case "Toyota":
-                switch (type) {
-                    case "Sport":
-                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
-                                .add("Toyota 86", "Toyota 86")
-                                .build();
-                        break;
-                    case "Multipurpose Vehicle":
-                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
-                                .add("All New Foxy", "All New Foxy")
-                                .add("Avanza", "Avanza")
-                                .add("Calya", "Calya")
-                                .add("Hatchback", "Hatchback")
-                                .add("Kijang Innova", "Kijang Innova")
-                                .add("NAV1", "NAV1")
-                                .add("New Alphard", "New Alphard")
-                                .add("New Sienta", "New Sienta")
-                                .add("New Vellfire", "New Venturer")
-                                .add("Veloz", "Veloz")
-                                .build();
-                        break;
-                    case "Hatchback":
-                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
-                                .add("New Agya", "New Agya")
-                                .add("New Yaris", "New Yaris")
-                                .build();
-                        break;
-                    case "Sport Utility Vehicle":
-                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
-                                .add("All New C-HR", "All New C-HR")
-                                .add("All New Rush", "All New Rush")
-                                .add("Fortuner TRD", "Fortuner TRD")
-                                .add("Land Cruiser", "Land Cruiser")
-                                .build();
-                        break;
-                    case "Commercial":
-                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
-                                .add("Dyna", "Dyna")
-                                .add("HiAce", "HiAce")
-                                .add("Hilux C Cab", "Hilux C Cab")
-                                .add("Hilux D Cab", "Hilux D Cab")
-                                .add("Hilux S Cab", "Hilux S Cab")
-                                .build();
-                        break;
-                    case "Sedan":
-                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
-                                .add("New Camry", "New Camry")
-                                .add("New Corolal Altis", "New Corolal Altis")
-                                .add("New Vios", "New Vios")
-                                .build();
-                        break;
-                }
-                break;
-            case "BMW":
-                switch (type) {
-                    case "Sport":
-                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
-                                .add("BMW X1", "BMW X1")
-                                .add("BMW X2", "BMW X2")
-                                .add("BMW X3", "BMW X3")
-                                .add("BMW X4", "BMW X4")
-                                .add("BMW X5", "BMW X5")
-                                .build();
-                        break;
-                    case "Multipurpose Vehicle":
-                        break;
-                    case "Hatchback":
-                        quickReplyBuilder = new QuickReplyBuilder.Builder("Model")
-                                .add("BMW 1 Series 5-door", "BMW 1 Series 5-door")
-                                .build();
-                        break;
-                    case "Sport Utility Vehicle":
-                        break;
-                    case "Commercial":
-                        break;
-                    case "Sedan":
-                        break;
-                }
-                break;
-            case "Daihatsu":
-                switch (type) {
-                    case "Sport":
-                        break;
-                    case "Multipurpose Vehicle":
-                        break;
-                    case "Hatchback":
-                        break;
-                    case "Sport Utility Vehicle":
-                        break;
-                    case "Commercial":
-                        break;
-                    case "Sedan":
-                        break;
-                }
-                break;
-            case "Isuzu":
-                switch (type) {
-                    case "Sport":
-                        break;
-                    case "Multipurpose Vehicle":
-                        break;
-                    case "Hatchback":
-                        break;
-                    case "Sport Utility Vehicle":
-                        break;
-                    case "Commercial":
-                        break;
-                    case "Sedan":
-                        break;
-                }
-                break;
-        }
-        output.put(OUTPUT, quickReplyBuilder.string());
-
-        ExtensionResult extensionResult = new ExtensionResult();
-        extensionResult.setAgent(false);
-        extensionResult.setRepeat(false);
-        extensionResult.setSuccess(true);
-        extensionResult.setNext(true);
-        extensionResult.setValue(output);
-        return extensionResult;
-    }
-
-    
-    
-    ///// Booking Service /////
     /**
+     * Seva.id sdk
      * Membuat carousel berupa merk-merk mobil yang dinamis
-     *
      * @param extensionRequest
      * @return
      */
@@ -1456,8 +1157,8 @@ public class ServiceImp implements IService {
     }
 
     /**
+     * Seva.id sdk
      * nge get model mobil
-     *
      * @param extensionRequest
      * @return
      */
@@ -1469,7 +1170,6 @@ public class ServiceImp implements IService {
         String merek = getEasyMapValueByName(extensionRequest, "merk");
 
         String url = "https://bububibap.herokuapp.com/getToyota/";
-        // getModelMobil/type/merek
         List<List<String>> models = getModelModel(url, "mobil", "model", tipe);
         List<ButtonBuilder> buttonBuilders = new ArrayList<>();
         List<String> model = models.get(type_index);
@@ -1506,8 +1206,8 @@ public class ServiceImp implements IService {
     }
 
     /**
+     * Seva.id sdk
      * untuk mendapatkan data mobil baik itu merk, model, atau varian
-     *
      * @param url API database yang akan digunakan
      * @param jsonName penamaan nama JSONObject
      * @param key adalah string yang diget dari JSONObject
@@ -1536,8 +1236,8 @@ public class ServiceImp implements IService {
     }
 
     /**
+     * Seva.id sdk
      * untuk mendapatkan data model mobil dinamis
-     *
      * @param url API db user
      * @param jsonName pernamaan json
      * @param key model
@@ -1582,6 +1282,11 @@ public class ServiceImp implements IService {
         return result;
     }
 
+    /**
+     * buat shorten bitly tp gajadi make
+     * @param link
+     * @return 
+     */
     private String shortenBitLy(String link) {
         Bitly bitly = Bit.ly(appProperties.getBitlyAccessToken());
         String shortUrl = bitly.shorten(link);
