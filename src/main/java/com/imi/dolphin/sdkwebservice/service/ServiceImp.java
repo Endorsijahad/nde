@@ -694,7 +694,12 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
-    
+
+    /**
+     *
+     * @param extensionRequest
+     * @return
+     */
     @Override
     public ExtensionResult doGetFormRequest(ExtensionRequest extensionRequest) {
 
@@ -721,8 +726,54 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
-    
-     @Override
+
+    /**
+     *
+     * @param extensionRequest
+     * @return
+     */
+    @Override
+    public ExtensionResult doGetFormComplaint(ExtensionRequest extensionRequest) {
+
+        Map<String, String> output = new HashMap<>();
+        String formId = appProperties.getFormIdComplaint();
+        FormBuilder formBuilder = new FormBuilder(formId);
+        ButtonTemplate button = new ButtonTemplate();
+        button.setTitle("Form Complaint");
+        button.setSubTitle("Form Complaint");
+        List<EasyMap> actions = new ArrayList<>();
+
+        EasyMap bookAction = new EasyMap();
+        EasyMap bookAction2 = new EasyMap();
+        EasyMap bookAction3 = new EasyMap();
+
+        bookAction2.setName("Book Online");
+        bookAction2.setValue("https://www.siloamhospitals.com");
+        actions.add(bookAction2);
+        
+        bookAction3.setName("By Phone");
+        bookAction3.setValue(appProperties.getCallAppointment());
+//        bookAction3.setValue("tel:1500181");
+        actions.add(bookAction3);
+
+        bookAction.setName("Isi Form");
+        bookAction.setValue(formBuilder.build());
+        actions.add(bookAction);
+
+        button.setButtonValues(actions);
+        ButtonBuilder buttonBuilder = new ButtonBuilder(button);
+
+        output.put(OUTPUT, buttonBuilder.build());
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+
+    @Override
     public ExtensionResult doGetFormEventCCW(ExtensionRequest extensionRequest) {
 
         Map<String, String> output = new HashMap<>();
@@ -751,9 +802,6 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
-    
-    
-    
 
     @Override
     public ExtensionResult dogetajuincuti(ExtensionRequest extensionRequest) {
@@ -1081,10 +1129,10 @@ public class ServiceImp implements IService {
     }
 
     /**
-     * Seva.id sdk
-     * Mendapatkan tipe tipe mobil
+     * Seva.id sdk Mendapatkan tipe tipe mobil
+     *
      * @param extensionRequest
-     * @return 
+     * @return
      */
     @Override
     public ExtensionResult doGetTipeMobil(ExtensionRequest extensionRequest) {
@@ -1109,8 +1157,8 @@ public class ServiceImp implements IService {
     }
 
     /**
-     * Seva.id sdk
-     * Membuat carousel berupa merk-merk mobil yang dinamis
+     * Seva.id sdk Membuat carousel berupa merk-merk mobil yang dinamis
+     *
      * @param extensionRequest
      * @return
      */
@@ -1156,8 +1204,8 @@ public class ServiceImp implements IService {
     }
 
     /**
-     * Seva.id sdk
-     * nge get model mobil
+     * Seva.id sdk nge get model mobil
+     *
      * @param extensionRequest
      * @return
      */
@@ -1174,8 +1222,8 @@ public class ServiceImp implements IService {
         List<String> model = models.get(type_index);
         for (String mod : model) {
             ButtonTemplate button = new ButtonTemplate();
-    //button.setPictureLink(appProperties.getToyotaImgUrl());
-    //button.setPicturePath(appProperties.getToyotaImgUrl());
+            //button.setPictureLink(appProperties.getToyotaImgUrl());
+            //button.setPicturePath(appProperties.getToyotaImgUrl());
             button.setTitle(mod);
             button.setSubTitle(mod);
             List<EasyMap> actions = new ArrayList<>();
@@ -1205,8 +1253,9 @@ public class ServiceImp implements IService {
     }
 
     /**
-     * Seva.id sdk
-     * untuk mendapatkan data mobil baik itu merk, model, atau varian
+     * Seva.id sdk untuk mendapatkan data mobil baik itu merk, model, atau
+     * varian
+     *
      * @param url API database yang akan digunakan
      * @param jsonName penamaan nama JSONObject
      * @param key adalah string yang diget dari JSONObject
@@ -1235,8 +1284,8 @@ public class ServiceImp implements IService {
     }
 
     /**
-     * Seva.id sdk
-     * untuk mendapatkan data model mobil dinamis
+     * Seva.id sdk untuk mendapatkan data model mobil dinamis
+     *
      * @param url API db user
      * @param jsonName pernamaan json
      * @param key model
@@ -1283,8 +1332,9 @@ public class ServiceImp implements IService {
 
     /**
      * buat shorten bitly tp gajadi make
+     *
      * @param link
-     * @return 
+     * @return
      */
     private String shortenBitLy(String link) {
         Bitly bitly = Bit.ly(appProperties.getBitlyAccessToken());
@@ -1292,5 +1342,5 @@ public class ServiceImp implements IService {
         return shortUrl;
     }
     ///// Booking Service /////
-    
+
 }

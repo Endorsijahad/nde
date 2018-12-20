@@ -69,6 +69,8 @@ public interface IService {
         
 	ExtensionResult doGetFormRequest(ExtensionRequest extensionRequest);
 	
+        ExtensionResult doGetFormComplaint(ExtensionRequest extensionRequest);
+	
         ExtensionResult doGetFormEventCCW(ExtensionRequest extensionRequest);
         
 }
