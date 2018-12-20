@@ -736,6 +736,7 @@ public class ServiceImp implements IService {
 
         Map<String, String> output = new HashMap<>();
         String formId = appProperties.getFormIdComplaint();
+        String callAppointment = appProperties.getCallAppointment();
         FormBuilder formBuilder = new FormBuilder(formId);
         ButtonTemplate button = new ButtonTemplate();
         button.setTitle("Form Complaint");
@@ -751,7 +752,7 @@ public class ServiceImp implements IService {
         actions.add(bookAction2);
         
         bookAction3.setName("By Phone");
-        bookAction3.setValue(appProperties.getCallAppointment());
+        bookAction3.setValue(callAppointment);
 //        bookAction3.setValue("tel:+621500181");
         actions.add(bookAction3);
 
