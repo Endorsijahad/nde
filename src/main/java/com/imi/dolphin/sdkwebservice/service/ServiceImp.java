@@ -1352,12 +1352,13 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
     private List<List<String>> getModelModel(String url, String jsonName, String key, String tipe) {
         List<List<String>> result = new ArrayList<>();
 
+        
         try {
             OkHttpUtil okHttpUtil = new OkHttpUtil();
             okHttpUtil.init(true);
             Request request = new Request.Builder().url(url).get().build();
             Response response = okHttpUtil.getClient().newCall(request).execute();
-
+ 
             String res = "{\"" + jsonName + "\":" + response.body().string() + "}";
 
             JSONObject jsonObject = new JSONObject(res);
