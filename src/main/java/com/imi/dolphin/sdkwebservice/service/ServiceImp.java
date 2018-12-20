@@ -750,9 +750,9 @@ public class ServiceImp implements IService {
         bookAction2.setName("Book Online");
         bookAction2.setValue("https://www.siloamhospitals.com");
         actions.add(bookAction2);
-
+        
         bookAction3.setName("By Phone");
-        bookAction3.setValue(callAppointment + "");
+        bookAction3.setValue(callAppointment);
 //        bookAction3.setValue("tel:+621500181");
         actions.add(bookAction3);
 
