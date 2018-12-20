@@ -137,6 +137,12 @@ public class Controller {
 		return svcService.doGetFormRequest(extensionRequest);
 	}
         
+	@RequestMapping("/formcomplaint")
+	@PostMapping
+	public ExtensionResult dogetFormComplaint(@RequestBody ExtensionRequest extensionRequest) {
+		return svcService.doGetFormComplaint(extensionRequest);
+	}
+        
 	@RequestMapping("/formevent")
 	@PostMapping
 	public ExtensionResult dogetFormEventCCW(@RequestBody ExtensionRequest extensionRequest) {
