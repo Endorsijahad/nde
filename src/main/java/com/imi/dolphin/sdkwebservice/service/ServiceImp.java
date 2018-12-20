@@ -735,6 +735,9 @@ public class ServiceImp implements IService {
         bookAction.setName("Isi Form");
         bookAction.setValue(formBuilder.build());
         actions.add(bookAction);
+        bookAction.setName("Button 2");
+        bookAction.setValue(formBuilder.build());
+        actions.add(bookAction);
         button.setButtonValues(actions);
         ButtonBuilder buttonBuilder = new ButtonBuilder(button);
 
