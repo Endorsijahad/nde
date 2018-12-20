@@ -6,30 +6,34 @@ import com.google.gson.annotations.SerializedName;
 
 public class Datum {
 
-    @SerializedName("nik")
-    @Expose
-    private String nik;
-    @SerializedName("mengajukan_permohonan_ijin_untuk__")
-    @Expose
-    private String mengajukanPermohonanIjinUntuk;
-    @SerializedName("nama_")
+    @SerializedName("silahkan_isi_nama_lengkap_kamu_ya")
     @Expose
     private String nama;
-    @SerializedName("lembaga")
+    
+    @SerializedName("silahkan_isi_nik_kamu")
+    @Expose
+    private String nik;
+    
+    @SerializedName("silahkan_isi_lembaga_kamu")
     @Expose
     private String lembaga;
-    @SerializedName("permohonan_ijin")
+    
+    @SerializedName("tujuan_izin_kamu_untuk_")
     @Expose
-    private String permohonanIjin;
-    @SerializedName("waktu_ijin")
-    @Expose
-    private String waktuIjin;
-    @SerializedName("tanggal")
+    private String mengajukanPermohonanIjinUntuk;
+    
+    @SerializedName("pilihlah_tanggal_kapan_kamu_ingin_ajukan_cuti")
     @Expose
     private String tanggal;
-    @SerializedName("keperluan___keterangan")
+    
+    @SerializedName("berapa_lama_waktu_kamu_izin_cuti_")
+    @Expose
+    private String waktuIjin;
+    
+    @SerializedName("apa_keperluan_kamu_untuk_cuti_izin_")
     @Expose
     private String keperluanKeterangan;
+    
     @SerializedName("ticket_number")
     @Expose
     private String ticketNumber;
@@ -99,15 +103,7 @@ public class Datum {
     public void setLembaga(String lembaga) {
         this.lembaga = lembaga;
     }
-
-    public String getPermohonanIjin() {
-        return permohonanIjin;
-    }
-
-    public void setPermohonanIjin(String permohonanIjin) {
-        this.permohonanIjin = permohonanIjin;
-    }
-
+    
     public String getWaktuIjin() {
         return waktuIjin;
     }
@@ -193,7 +189,7 @@ public class Datum {
 	public String getId() {
         return id;
     }
-
+        
     public void setId(String id) {
         this.id = id;
     }

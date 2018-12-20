@@ -566,7 +566,7 @@ public class ServiceImp implements IService {
 
     public Datum getForm(String bearer, String ticketNumber) {
         Datum data = new Datum();
-        String baseUrl = appProperties.getBaseUrl();
+        String baseUrl = appProperties.getUrl();
         String apiform = appProperties.getApiForm();
         String formId = appProperties.getFormIdCuti();
         String paramformId = "?formId=";
@@ -622,9 +622,10 @@ public class ServiceImp implements IService {
 
     public String getToken() {
         String bearer = "";
-        String username = "michael.samuel@inmotion.co.id";
-        String password = "Michael@123";
-        String baseUrl = appProperties.getBaseUrl();
+        String username = "agent4@mii.co.id";
+        String password = "P@ssw0rd";
+//        String baseUrl = appProperties.getBaseUrl();
+        String baseUrl = appProperties.getUrl();
         String apiToken = appProperties.getApiToken();
 
         String url = baseUrl + apiToken;
@@ -647,7 +648,7 @@ public class ServiceImp implements IService {
         try {
             Response response = okHttpUtil.getClient().newCall(request).execute();
 
-            JSONObject jsonObjek = new JSONObject(response.body().string());
+                JSONObject jsonObjek = new JSONObject(response.body().string());
             bearer = jsonObjek.getString("token");
 
         } catch (IOException e) {
@@ -768,7 +769,6 @@ public class ServiceImp implements IService {
         String nik = "";
         String lembaga = "";
         String ijinuntuk = "";
-        String permohonanijin = "";
         String tanggal = "";
         String waktuijin = "";
         String keperluan = "";
@@ -788,7 +788,6 @@ public class ServiceImp implements IService {
         nik = data.getNik();
         lembaga = data.getLembaga();
         ijinuntuk = data.getMengajukanPermohonanIjinUntuk();
-        permohonanijin = data.getPermohonanIjin();
         tanggal = data.getTanggal();
         waktuijin = data.getWaktuIjin();
         keperluan = data.getKeperluanKeterangan();
@@ -825,8 +824,8 @@ public class ServiceImp implements IService {
         String bodyHrd = respBuilder2.toString();
 
         // 3. kirim email
-        String recipient1 = getEasyMapValueByName(extensionRequest, "email1");
-        String recipient2 = getEasyMapValueByName(extensionRequest, "email2");
+        String recipient1 = appProperties.getEmailrecipient1();
+        String recipient2 = appProperties.getEmailrecipient2();
         System.out.println("recipient 1 : " + recipient1);
         System.out.println("recipient 2 : " + recipient2);
 
