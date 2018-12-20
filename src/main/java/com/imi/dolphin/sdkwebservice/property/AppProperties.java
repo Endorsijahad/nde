@@ -100,19 +100,19 @@ public class AppProperties {
 
     @Value("${dolphin.atm.image.url}")
     String atmUrl;
-    
+
     @Value("${dolphin.toyota.image.url}")
     String toyotaImgUrl;
-    
+
     @Value("${dolphin.daihatsu.image.url}")
     String daihatsuImgUrl;
-    
+
     @Value("${dolphin.bmw.image.url}")
     String bmwImgUrl;
-    
+
     @Value("${dolphin.peugeot.image.url}")
     String peugeotImgUrl;
-    
+
     @Value("${dolphin.isuzu.image.url}")
     String isuzuImgUrl;
 
@@ -124,19 +124,21 @@ public class AppProperties {
 
     @Value("${app.form.id.test_form}")
     String formIdTest;
-    
-    
+
     @Value("${bitly.access.token}")
     String bitlyAccessToken;
-    
+
     @Value("${app.form.id.request_form}")
     String formIdRequest;
-    
+
     @Value("${dolphin.form.id.complaint}")
     String formIdComplaint;
-    
+
     @Value("${shorten.form.event_ccw}")
     String formEventCCW;
+
+    @Value("${dolphin.call.appointment}")
+    String callAppointment;
 
     public String getButtonTitlePayload() {
         return buttonTitlePayload;
@@ -434,8 +436,6 @@ public class AppProperties {
         this.formIdComplaint = formIdComplaint;
     }
 
-    
-    
     public String getFormEventCCW() {
         return formEventCCW;
     }
@@ -443,6 +443,15 @@ public class AppProperties {
     public void setFormEventCCW(String formEventCCW) {
         this.formEventCCW = formEventCCW;
     }
+
+    public String getCallAppointment() {
+        return callAppointment;
+    }
+
+    public void setCallAppointment(String callAppointment) {
+        this.callAppointment = callAppointment;
+    }
     
     
+
 }
