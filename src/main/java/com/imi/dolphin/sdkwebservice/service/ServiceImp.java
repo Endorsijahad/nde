@@ -755,7 +755,7 @@ public class ServiceImp implements IService {
         actions.add(bookAction2);
         
         bookAction3.setName("By Phone");
-        bookAction3.setValue("188-128-1238");
+        bookAction3.setValue("Dial 188-128-1238");
         actions.add(bookAction3);
         
         button.setButtonValues(actions);
