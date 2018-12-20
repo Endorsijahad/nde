@@ -694,6 +694,11 @@ public class ServiceImp implements IService {
         return extensionResult;
     }
 
+    /**
+     * 
+     * @param extensionRequest
+     * @return 
+     */
     @Override
     public ExtensionResult doGetFormRequest(ExtensionRequest extensionRequest) {
 
@@ -721,6 +726,11 @@ public class ServiceImp implements IService {
         return extensionResult;
     }
 
+    /**
+     * 
+     * @param extensionRequest
+     * @return 
+     */
     @Override
     public ExtensionResult doGetFormComplaint(ExtensionRequest extensionRequest) {
 
@@ -733,12 +743,19 @@ public class ServiceImp implements IService {
         List<EasyMap> actions = new ArrayList<>();
         EasyMap bookAction = new EasyMap();
         EasyMap bookAction2 = new EasyMap();
+        EasyMap bookAction3 = new EasyMap();
         bookAction.setName("Isi Form");
         bookAction.setValue(formBuilder.build());
         actions.add(bookAction);
+        
         bookAction2.setName("Online");
         bookAction2.setValue("https://www.siloamhospitals.com");
         actions.add(bookAction2);
+        
+        bookAction3.setName("By Phone");
+        bookAction3.setValue("188-128-1238");
+        actions.add(bookAction3);
+        
         button.setButtonValues(actions);
         ButtonBuilder buttonBuilder = new ButtonBuilder(button);
 

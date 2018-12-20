@@ -26,6 +26,7 @@ public class ButtonBuilder {
 	private ButtonTemplate buttonTemplateEntity;
 	private static final String BUTTON_SYNTAX = "{button:";
 	private static final String BUTTON_SYNTAX_SUFFIX = "}";
+	private static final String BUTTON_SPLIT = "|";
 	
 	/**
 	 * 
@@ -42,7 +43,7 @@ public class ButtonBuilder {
 	public String build() {
 		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 		String button = gson.toJson(getButtonTemplateEntity());
-		button =  BUTTON_SYNTAX + button + BUTTON_SYNTAX_SUFFIX;
+		button =  BUTTON_SYNTAX + button + BUTTON_SYNTAX_SUFFIX + BUTTON_SPLIT;
 		return button;
 	}
 
