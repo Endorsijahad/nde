@@ -132,6 +132,9 @@ public class AppProperties {
     @Value("${app.form.id.request_form}")
     String formIdRequest;
     
+    @Value("${dolphin.form.id.complaint}")
+    String formIdComplaint;
+    
     @Value("${shorten.form.event_ccw}")
     String formEventCCW;
 
@@ -423,6 +426,16 @@ public class AppProperties {
         this.formIdRequest = formIdRequest;
     }
 
+    public String getFormIdComplaint() {
+        return formIdComplaint;
+    }
+
+    public void setFormIdComplaint(String formIdComplaint) {
+        this.formIdComplaint = formIdComplaint;
+    }
+
+    
+    
     public String getFormEventCCW() {
         return formEventCCW;
     }

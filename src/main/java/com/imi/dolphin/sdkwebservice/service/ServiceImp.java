@@ -721,6 +721,34 @@ public class ServiceImp implements IService {
         return extensionResult;
     }
     
+    @Override
+    public ExtensionResult doGetFormComplaint(ExtensionRequest extensionRequest) {
+
+        Map<String, String> output = new HashMap<>();
+        String formId = appProperties.getFormIdComplaint();
+        FormBuilder formBuilder = new FormBuilder(formId);
+        ButtonTemplate button = new ButtonTemplate();
+        button.setTitle("Form Complaint");
+        button.setSubTitle("Form Complaint");
+        List<EasyMap> actions = new ArrayList<>();
+        EasyMap bookAction = new EasyMap();
+        bookAction.setName("Isi Form");
+        bookAction.setValue(formBuilder.build());
+        actions.add(bookAction);
+        button.setButtonValues(actions);
+        ButtonBuilder buttonBuilder = new ButtonBuilder(button);
+
+        output.put(OUTPUT, buttonBuilder.build());
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+    
+    
      @Override
     public ExtensionResult doGetFormEventCCW(ExtensionRequest extensionRequest) {
 
