@@ -751,8 +751,8 @@ public class ServiceImp implements IService {
         actions.add(bookAction2);
         
         bookAction3.setName("By Phone");
-        bookAction3.setValue(appProperties.getCallAppointment());
-//        bookAction3.setValue("tel:1500181");
+//        bookAction3.setValue(appProperties.getCallAppointment());
+        bookAction3.setValue("tel:+621500181");
         actions.add(bookAction3);
 
         bookAction.setName("Isi Form");
