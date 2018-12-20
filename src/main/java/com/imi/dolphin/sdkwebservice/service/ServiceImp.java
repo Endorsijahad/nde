@@ -1294,7 +1294,4 @@ public class ServiceImp implements IService {
     }
     ///// Booking Service /////
     
-    
-    
-    
 }
