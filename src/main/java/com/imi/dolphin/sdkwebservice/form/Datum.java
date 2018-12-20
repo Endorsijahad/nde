@@ -9,7 +9,7 @@ public class Datum {
     @SerializedName("nik")
     @Expose
     private String nik;
-    @SerializedName("mengajukan_permohonan_ijin_untuk__")
+    @SerializedName("mengajukan_permohonan_ijin_untuk_")
     @Expose
     private String mengajukanPermohonanIjinUntuk;
     @SerializedName("nama_")
