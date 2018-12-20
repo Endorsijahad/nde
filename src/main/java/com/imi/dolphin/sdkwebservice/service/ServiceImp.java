@@ -741,9 +741,11 @@ public class ServiceImp implements IService {
         button.setTitle("Form Complaint");
         button.setSubTitle("Form Complaint");
         List<EasyMap> actions = new ArrayList<>();
+        
         EasyMap bookAction = new EasyMap();
         EasyMap bookAction2 = new EasyMap();
         EasyMap bookAction3 = new EasyMap();
+        
         bookAction.setName("Isi Form");
         bookAction.setValue(formBuilder.build());
         actions.add(bookAction);
