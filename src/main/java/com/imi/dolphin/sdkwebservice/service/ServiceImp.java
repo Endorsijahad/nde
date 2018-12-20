@@ -1413,7 +1413,7 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
         String ticketNumber = extensionRequest.getIntent().getTicket().getTicketNumber();
 
         String Bearer = "";
-        String nama = getEasyMapValueByName(extensionRequest, "nama");
+        String nama = getEasyMapValueByName(extensionRequest, "person");
         String lembaga = getEasyMapValueByName(extensionRequest, "company");
         String posisi = getEasyMapValueByName(extensionRequest, "position");
         String email = getEasyMapValueByName(extensionRequest, "email");
