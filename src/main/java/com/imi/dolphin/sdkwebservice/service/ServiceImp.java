@@ -794,6 +794,7 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
 
         Map<String, String> output = new HashMap<>();
         String formId = appProperties.getFormIdComplaint();
+//        String callAppointment = appProperties.getCallAppointment();
         FormBuilder formBuilder = new FormBuilder(formId);
         ButtonTemplate button = new ButtonTemplate();
         button.setTitle("Form Complaint");
@@ -809,8 +810,8 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
         actions.add(bookAction2);
         
         bookAction3.setName("By Phone");
-        bookAction3.setValue(appProperties.getCallAppointment());
-//        bookAction3.setValue("tel:1500181");
+        bookAction3.setValue("https://www.siloamhospitals.com/tel:1500181");
+//        bookAction3.setValue("tel:+621500181");
         actions.add(bookAction3);
 
         bookAction.setName("Isi Form");
