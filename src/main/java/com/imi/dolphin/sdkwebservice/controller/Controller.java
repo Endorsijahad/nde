@@ -199,7 +199,7 @@ public class Controller {
         @RequestMapping("/ticketNumber")
         @PostMapping
         public ExtensionResult getTicketNumber(@RequestBody ExtensionRequest extensionRequest){
-            return svcService.doGetComplaint(extensionRequest);
+            return svcService.doGetTicketNumber(extensionRequest);
         }
         
          
