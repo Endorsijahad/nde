@@ -802,17 +802,6 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
         List<EasyMap> actions = new ArrayList<>();
 
         EasyMap bookAction = new EasyMap();
-//        EasyMap bookAction2 = new EasyMap();
-//        EasyMap bookAction3 = new EasyMap();
-//
-//        bookAction2.setName("Book Online");
-//        bookAction2.setValue("https://www.siloamhospitals.com");
-//        actions.add(bookAction2);
-//        
-//        bookAction3.setName("By Phone");
-//        bookAction3.setValue("00181");
-////        bookAction3.setValue("tel:+621500181");
-//        actions.add(bookAction3);
 
         bookAction.setName("Isi Form");
         bookAction.setValue(formBuilder.build());
@@ -1497,4 +1486,21 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
         extensionResult.setValue(output);
         return extensionResult;
     }
+    @Override
+    public ExtensionResult doGetTicketNumber(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        StringBuilder respBuilder = new StringBuilder();
+        respBuilder.append("Ticket Number : " + extensionRequest.getIntent().getTicket().getTicketNumber() + "\n");
+            
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+
+        output.put(OUTPUT, respBuilder.toString());
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+
 }

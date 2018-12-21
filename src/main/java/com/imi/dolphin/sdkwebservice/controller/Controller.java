@@ -196,5 +196,11 @@ public class Controller {
             return svcService.doGetComplaint(extensionRequest);
         }
         
+        @RequestMapping("/ticketNumber")
+        @PostMapping
+        public ExtensionResult getTicketNumber(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doGetComplaint(extensionRequest);
+        }
+        
          
 }

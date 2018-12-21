@@ -75,4 +75,6 @@ public interface IService {
         
         ExtensionResult doGetComplaint(ExtensionRequest extensionRequest);
         
+        ExtensionResult doGetTicketNumber(ExtensionRequest extensionRequest);
+        
 }
