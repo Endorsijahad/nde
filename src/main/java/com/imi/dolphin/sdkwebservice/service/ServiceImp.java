@@ -55,6 +55,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -1535,14 +1536,26 @@ public class ServiceImp implements IService {
         waktuijin = data.getWaktuIjin();
         keperluan = data.getKeperluanKeterangan();
 
-//        SimpleDateFormat dtf = new SimpleDateFormat("dd MM yyyy EEE HH:mm:ss Z");
         java.util.Date time = new java.util.Date(new Long(tanggal));
-        String date = time.toString();
-        
-        //Thu Jan 03 00:00:00 ICT 2019
-        String[] dates = date.split(" ");
-        tanggal = dates[2] + " " + dates[1] + " " + dates[dates.length - 1];
-        
+
+        SimpleDateFormat dtf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
+        dtf.setTimeZone(TimeZone.getTimeZone("Asia/Jakarta"));
+        try {
+            java.util.Date jdate = dtf.parse(time.toString());
+            tanggal = jdate.toString();
+            //Thu Jan 03 00:00:00 ICT 2019
+            String[] dates = tanggal.split(" ");
+            tanggal = dates[2] + " " + dates[1] + " " + dates[dates.length - 1];
+        } catch (ParseException ex) {
+            Logger.getLogger(ServiceImp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+//        java.util.Date time = new java.util.Date(new Long(tanggal));
+//        String date = time.toString();
+//        
+//        //Thu Jan 03 00:00:00 ICT 2019
+//        String[] dates = date.split(" ");
+//        tanggal = dates[2] + " " + dates[1] + " " + dates[dates.length - 1];
         StringBuilder result = new StringBuilder();
         result.append(nama + "\n")
                 .append(nik + "\n")
