@@ -52,6 +52,8 @@ import fr.plaisance.bitly.Bitly;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -621,8 +623,8 @@ public class ServiceImp implements IService {
 
         return data;
     }
-    
-public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
+
+    public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
         DatumComplaint data = new DatumComplaint();
         String baseUrl = appProperties.getUrl();
         String apiform = appProperties.getApiForm();
@@ -677,6 +679,7 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
 
         return data;
     }
+
     public String getToken() {
         String bearer = "";
         String username = "agent4@mii.co.id";
@@ -705,7 +708,7 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
         try {
             Response response = okHttpUtil.getClient().newCall(request).execute();
 
-                JSONObject jsonObjek = new JSONObject(response.body().string());
+            JSONObject jsonObjek = new JSONObject(response.body().string());
             bearer = jsonObjek.getString("token");
 
         } catch (IOException e) {
@@ -1341,13 +1344,12 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
     private List<List<String>> getModelModel(String url, String jsonName, String key, String tipe) {
         List<List<String>> result = new ArrayList<>();
 
-        
         try {
             OkHttpUtil okHttpUtil = new OkHttpUtil();
             okHttpUtil.init(true);
             Request request = new Request.Builder().url(url).get().build();
             Response response = okHttpUtil.getClient().newCall(request).execute();
- 
+
             String res = "{\"" + jsonName + "\":" + response.body().string() + "}";
 
             JSONObject jsonObject = new JSONObject(res);
@@ -1391,7 +1393,6 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
     }
     ///// Booking Service /////
 
-    
     @Override
     public ExtensionResult doGetComplaint(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
@@ -1409,7 +1410,7 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
         String nohp = getEasyMapValueByName(extensionRequest, "phone");
         String keluhan = "";
         String masukan = "";
-        
+
         // 1.get data dari form
         // ambil token
         Bearer = getToken();
@@ -1423,7 +1424,7 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
 
         keluhan = data.getKeluhan();
         masukan = data.getMasukan();
-        
+
         String namaatasan = appProperties.getNamerecipient1();
         String namaHrd = appProperties.getNamerecipient2();
 
@@ -1486,12 +1487,13 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
         extensionResult.setValue(output);
         return extensionResult;
     }
+
     @Override
     public ExtensionResult doGetTicketNumber(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
         StringBuilder respBuilder = new StringBuilder();
         respBuilder.append("Ticket Number : " + extensionRequest.getIntent().getTicket().getTicketNumber() + "\n");
-            
+
         ExtensionResult extensionResult = new ExtensionResult();
         extensionResult.setAgent(false);
         extensionResult.setRepeat(false);
@@ -1518,13 +1520,13 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
         String tanggal = "";
         String waktuijin = "";
         String keperluan = "";
-        
+
         Datum data = new Datum();
-        
+
         Bearer = getToken();
-        
+
         data = getForm(Bearer, ticketNumber);
-        
+
         nama = data.getNama();
         nik = data.getNik();
         lembaga = data.getLembaga();
@@ -1532,6 +1534,14 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
         tanggal = data.getTanggal();
         waktuijin = data.getWaktuIjin();
         keperluan = data.getKeperluanKeterangan();
+
+//        SimpleDateFormat dtf = new SimpleDateFormat("dd MM yyyy EEE HH:mm:ss Z");
+        java.util.Date time = new java.util.Date(new Long(tanggal));
+        String date = time.toString();
+        
+        //Thu Jan 03 00:00:00 ICT 2019
+        String[] dates = date.split(" ");
+        tanggal = dates[2] + " " + dates[1] + " " + dates[dates.length - 1];
         
         StringBuilder result = new StringBuilder();
         result.append(nama + "\n")
@@ -1541,7 +1551,7 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
                 .append(tanggal + "\n")
                 .append(waktuijin + "\n")
                 .append(keperluan + "\n");
-        
+
         output.put(OUTPUT, result.toString());
         extensionResult.setAgent(false);
         extensionResult.setRepeat(false);
@@ -1550,5 +1560,5 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
         extensionResult.setValue(output);
         return extensionResult;
     }
-    
+
 }
