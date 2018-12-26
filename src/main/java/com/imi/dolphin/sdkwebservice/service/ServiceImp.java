@@ -639,7 +639,7 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
 
         // tidak pakai ticket number
 //		String url = baseUrl + apiform + paramformId + formId + paramFieldName + fieldName + paramFieldValue
-//				+ paramStart + paramCount;
+//				+ paramStart + param Count;
         System.out.println(url);
 
         OkHttpUtil okHttpUtil = new OkHttpUtil();
@@ -976,7 +976,7 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
             JSONObject obj = new JSONObject(inline);
             JSONObject main = obj.getJSONObject("main");
             int temp = main.getInt("temp");
-//            inline = temp + "";
+            inline = temp + "";
 
 //            JSONObject obj = new JSONObject(inline);
             int pageName = obj.getJSONObject("coord").getInt("lon");
@@ -1503,4 +1503,52 @@ public DatumComplaint getFormComplaint(String bearer, String ticketNumber) {
         return extensionResult;
     }
 
+    @Override
+    public ExtensionResult doGetLastFormData(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        ExtensionResult extensionResult = new ExtensionResult();
+
+        String ticketNumber = extensionRequest.getIntent().getTicket().getTicketNumber();
+
+        String Bearer = "";
+        String nama = "";
+        String nik = "";
+        String lembaga = "";
+        String ijinuntuk = "";
+        String tanggal = "";
+        String waktuijin = "";
+        String keperluan = "";
+        
+        Datum data = new Datum();
+        
+        Bearer = getToken();
+        
+        data = getForm(Bearer, ticketNumber);
+        
+        nama = data.getNama();
+        nik = data.getNik();
+        lembaga = data.getLembaga();
+        ijinuntuk = data.getMengajukanPermohonanIjinUntuk();
+        tanggal = data.getTanggal();
+        waktuijin = data.getWaktuIjin();
+        keperluan = data.getKeperluanKeterangan();
+        
+        StringBuilder result = new StringBuilder();
+        result.append(nama + "\n")
+                .append(nik + "\n")
+                .append(lembaga + "\n")
+                .append(ijinuntuk + "\n")
+                .append(tanggal + "\n")
+                .append(waktuijin + "\n")
+                .append(keperluan + "\n");
+        
+        output.put(OUTPUT, result.toString());
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+    
 }

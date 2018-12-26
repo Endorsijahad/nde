@@ -77,4 +77,6 @@ public interface IService {
         
         ExtensionResult doGetTicketNumber(ExtensionRequest extensionRequest);
         
+        ExtensionResult doGetLastFormData(ExtensionRequest extensionRequest);
+        
 }
