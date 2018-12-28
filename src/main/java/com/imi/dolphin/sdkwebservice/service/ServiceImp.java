@@ -36,7 +36,9 @@ import com.imi.dolphin.sdkwebservice.builder.ImageBuilder;
 import com.imi.dolphin.sdkwebservice.builder.QuickReplyBuilder;
 import com.imi.dolphin.sdkwebservice.form.Datum;
 import com.imi.dolphin.sdkwebservice.form.DatumComplaint;
+import com.imi.dolphin.sdkwebservice.form.DatumRequest;
 import com.imi.dolphin.sdkwebservice.form.FormComplaint;
+import com.imi.dolphin.sdkwebservice.form.FormRequest;
 import com.imi.dolphin.sdkwebservice.form.Formcuti;
 import com.imi.dolphin.sdkwebservice.model.ButtonTemplate;
 import com.imi.dolphin.sdkwebservice.model.EasyMap;
@@ -672,6 +674,62 @@ public class ServiceImp implements IService {
             // System.out.println("Object json dari form cuti data : "+jsonObjek);
 
             data = gson.fromJson(jsonObjek.toString(), DatumComplaint.class);
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return data;
+    }
+
+    public DatumRequest getDataRequest(String bearer, String ticketNumber) {
+        DatumRequest data = new DatumRequest();
+        String baseUrl = appProperties.getUrl();
+        String apiform = appProperties.getApiForm();
+        String formId = appProperties.getFormIdRequest();
+        String paramformId = "?formId=";
+        String paramFieldName = "&fieldName=";
+        String paramFieldValue = "&fieldValue=*";
+        String paramStart = "&start=0";
+        String paramCount = "&count=1";
+        String fieldName = appProperties.getTicketNumber();
+
+        //menggunakan ticket number
+        String url = baseUrl + apiform + paramformId + formId + paramFieldName + fieldName + paramFieldValue + ticketNumber + paramStart + paramCount;
+
+        // tidak pakai ticket number
+//		String url = baseUrl + apiform + paramformId + formId + paramFieldName + fieldName + paramFieldValue
+//				+ paramStart + param Count;
+        System.out.println(url);
+
+        OkHttpUtil okHttpUtil = new OkHttpUtil();
+        okHttpUtil.init(true);
+
+        Request request = new Request.Builder().url(url).get().addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer " + bearer).build();
+
+        try {
+            Response response = okHttpUtil.getClient().newCall(request).execute();
+
+            FormRequest complaint = new FormRequest();
+            String JsonString = response.body().string();
+            // System.out.println("getform, Jsonstring : "+JsonString);
+
+            Gson gson = new Gson();
+            complaint = gson.fromJson(JsonString, FormRequest.class);
+            // System.out.println("From cuti data : "+fct);
+
+            String jsonfct = gson.toJson(complaint.getData());
+            // System.out.println(jsonfct);
+
+            // ambil json array
+            JSONArray arrayJson = new JSONArray(jsonfct);
+            // System.out.println("Array json dari form cuti data : "+arrayJson);
+            JSONObject jsonObjek = arrayJson.getJSONObject(0);
+            // System.out.println("Object json dari form cuti data : "+jsonObjek);
+
+            data = gson.fromJson(jsonObjek.toString(), DatumRequest.class);
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -1395,7 +1453,7 @@ public class ServiceImp implements IService {
     ///// Booking Service /////
 
     @Override
-    public ExtensionResult doGetComplaint(ExtensionRequest extensionRequest) {
+    public ExtensionResult doSendComplaint(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
         ExtensionResult extensionResult = new ExtensionResult();
         StringBuilder respBuilder = new StringBuilder();
@@ -1432,8 +1490,7 @@ public class ServiceImp implements IService {
         respBuilder.append("Kepada Yth.\n");
         respBuilder.append(namaatasan);
         respBuilder.append("\nDengan Hormat,");
-        respBuilder.append("\n\nNama : " + nama);
-        respBuilder.append("\nLembaga : " + lembaga);
+        respBuilder.append("\n\nLembaga : " + lembaga);
         respBuilder.append("\nPosisi : " + posisi);
         respBuilder.append("\nNo HP : " + nohp);
         respBuilder.append("\nKeluhan : " + keluhan);
@@ -1457,7 +1514,7 @@ public class ServiceImp implements IService {
         String bodyHrd = respBuilder2.toString();
 
         // 3. kirim email
-        String recipient1 = email;
+        String recipient1 = appProperties.getEmailrecipient1();
         String recipient2 = appProperties.getEmailrecipient2();
         System.out.println("recipient 1 : " + recipient1);
         System.out.println("recipient 2 : " + recipient2);
@@ -1566,6 +1623,109 @@ public class ServiceImp implements IService {
                 .append(keperluan);
 
         output.put(OUTPUT, result.toString());
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doSendEmailRequest(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        ExtensionResult extensionResult = new ExtensionResult();
+        StringBuilder respBuilder = new StringBuilder();
+        StringBuilder respBuilder2 = new StringBuilder();
+
+        String ticketNumber = extensionRequest.getIntent().getTicket().getTicketNumber();
+
+        String Bearer = "";
+        String nama = getEasyMapValueByName(extensionRequest, "person");
+        String lembaga = getEasyMapValueByName(extensionRequest, "company");
+        String posisi = getEasyMapValueByName(extensionRequest, "position");
+        String email = getEasyMapValueByName(extensionRequest, "email");
+        String nohp = getEasyMapValueByName(extensionRequest, "phone");
+        String request = "";
+        String kebutuhan = "";
+        String waktu = "";
+
+        // 1.get data dari form
+        // ambil token
+        Bearer = getToken();
+
+        // request API dolphin
+        System.out.println("bearer = " + Bearer);
+
+        DatumRequest data = new DatumRequest();
+        data = getDataRequest(Bearer, ticketNumber);
+        // 2. parsing data
+
+        request = data.getRequest();
+        kebutuhan = data.getKebutuhan();
+        waktu = data.getTanggal();
+        waktu = new java.util.Date(new Long(waktu)).toString();
+
+        String[] times = waktu.split(" ");
+
+        waktu = times[2] + " " + times[1] + " " + times[times.length - 1];
+
+        String namaatasan = appProperties.getNamerecipient1();
+        String namaHrd = appProperties.getNamerecipient2();
+
+        respBuilder.append("Kepada Yth.\n");
+        respBuilder.append(namaatasan);
+        respBuilder.append("\nDengan Hormat,");
+        respBuilder.append("\n\nLembaga : " + lembaga);
+        respBuilder.append("\nPosisi : " + posisi);
+        respBuilder.append("\nEmail : " + email);
+        respBuilder.append("\nNo HP : " + nohp);
+        respBuilder.append("\nRequest : " + request);
+        respBuilder.append("\nKebutuhan : " + kebutuhan);
+        respBuilder.append("\nWaktu : " + waktu);
+        respBuilder.append("\n\nDemikian Surat request ini dibuat.");
+        respBuilder.append("\nterima kasih");
+
+        respBuilder2.append("Kepada Yth.\n");
+        respBuilder2.append(namaHrd);
+        respBuilder2.append("\nDengan Hormat,");
+        respBuilder2.append("\n\nNama : " + nama);
+        respBuilder2.append("\nLembaga : " + lembaga);
+        respBuilder2.append("\nPosisi : " + posisi);
+        respBuilder2.append("\nEmail : " + email);
+        respBuilder2.append("\nNo HP : " + nohp);
+        respBuilder2.append("\nRequest : " + request);
+        respBuilder2.append("\nKebutuhan : " + kebutuhan);
+        respBuilder2.append("\nWaktu : " + waktu);
+        respBuilder2.append("\n\nDemikian Surat request ini dibuat.");
+        respBuilder2.append("\nterima kasih");
+
+        String bodyAtasan = respBuilder.toString();
+        String bodyHrd = respBuilder2.toString();
+
+        // 3. kirim email
+        String recipient1 = appProperties.getEmailrecipient1();
+        String recipient2 = appProperties.getEmailrecipient2();
+        System.out.println("recipient 1 : " + recipient1);
+        System.out.println("recipient 2 : " + recipient2);
+
+        MailModel mailModel = new MailModel(recipient1, "Surat Request", bodyAtasan);
+        MailModel mailModel2 = new MailModel(recipient2, "Surat Request", bodyHrd);
+        String sendMailResult = svcMailService.sendMail(mailModel);
+        String sendMailResult2 = svcMailService.sendMail(mailModel2);
+        System.out.println("hasil kirim email" + sendMailResult);
+        System.out.println("hasil kirim email" + sendMailResult2);
+
+        String result = "";
+        if (sendMailResult.toLowerCase().contains("success") && sendMailResult2.toLowerCase().contains("success")) {
+            result = "Baik kak silahkan tunggu konfirmasi ya kak";
+        } else if (sendMailResult.toLowerCase().contains("fail") && sendMailResult2.toLowerCase().contains("fail")) {
+            result = "Maaf kak pengiriman email gagal. Boleh diulangi kak";
+        } else {
+            result = "Maaf kak {bot_name} belum mengerti. Bisa tolong ulangi lagi kak.";
+        }
+
+        output.put(OUTPUT, result);
         extensionResult.setAgent(false);
         extensionResult.setRepeat(false);
         extensionResult.setSuccess(true);

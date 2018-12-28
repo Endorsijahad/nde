@@ -73,10 +73,12 @@ public interface IService {
 	
         ExtensionResult doGetFormEventCCW(ExtensionRequest extensionRequest);
         
-        ExtensionResult doGetComplaint(ExtensionRequest extensionRequest);
+        ExtensionResult doSendComplaint(ExtensionRequest extensionRequest);
         
         ExtensionResult doGetTicketNumber(ExtensionRequest extensionRequest);
         
         ExtensionResult doGetLastFormData(ExtensionRequest extensionRequest);
+        
+        ExtensionResult doSendEmailRequest(ExtensionRequest extensionRequest);
         
 }

@@ -193,7 +193,13 @@ public class Controller {
          @RequestMapping("/complaint")
         @PostMapping
         public ExtensionResult doComplaint(@RequestBody ExtensionRequest extensionRequest){
-            return svcService.doGetComplaint(extensionRequest);
+            return svcService.doSendComplaint(extensionRequest);
+        }
+        
+        @RequestMapping("/emailRequest")
+        @PostMapping
+        public ExtensionResult dosendRequest(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doSendEmailRequest(extensionRequest);
         }
         
         @RequestMapping("/ticketNumber")
