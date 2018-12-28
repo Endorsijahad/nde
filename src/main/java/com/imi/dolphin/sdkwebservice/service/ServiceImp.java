@@ -1563,7 +1563,7 @@ public class ServiceImp implements IService {
                 .append(ijinuntuk + "\n")
                 .append(tanggal + "\n")
                 .append(waktuijin + "\n")
-                .append(keperluan + "\n");
+                .append(keperluan);
 
         output.put(OUTPUT, result.toString());
         extensionResult.setAgent(false);
