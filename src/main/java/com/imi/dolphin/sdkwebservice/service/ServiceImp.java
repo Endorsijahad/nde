@@ -1490,12 +1490,14 @@ public class ServiceImp implements IService {
         respBuilder.append("Kepada Yth.\n");
         respBuilder.append(namaatasan);
         respBuilder.append("\nDengan Hormat,");
-        respBuilder.append("\n\nLembaga : " + lembaga);
+        respBuilder.append("\n\nNama : " + nama);
+        respBuilder.append("\nLembaga : " + lembaga);
         respBuilder.append("\nPosisi : " + posisi);
+        respBuilder.append("\nEmail : " + email);
         respBuilder.append("\nNo HP : " + nohp);
         respBuilder.append("\nKeluhan : " + keluhan);
         respBuilder.append("\nMasukan : " + masukan);
-        respBuilder.append("\n\nDemikian Surat keluhan ini dibuat.");
+        respBuilder.append("\n\nDemikian Surat Complaint ini dibuat.");
         respBuilder.append("\nterima kasih");
 
         respBuilder2.append("Kepada Yth.\n");
@@ -1504,10 +1506,11 @@ public class ServiceImp implements IService {
         respBuilder2.append("\n\nNama : " + nama);
         respBuilder2.append("\nLembaga : " + lembaga);
         respBuilder2.append("\nPosisi : " + posisi);
+        respBuilder2.append("\nEmail : " + email);
         respBuilder2.append("\nNo HP : " + nohp);
         respBuilder2.append("\nKeluhan : " + keluhan);
         respBuilder2.append("\nMasukan : " + masukan);
-        respBuilder2.append("\n\nDemikian Surat keluhan ini dibuat.");
+        respBuilder2.append("\n\nDemikian Surat Complaint ini dibuat.");
         respBuilder2.append("\nterima kasih");
 
         String bodyAtasan = respBuilder.toString();
@@ -1521,8 +1524,8 @@ public class ServiceImp implements IService {
 
         //String recipient1 = appProperties.getEmailrecipient1();
         // String recipient2 = appProperties.getEmailrecipient2();
-        MailModel mailModel = new MailModel(recipient1, "Surat Keluhan", bodyAtasan);
-        MailModel mailModel2 = new MailModel(recipient2, "Surat Keluhan", bodyHrd);
+        MailModel mailModel = new MailModel(recipient1, "[Complaint]", bodyAtasan);
+        MailModel mailModel2 = new MailModel(recipient2, "[Complaint]", bodyHrd);
         String sendMailResult = svcMailService.sendMail(mailModel);
         String sendMailResult2 = svcMailService.sendMail(mailModel2);
         System.out.println("hasil kirim email" + sendMailResult);
@@ -1676,7 +1679,8 @@ public class ServiceImp implements IService {
         respBuilder.append("Kepada Yth.\n");
         respBuilder.append(namaatasan);
         respBuilder.append("\nDengan Hormat,");
-        respBuilder.append("\n\nLembaga : " + lembaga);
+        respBuilder.append("\n\nNama : " + nama);
+        respBuilder.append("\nLembaga : " + lembaga);
         respBuilder.append("\nPosisi : " + posisi);
         respBuilder.append("\nEmail : " + email);
         respBuilder.append("\nNo HP : " + nohp);
@@ -1709,8 +1713,8 @@ public class ServiceImp implements IService {
         System.out.println("recipient 1 : " + recipient1);
         System.out.println("recipient 2 : " + recipient2);
 
-        MailModel mailModel = new MailModel(recipient1, "Surat Request", bodyAtasan);
-        MailModel mailModel2 = new MailModel(recipient2, "Surat Request", bodyHrd);
+        MailModel mailModel = new MailModel(recipient1, "[Request]", bodyAtasan);
+        MailModel mailModel2 = new MailModel(recipient2, "[Request]", bodyHrd);
         String sendMailResult = svcMailService.sendMail(mailModel);
         String sendMailResult2 = svcMailService.sendMail(mailModel2);
         System.out.println("hasil kirim email" + sendMailResult);
@@ -1731,6 +1735,146 @@ public class ServiceImp implements IService {
         extensionResult.setSuccess(true);
         extensionResult.setNext(true);
         extensionResult.setValue(output);
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doSendEmailSolution(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        ExtensionResult extensionResult = new ExtensionResult();
+        StringBuilder respBuilder = new StringBuilder();
+        StringBuilder respBuilder2 = new StringBuilder();
+        String pertanyaan = getEasyMapValueByName(extensionRequest, "pertanyaan");
+        String namaatasan = appProperties.getNamerecipient1();
+        String namaHrd = appProperties.getNamerecipient2();
+
+        respBuilder.append("Kepada Yth.\n");
+        respBuilder.append(namaatasan);
+        respBuilder.append("\nDengan Hormat,");
+        respBuilder.append("\n\nPertanyaan : " + pertanyaan);
+        respBuilder.append("\n\nDemikian Surat solution ini dibuat.");
+        respBuilder.append("\nterima kasih");
+
+        respBuilder2.append("Kepada Yth.\n");
+        respBuilder2.append(namaHrd);
+        respBuilder2.append("\nDengan Hormat,");
+        respBuilder2.append("\n\nPertanyaan : " + pertanyaan);
+        respBuilder2.append("\n\nDemikian Surat solution ini dibuat.");
+        respBuilder2.append("\nterima kasih");
+
+        String bodyAtasan = respBuilder.toString();
+        String bodyHrd = respBuilder2.toString();
+
+        // 3. kirim email
+        String recipient1 = appProperties.getEmailrecipient1();
+        String recipient2 = appProperties.getEmailrecipient2();
+        System.out.println("recipient 1 : " + recipient1);
+        System.out.println("recipient 2 : " + recipient2);
+
+        MailModel mailModel = new MailModel(recipient1, "[Solution]", bodyAtasan);
+        MailModel mailModel2 = new MailModel(recipient2, "[Solution]", bodyHrd);
+        String sendMailResult = svcMailService.sendMail(mailModel);
+        String sendMailResult2 = svcMailService.sendMail(mailModel2);
+        System.out.println("hasil kirim email" + sendMailResult);
+        System.out.println("hasil kirim email" + sendMailResult2);
+
+        String result = "";
+        if (sendMailResult.toLowerCase().contains("success") && sendMailResult2.toLowerCase().contains("success")) {
+            result = "Baik kak silahkan tunggu konfirmasi ya kak";
+        } else if (sendMailResult.toLowerCase().contains("fail") && sendMailResult2.toLowerCase().contains("fail")) {
+            result = "Maaf kak pengiriman email gagal. Boleh diulangi kak";
+        } else {
+            result = "Maaf kak {bot_name} belum mengerti. Bisa tolong ulangi lagi kak.";
+        }
+
+        output.put(OUTPUT, result);
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doSendEmailPromo(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        ExtensionResult extensionResult = new ExtensionResult();
+        StringBuilder respBuilder = new StringBuilder();
+        StringBuilder respBuilder2 = new StringBuilder();
+        String promo = getEasyMapValueByName(extensionRequest, "promo");
+        String namaatasan = appProperties.getNamerecipient1();
+        String namaHrd = appProperties.getNamerecipient2();
+
+        respBuilder.append("Kepada Yth.\n");
+        respBuilder.append(namaatasan);
+        respBuilder.append("\nDengan Hormat,");
+        respBuilder.append("\n\nPromo : " + promo);
+        respBuilder.append("\n\nDemikian Surat promo ini dibuat.");
+        respBuilder.append("\nterima kasih");
+
+        respBuilder2.append("Kepada Yth.\n");
+        respBuilder2.append(namaHrd);
+        respBuilder2.append("\nDengan Hormat,");
+        respBuilder2.append("\n\nPromo : " + promo);
+        respBuilder2.append("\n\nDemikian Surat promo ini dibuat.");
+        respBuilder2.append("\nterima kasih");
+
+        String bodyAtasan = respBuilder.toString();
+        String bodyHrd = respBuilder2.toString();
+
+        // 3. kirim email
+        String recipient1 = appProperties.getEmailrecipient1();
+        String recipient2 = appProperties.getEmailrecipient2();
+        System.out.println("recipient 1 : " + recipient1);
+        System.out.println("recipient 2 : " + recipient2);
+
+        MailModel mailModel = new MailModel(recipient1, "[Promo]", bodyAtasan);
+        MailModel mailModel2 = new MailModel(recipient2, "[Promo]", bodyHrd);
+        String sendMailResult = svcMailService.sendMail(mailModel);
+        String sendMailResult2 = svcMailService.sendMail(mailModel2);
+        System.out.println("hasil kirim email" + sendMailResult);
+        System.out.println("hasil kirim email" + sendMailResult2);
+
+        String result = "";
+        if (sendMailResult.toLowerCase().contains("success") && sendMailResult2.toLowerCase().contains("success")) {
+            result = "Baik kak silahkan tunggu konfirmasi ya kak";
+        } else if (sendMailResult.toLowerCase().contains("fail") && sendMailResult2.toLowerCase().contains("fail")) {
+            result = "Maaf kak pengiriman email gagal. Boleh diulangi kak";
+        } else {
+            result = "Maaf kak {bot_name} belum mengerti. Bisa tolong ulangi lagi kak.";
+        }
+
+        output.put(OUTPUT, result);
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doValidatePhone(ExtensionRequest extensionRequest) {
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+
+        Map<String, String> clearEntities = new HashMap<>();
+        String phone = getEasyMapValueByName(extensionRequest, "phone");
+
+        if (phone.matches("^[0-9]*$")) {
+            if (phone.length() < 12) {
+                clearEntities.put("phone", "");
+                extensionResult.setEntities(clearEntities);
+            }
+        } else {
+            clearEntities.put("phone", "");
+            extensionResult.setEntities(clearEntities);
+        }
+
         return extensionResult;
     }
 

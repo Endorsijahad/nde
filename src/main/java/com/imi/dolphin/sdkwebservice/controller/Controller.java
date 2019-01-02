@@ -202,6 +202,18 @@ public class Controller {
             return svcService.doSendEmailRequest(extensionRequest);
         }
         
+        @RequestMapping("/emailSolution")
+        @PostMapping
+        public ExtensionResult dosendSolution(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doSendEmailSolution(extensionRequest);
+        }
+        
+        @RequestMapping("/emailPromo")
+        @PostMapping
+        public ExtensionResult dosendPromo(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doSendEmailPromo(extensionRequest);
+        }
+        
         @RequestMapping("/ticketNumber")
         @PostMapping
         public ExtensionResult getTicketNumber(@RequestBody ExtensionRequest extensionRequest){
@@ -212,5 +224,11 @@ public class Controller {
         @PostMapping
         public ExtensionResult getLastFormData(@RequestBody ExtensionRequest extensionRequest){
             return svcService.doGetLastFormData(extensionRequest);
+        }
+        
+        @RequestMapping("/validatephone")
+        @PostMapping
+        public ExtensionResult doValidatePhone(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doValidatePhone(extensionRequest);
         }
 }
