@@ -1867,11 +1867,11 @@ public class ServiceImp implements IService {
 
         if (phone.matches("^[0-9]*$")) {
             if (phone.length() < 12) {
-                clearEntities.put("phone", "0");
+                clearEntities.put("phone", "");
                 extensionResult.setEntities(clearEntities);
             }
         } else {
-            clearEntities.put("phone", "0");
+            clearEntities.put("phone", "");
             extensionResult.setEntities(clearEntities);
         }
 
