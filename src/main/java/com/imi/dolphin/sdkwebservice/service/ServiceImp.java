@@ -60,6 +60,8 @@ import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -1867,7 +1869,7 @@ public class ServiceImp implements IService {
 
         
         if (phone.matches("^[0-9]*$") && !phone.equals("")) {
-            if (phone.length() < 12) {
+            if (phone.length() < 10 || phone.length() > 13){
                 clearEntities.put("phone", null);
                 extensionResult.setEntities(clearEntities);
             }
@@ -1876,6 +1878,26 @@ public class ServiceImp implements IService {
             extensionResult.setEntities(clearEntities);
         }
 
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doValidateEmail(ExtensionRequest extensionRequest) {
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+
+        Map<String, String> clearEntities = new HashMap<>();
+        String email = getEasyMapValueByName(extensionRequest, "email");
+        Matcher matcher = Pattern.compile("^[A-Z0-9._-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE)
+                .matcher(email);
+        
+        if (matcher.find() == false) {
+                clearEntities.put("email", null);
+                extensionResult.setEntities(clearEntities);
+        } 
         return extensionResult;
     }
 

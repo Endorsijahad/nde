@@ -86,4 +86,6 @@ public interface IService {
         ExtensionResult doSendEmailPromo(ExtensionRequest extensionRequest);
         
         ExtensionResult doValidatePhone(ExtensionRequest extensionRequest);
+        
+        ExtensionResult doValidateEmail(ExtensionRequest extensionRequest);
 }
