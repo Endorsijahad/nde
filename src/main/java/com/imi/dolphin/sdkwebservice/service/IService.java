@@ -88,4 +88,6 @@ public interface IService {
         ExtensionResult doValidatePhone(ExtensionRequest extensionRequest);
         
         ExtensionResult doValidateEmail(ExtensionRequest extensionRequest);
+        
+        ExtensionResult yesNoConfirm(ExtensionRequest extensionRequest);
 }

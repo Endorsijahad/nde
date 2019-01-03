@@ -237,4 +237,10 @@ public class Controller {
         public ExtensionResult doValidateEmail(@RequestBody ExtensionRequest extensionRequest){
             return svcService.doValidateEmail(extensionRequest);
         }
+        
+        @RequestMapping("/yesnoconfirm")
+        @PostMapping
+        public ExtensionResult yesNoConfirm(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.yesNoConfirm(extensionRequest);
+        }
 }
