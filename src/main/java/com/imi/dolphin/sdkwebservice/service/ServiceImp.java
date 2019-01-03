@@ -1867,13 +1867,12 @@ public class ServiceImp implements IService {
         Map<String, String> clearEntities = new HashMap<>();
         String phone = getEasyMapValueByName(extensionRequest, "phone");
 
-        
         if (phone.matches("^[0-9]*$") && !phone.equals("")) {
-            if (phone.length() < 10 || phone.length() > 13){
+            if (phone.length() < 10 || phone.length() > 13) {
                 clearEntities.put("phone", null);
                 extensionResult.setEntities(clearEntities);
             }
-        } else if(!phone.equals("")){
+        } else if (!phone.equals("")) {
             clearEntities.put("phone", null);
             extensionResult.setEntities(clearEntities);
         }
@@ -1885,7 +1884,6 @@ public class ServiceImp implements IService {
     public ExtensionResult doValidateEmail(ExtensionRequest extensionRequest) {
         ExtensionResult extensionResult = new ExtensionResult();
         extensionResult.setAgent(false);
-        extensionResult.setRepeat(false);
         extensionResult.setSuccess(true);
         extensionResult.setNext(true);
 
@@ -1893,11 +1891,12 @@ public class ServiceImp implements IService {
         String email = getEasyMapValueByName(extensionRequest, "email");
         Matcher matcher = Pattern.compile("^[A-Z0-9._-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE)
                 .matcher(email);
-        
+
         if (matcher.find() == false) {
-                clearEntities.put("email", null);
-                extensionResult.setEntities(clearEntities);
-        } 
+            clearEntities.put("email", null);
+            extensionResult.setEntities(clearEntities);
+            extensionResult.setRepeat(true);
+        }
         return extensionResult;
     }
 
