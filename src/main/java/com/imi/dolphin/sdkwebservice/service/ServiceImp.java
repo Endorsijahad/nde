@@ -1895,10 +1895,7 @@ public class ServiceImp implements IService {
         if (matcher.find() == false) {
             clearEntities.put("email", null);
             extensionResult.setEntities(clearEntities);
-            extensionResult.setRepeat(true);
-        } else {
-            extensionResult.setRepeat(false);
-        }
+        } 
         return extensionResult;
     }
 
