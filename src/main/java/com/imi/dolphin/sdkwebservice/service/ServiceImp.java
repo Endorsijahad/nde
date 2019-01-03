@@ -1896,6 +1896,8 @@ public class ServiceImp implements IService {
             clearEntities.put("email", null);
             extensionResult.setEntities(clearEntities);
             extensionResult.setRepeat(true);
+        } else {
+            extensionResult.setRepeat(false);
         }
         return extensionResult;
     }
