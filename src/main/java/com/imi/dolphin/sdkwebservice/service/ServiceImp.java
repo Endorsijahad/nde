@@ -1867,8 +1867,10 @@ public class ServiceImp implements IService {
         Map<String, String> clearEntities = new HashMap<>();
         String phone = getEasyMapValueByName(extensionRequest, "phone");
 
-        if (phone.matches("^[0-9]*$") && !phone.equals("")) {
-            if (phone.length() < 10 || phone.length() > 13) {
+        if (phone.matches("^[+0-9]*$") && !phone.equals("")) {
+            String preZero8 = phone.substring(0,2);
+            String prePlus62 = phone.substring(0,3);
+            if ((phone.length() < 10 || phone.length() > 14) &&(preZero8.equals("08") || prePlus62.equals("+62"))) {
                 clearEntities.put("phone", null);
                 extensionResult.setEntities(clearEntities);
             }
