@@ -243,4 +243,10 @@ public class Controller {
         public ExtensionResult yesNoConfirm(@RequestBody ExtensionRequest extensionRequest){
             return svcService.yesNoConfirm(extensionRequest);
         }
+        
+        @RequestMapping("/merk17")
+        @PostMapping
+        public ExtensionResult merk17(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doGet17MerkMobil(extensionRequest);
+        }
 }

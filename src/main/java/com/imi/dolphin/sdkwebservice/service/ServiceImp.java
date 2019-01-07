@@ -1917,4 +1917,45 @@ public class ServiceImp implements IService {
         return extensionResult;
     }
 
+    @Override
+    public ExtensionResult doGet17MerkMobil(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        
+
+       
+        List<ButtonBuilder> buttonBuilders = new ArrayList<>();
+        for (int i = 0; i <17; i++) {
+            logger.debug("Mobil dengan merk : " + i);
+            ButtonTemplate button = new ButtonTemplate();
+            button.setPictureLink(appProperties.getToyotaImgUrl());
+            button.setPicturePath(appProperties.getToyotaImgUrl());
+            button.setTitle(i+"");
+            button.setSubTitle("Astra " + i);
+            List<EasyMap> actions = new ArrayList<>();
+            EasyMap bookAction = new EasyMap();
+            bookAction.setName(i+"");
+            bookAction.setValue(i+"");
+            actions.add(bookAction);
+            button.setButtonValues(actions);
+
+            ButtonBuilder buttonBuilder = new ButtonBuilder(button);
+            buttonBuilders.add(buttonBuilder);
+        }
+        String btnBuilders = "";
+        for (ButtonBuilder buttonBuilder : buttonBuilders) {
+            btnBuilders += buttonBuilder.build();
+            btnBuilders += "&split&";
+        }
+
+        CarouselBuilder carouselBuilder = new CarouselBuilder(btnBuilders);
+        output.put(OUTPUT, carouselBuilder.build());
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+
 }
