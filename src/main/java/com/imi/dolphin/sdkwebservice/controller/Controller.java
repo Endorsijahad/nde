@@ -249,4 +249,10 @@ public class Controller {
         public ExtensionResult merk17(@RequestBody ExtensionRequest extensionRequest){
             return svcService.doGet17MerkMobil(extensionRequest);
         }
+        
+        @RequestMapping("/ping")
+        @PostMapping
+        public ExtensionResult ping(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doPing(extensionRequest);
+        }
 }

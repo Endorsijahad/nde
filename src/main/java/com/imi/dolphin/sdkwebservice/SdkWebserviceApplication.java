@@ -13,6 +13,10 @@
 
 package com.imi.dolphin.sdkwebservice;
 
+import com.imi.dolphin.sdkwebservice.service.IService;
+import java.util.Timer;
+import java.util.TimerTask;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,7 +30,17 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {"com.imi.dolphin.sdkwebservice"})
 public class SdkWebserviceApplication {
 
+    @Autowired
+    static IService iService;
 	public static void main(String[] args) {
 		SpringApplication.run(SdkWebserviceApplication.class, args);
+                
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        iService.ping();
+                    }
+                },0,1000L * 60L * 30L);
 	}
 }

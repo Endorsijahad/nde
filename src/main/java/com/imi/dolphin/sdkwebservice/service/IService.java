@@ -23,6 +23,10 @@ import com.imi.dolphin.sdkwebservice.model.ExtensionResult;
  */
 public interface IService {
 	
+	void ping();
+        
+	ExtensionResult doPing(ExtensionRequest extensionRequest);
+        
 	ExtensionResult getSrnResult(ExtensionRequest extensionRequest);
 	
 	ExtensionResult getCustomerInfo(ExtensionRequest extensionRequest);

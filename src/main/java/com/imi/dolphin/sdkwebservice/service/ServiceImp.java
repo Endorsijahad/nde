@@ -1868,9 +1868,9 @@ public class ServiceImp implements IService {
         String phone = getEasyMapValueByName(extensionRequest, "phone");
 
         if (phone.matches("^[+0-9]*$") && !phone.equals("")) {
-            String preZero8 = phone.substring(0,2);
-            String prePlus62 = phone.substring(0,3);
-            if ((phone.length() < 10 || phone.length() > 14) &&(preZero8.equals("08") || prePlus62.equals("+62"))) {
+            String preZero8 = phone.substring(0, 2);
+            String prePlus62 = phone.substring(0, 3);
+            if ((phone.length() < 10 || phone.length() > 14) && (preZero8.equals("08") || prePlus62.equals("+62"))) {
                 clearEntities.put("phone", null);
                 extensionResult.setEntities(clearEntities);
             }
@@ -1897,7 +1897,7 @@ public class ServiceImp implements IService {
         if (matcher.find() == false) {
             clearEntities.put("email", null);
             extensionResult.setEntities(clearEntities);
-        } 
+        }
         return extensionResult;
     }
 
@@ -1920,21 +1920,19 @@ public class ServiceImp implements IService {
     @Override
     public ExtensionResult doGet17MerkMobil(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
-        
 
-       
         List<ButtonBuilder> buttonBuilders = new ArrayList<>();
-        for (int i = 0; i <17; i++) {
+        for (int i = 0; i < 17; i++) {
             logger.debug("Mobil dengan merk : " + i);
             ButtonTemplate button = new ButtonTemplate();
             button.setPictureLink(appProperties.getToyotaImgUrl());
             button.setPicturePath(appProperties.getToyotaImgUrl());
-            button.setTitle(i+"");
+            button.setTitle(i + "");
             button.setSubTitle("Astra " + i);
             List<EasyMap> actions = new ArrayList<>();
             EasyMap bookAction = new EasyMap();
-            bookAction.setName(i+"");
-            bookAction.setValue(i+"");
+            bookAction.setName(i + "");
+            bookAction.setValue(i + "");
             actions.add(bookAction);
             button.setButtonValues(actions);
 
@@ -1956,6 +1954,33 @@ public class ServiceImp implements IService {
         extensionResult.setNext(true);
         extensionResult.setValue(output);
         return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doPing(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        output.put(OUTPUT, "pong");
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+
+    @Override
+    public void ping() {
+        String url = "http://sdk-bipbip.herokuapp.com/ping";
+        try {
+            OkHttpUtil okHttpUtil = new OkHttpUtil();
+            okHttpUtil.init(true);
+            Request request = new Request.Builder().url(url).get().build();
+            Response response = okHttpUtil.getClient().newCall(request).execute();
+            System.out.println(response.body());
+        } catch(Exception e)  {
+            System.out.println(e.getMessage());
+        }
     }
 
 }
