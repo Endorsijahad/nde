@@ -1909,7 +1909,7 @@ public class ServiceImp implements IService {
         extensionResult.setNext(true);
 
         Map<String, String> clearEntities = new HashMap<>();
-        String conf = getEasyMapValueByName(extensionRequest, "comfirm2");
+        String conf = getEasyMapValueByName(extensionRequest, "comfirm");
         
         if (conf.equals("salah")) {
             clearEntities.put("email", null);
