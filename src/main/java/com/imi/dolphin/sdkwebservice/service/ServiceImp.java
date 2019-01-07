@@ -1903,17 +1903,22 @@ public class ServiceImp implements IService {
 
     @Override
     public ExtensionResult yesNoConfirm(ExtensionRequest extensionRequest) {
-        Map<String, String> output = new HashMap<>();
-        QuickReplyBuilder quickReplyBuilder = new QuickReplyBuilder.Builder("Hello")
-                .add("Yes", "Yes")
-                .add("No", "cek validasi").build();
-        output.put(OUTPUT, quickReplyBuilder.string());
         ExtensionResult extensionResult = new ExtensionResult();
         extensionResult.setAgent(false);
-        extensionResult.setRepeat(false);
         extensionResult.setSuccess(true);
         extensionResult.setNext(true);
-        extensionResult.setValue(output);
+
+        Map<String, String> clearEntities = new HashMap<>();
+        String conf = getEasyMapValueByName(extensionRequest, "comfirm2");
+        
+        if (conf.equals("salah")) {
+            clearEntities.put("email", null);
+            clearEntities.put("phone", null);
+        }else{
+            clearEntities.put("confirm2", "yes");
+        }
+        
+        extensionResult.setEntities(clearEntities);
         return extensionResult;
     }
 
