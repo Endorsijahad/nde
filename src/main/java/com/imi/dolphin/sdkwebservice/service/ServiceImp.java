@@ -1908,17 +1908,21 @@ public class ServiceImp implements IService {
         extensionResult.setSuccess(true);
         extensionResult.setNext(true);
 
+        Map<String, String> emailEntity = new HashMap<>();
+        Map<String, String> phoneEntity = new HashMap<>();
         Map<String, String> clearEntities = new HashMap<>();
         String conf = getEasyMapValueByName(extensionRequest, "confirm");
-        
+
         if (conf.equals("salah")) {
-            clearEntities.put("email", null);
-            clearEntities.put("phone", null);
-            clearEntities.put("confirm", "0");
-        }else{
+//            emailEntity.put("email", null);
+            phoneEntity.put("confirm", null);
+//            clearEntities.putAll(emailEntity);
+            clearEntities.putAll(phoneEntity);
+            
+        } else {
             clearEntities.put("confirm2", "yes");
         }
-        
+
         extensionResult.setEntities(clearEntities);
         return extensionResult;
     }
@@ -1984,7 +1988,7 @@ public class ServiceImp implements IService {
             Request request = new Request.Builder().url(url).get().build();
             Response response = okHttpUtil.getClient().newCall(request).execute();
             System.out.println(response.body());
-        } catch(Exception e)  {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
