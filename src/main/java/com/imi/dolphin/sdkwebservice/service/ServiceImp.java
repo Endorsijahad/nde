@@ -1914,7 +1914,7 @@ public class ServiceImp implements IService {
         if (conf.equals("salah")) {
             clearEntities.put("email", null);
             clearEntities.put("phone", null);
-            clearEntities.put("confirm", null);
+            clearEntities.put("confirm", "0");
         }else{
             clearEntities.put("confirm2", "yes");
         }
