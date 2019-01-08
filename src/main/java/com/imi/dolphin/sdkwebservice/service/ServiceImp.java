@@ -1908,21 +1908,16 @@ public class ServiceImp implements IService {
         extensionResult.setSuccess(true);
         extensionResult.setNext(true);
 
-        Map<String, String> emailEntity = new HashMap<>();
-        Map<String, String> phoneEntity = new HashMap<>();
         Map<String, String> clearEntities = new HashMap<>();
         String conf = getEasyMapValueByName(extensionRequest, "confirm");
 
-        if (conf.equals("salah")) {
-//            emailEntity.put("email", null);
-            phoneEntity.put("confirm", null);
-//            clearEntities.putAll(emailEntity);
-            clearEntities.putAll(phoneEntity);
-
+        if (conf.equalsIgnoreCase("salah")) {
+            clearEntities.put("phone", null);
+            clearEntities.put("email", null);
+            clearEntities.put("confirm", null);
         } else {
             clearEntities.put("confirm2", "yes");
         }
-
         extensionResult.setEntities(clearEntities);
         return extensionResult;
     }
