@@ -2009,7 +2009,11 @@ public class ServiceImp implements IService {
                 clearEntities.put("conf", "yes");
             }
             extensionResult.setEntities(clearEntities);
+        }else{
+            clearEntities.put("conf", "yes");
+            extensionResult.setEntities(clearEntities);
         }
+        
         extensionResult.setAgent(false);
         extensionResult.setRepeat(false);
         extensionResult.setSuccess(true);
