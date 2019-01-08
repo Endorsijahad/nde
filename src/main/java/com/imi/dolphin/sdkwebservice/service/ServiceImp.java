@@ -2000,12 +2000,13 @@ public class ServiceImp implements IService {
         Map<String, String> clearEntities = new HashMap<>();
         ExtensionResult extensionResult = new ExtensionResult();
         int chc = Integer.parseInt(chance);
-
-        if (!code.equalsIgnoreCase("KD1010")) {
-            chc--;
-            clearEntities.put("code", null);
-            clearEntities.put("chance", chc + "");
-        } 
+        if (Integer.parseInt(code) > 0) {
+            if (!code.equalsIgnoreCase("KD1010")) {
+                chc--;
+                clearEntities.put("code", null);
+                clearEntities.put("chance", chc + "");
+            }
+        }
         extensionResult.setEntities(clearEntities);
         extensionResult.setAgent(false);
         extensionResult.setRepeat(false);
