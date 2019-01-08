@@ -1918,7 +1918,7 @@ public class ServiceImp implements IService {
             phoneEntity.put("confirm", null);
 //            clearEntities.putAll(emailEntity);
             clearEntities.putAll(phoneEntity);
-            
+
         } else {
             clearEntities.put("confirm2", "yes");
         }
@@ -1991,6 +1991,70 @@ public class ServiceImp implements IService {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @Override
+    public ExtensionResult doCheckVoucher(ExtensionRequest extensionRequest) {
+        String chance = getEasyMapValueByName(extensionRequest, "chance");
+        String code = getEasyMapValueByName(extensionRequest, "code");
+        Map<String, String> output = new HashMap<>();
+        Map<String, String> clearEntities = new HashMap<>();
+        ExtensionResult extensionResult = new ExtensionResult();
+        int chc = Integer.parseInt(chance);
+        if (chc > 0) {
+            if (!code.equalsIgnoreCase("KD1010")) {
+                chc--;
+                clearEntities.put("code", null);
+                clearEntities.put("chance", chc + "");
+                extensionResult.setValue(clearEntities);
+            } else {
+                output.put(OUTPUT, "Sukses ya ka. . .");
+                extensionResult.setValue(output);
+            }
+        } else {
+            output.put(OUTPUT, "Duuuuh maaf ya kak, kesempatannya sudah habis. . .");
+            extensionResult.setValue(output);
+        }
+
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doGetResult(ExtensionRequest extensionRequest) {
+        String chance = getEasyMapValueByName(extensionRequest, "chance");
+        Map<String, String> output = new HashMap<>();
+        ExtensionResult extensionResult = new ExtensionResult();
+        int chc = Integer.parseInt(chance);
+        if (chc > 0) {
+            output.put(OUTPUT, "Sukses ya ka. . .");
+        } else {
+            output.put(OUTPUT, "Duuuuh maaf ya kak, kesempatannya sudah habis. . .");
+        }
+        extensionResult.setValue(output);
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doSetChance(ExtensionRequest extensionRequest) {
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        Map<String, String> clearEntities = new HashMap<>();
+        clearEntities.put("chance", "2");
+        extensionResult.setEntities(clearEntities);
+        return extensionResult;
     }
 
 }

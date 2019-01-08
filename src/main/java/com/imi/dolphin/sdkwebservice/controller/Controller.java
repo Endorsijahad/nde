@@ -255,4 +255,22 @@ public class Controller {
         public ExtensionResult ping(@RequestBody ExtensionRequest extensionRequest){
             return svcService.doPing(extensionRequest);
         }
+        
+        @RequestMapping("/setchance")
+        @PostMapping
+        public ExtensionResult setChance(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doSetChance(extensionRequest);
+        }
+        
+        @RequestMapping("/checkvoucher")
+        @PostMapping
+        public ExtensionResult checkVoucher(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doCheckVoucher(extensionRequest);
+        }
+        
+        @RequestMapping("/getresult")
+        @PostMapping
+        public ExtensionResult getResult(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doGetResult(extensionRequest);
+        }
 }

@@ -96,4 +96,10 @@ public interface IService {
         ExtensionResult doValidateEmail(ExtensionRequest extensionRequest);
         
         ExtensionResult yesNoConfirm(ExtensionRequest extensionRequest);
+        
+        ExtensionResult doSetChance(ExtensionRequest extensionRequest);
+        
+        ExtensionResult doCheckVoucher(ExtensionRequest extensionRequest);
+        
+        ExtensionResult doGetResult(ExtensionRequest extensionRequest);
 }
