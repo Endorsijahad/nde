@@ -2004,9 +2004,9 @@ public class ServiceImp implements IService {
         if (!code.equalsIgnoreCase("KD1010")) {
             chc--;
             clearEntities.put("code", null);
-//            clearEntities.put("chance", chc + "");
+            clearEntities.put("chance", chc + "");
         } 
-        extensionResult.setValue(clearEntities);
+        extensionResult.setEntities(clearEntities);
         extensionResult.setAgent(false);
         extensionResult.setRepeat(false);
         extensionResult.setSuccess(true);
