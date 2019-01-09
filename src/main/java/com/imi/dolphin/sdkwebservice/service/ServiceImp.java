@@ -2050,4 +2050,30 @@ public class ServiceImp implements IService {
         return extensionResult;
     }
 
+    @Override
+    public ExtensionResult mauGakLocation(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        String mauLocation = getEasyMapValueByName(extensionRequest, "maugak");
+        
+        QuickReplyBuilder quickReplyBuilder = null;
+        Map<String,String> clearEntities= new HashMap<>();
+        ExtensionResult extensionResult = new ExtensionResult();
+        
+        if(mauLocation.equalsIgnoreCase("mau"))
+        {
+            quickReplyBuilder = new QuickReplyBuilder.Builder("Kirim lokasi kakak ya")
+                .add("location", "location").build();
+            output.put(OUTPUT, quickReplyBuilder.string());
+            extensionResult.setValue(output);
+        }else{
+            clearEntities.put("city", "Jakarta");
+            extensionResult.setEntities(clearEntities);
+        }
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        return extensionResult;
+    }
+
 }

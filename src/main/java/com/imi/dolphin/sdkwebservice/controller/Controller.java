@@ -273,4 +273,10 @@ public class Controller {
         public ExtensionResult getResult(@RequestBody ExtensionRequest extensionRequest){
             return svcService.doGetResult(extensionRequest);
         }
+        
+        @RequestMapping("/maugaklocation")
+        @PostMapping
+        public ExtensionResult mauGakLocation(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.mauGakLocation(extensionRequest);
+        }
 }

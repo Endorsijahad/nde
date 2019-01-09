@@ -102,4 +102,6 @@ public interface IService {
         ExtensionResult doCheckVoucher(ExtensionRequest extensionRequest);
         
         ExtensionResult doGetResult(ExtensionRequest extensionRequest);
+        
+        ExtensionResult mauGakLocation(ExtensionRequest extensionRequest);
 }
