@@ -104,4 +104,10 @@ public interface IService {
         ExtensionResult doGetResult(ExtensionRequest extensionRequest);
         
         ExtensionResult mauGakLocation(ExtensionRequest extensionRequest);
+        
+        ExtensionResult latLongToCity(ExtensionRequest extensionRequest);
+        
+        ExtensionResult doValidatePhoneSetNextEntity(ExtensionRequest extensionRequest);
+        
+        
 }

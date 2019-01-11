@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.DatabindContext;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -51,9 +52,11 @@ import com.imi.dolphin.sdkwebservice.token.Token;
 import com.imi.dolphin.sdkwebservice.util.OkHttpUtil;
 import fr.plaisance.bitly.Bit;
 import fr.plaisance.bitly.Bitly;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
@@ -69,6 +72,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import org.slf4j.LoggerFactory;
+import java.net.URLEncoder;
 
 /**
  *
@@ -91,6 +95,7 @@ public class ServiceImp implements IService {
     private static final String API_PARAM_NAME_DISTANCE = "&d=";
     private static final String API_PARAM_NAME_COUNT = "&count=";
     private int type_index = 0;
+    private static final String URL = "http://maps.googleapis.com/maps/api/geocode/json";
 
     @Autowired
     AppProperties appProperties;
@@ -1464,8 +1469,8 @@ public class ServiceImp implements IService {
         String ticketNumber = extensionRequest.getIntent().getTicket().getTicketNumber();
 
         String Bearer = "";
-        String nama = getEasyMapValueByName(extensionRequest, "person");
-        String lembaga = getEasyMapValueByName(extensionRequest, "company");
+        String nama = getEasyMapValueByName(extensionRequest, "person");    
+        String perusahaan = getEasyMapValueByName(extensionRequest, "company");
         String posisi = getEasyMapValueByName(extensionRequest, "position");
         String email = getEasyMapValueByName(extensionRequest, "email");
         String nohp = getEasyMapValueByName(extensionRequest, "phone");
@@ -1486,34 +1491,17 @@ public class ServiceImp implements IService {
         keluhan = data.getKeluhan();
         masukan = data.getMasukan();
 
-        String namaatasan = appProperties.getNamerecipient1();
-        String namaHrd = appProperties.getNamerecipient2();
+        respBuilder.append(getHeaderEmail("Complaint", nama, posisi, perusahaan, email, nohp).toString());
+//        respBuilder.append("\n6. Keluhan                : " + keluhan);
+//        respBuilder.append("\n7. Masukan                : " + masukan);
+        respBuilder.append(String.format("%4s%4s%31s%2s", "\n6.", " Keluhan", ": ", keluhan));
+        respBuilder.append(String.format("%4s%4s%29s%2s", "\n7.", " Masukan", ": ", masukan));
+        respBuilder.append(getFooterEmail().toString());
 
-        respBuilder.append("Kepada Yth.\n");
-        respBuilder.append(namaatasan);
-        respBuilder.append("\nDengan Hormat,");
-        respBuilder.append("\n\nNama : " + nama);
-        respBuilder.append("\nLembaga : " + lembaga);
-        respBuilder.append("\nPosisi : " + posisi);
-        respBuilder.append("\nEmail : " + email);
-        respBuilder.append("\nNo HP : " + nohp);
-        respBuilder.append("\nKeluhan : " + keluhan);
-        respBuilder.append("\nMasukan : " + masukan);
-        respBuilder.append("\n\nDemikian Surat Complaint ini dibuat.");
-        respBuilder.append("\nterima kasih");
-
-        respBuilder2.append("Kepada Yth.\n");
-        respBuilder2.append(namaHrd);
-        respBuilder2.append("\nDengan Hormat,");
-        respBuilder2.append("\n\nNama : " + nama);
-        respBuilder2.append("\nLembaga : " + lembaga);
-        respBuilder2.append("\nPosisi : " + posisi);
-        respBuilder2.append("\nEmail : " + email);
-        respBuilder2.append("\nNo HP : " + nohp);
-        respBuilder2.append("\nKeluhan : " + keluhan);
-        respBuilder2.append("\nMasukan : " + masukan);
-        respBuilder2.append("\n\nDemikian Surat Complaint ini dibuat.");
-        respBuilder2.append("\nterima kasih");
+        respBuilder2.append(getHeaderEmail("Complaint", nama, posisi, perusahaan, email, nohp).toString());
+        respBuilder2.append(String.format("%4s%4s%31s%2s", "\n6.", " Keluhan", ": ", keluhan));
+        respBuilder2.append(String.format("%4s%4s%29s%2s", "\n7.", " Masukan", ": ", masukan));
+        respBuilder2.append(getFooterEmail().toString());
 
         String bodyAtasan = respBuilder.toString();
         String bodyHrd = respBuilder2.toString();
@@ -1526,8 +1514,8 @@ public class ServiceImp implements IService {
 
         //String recipient1 = appProperties.getEmailrecipient1();
         // String recipient2 = appProperties.getEmailrecipient2();
-        MailModel mailModel = new MailModel(recipient1, "[Complaint]", bodyAtasan);
-        MailModel mailModel2 = new MailModel(recipient2, "[Complaint]", bodyHrd);
+        MailModel mailModel = new MailModel(recipient1, "SAMI - Tiket - Complaint", bodyAtasan);
+        MailModel mailModel2 = new MailModel(recipient2, "SAMI - Tiket - Complaint", bodyHrd);
         String sendMailResult = svcMailService.sendMail(mailModel);
         String sendMailResult2 = svcMailService.sendMail(mailModel2);
         System.out.println("hasil kirim email" + sendMailResult);
@@ -1647,7 +1635,7 @@ public class ServiceImp implements IService {
 
         String Bearer = "";
         String nama = getEasyMapValueByName(extensionRequest, "person");
-        String lembaga = getEasyMapValueByName(extensionRequest, "company");
+        String perusahaan = getEasyMapValueByName(extensionRequest, "company");
         String posisi = getEasyMapValueByName(extensionRequest, "position");
         String email = getEasyMapValueByName(extensionRequest, "email");
         String nohp = getEasyMapValueByName(extensionRequest, "phone");
@@ -1675,36 +1663,17 @@ public class ServiceImp implements IService {
 
         waktu = times[2] + " " + times[1] + " " + times[times.length - 1];
 
-        String namaatasan = appProperties.getNamerecipient1();
-        String namaHrd = appProperties.getNamerecipient2();
+        respBuilder.append(getHeaderEmail("Request", nama, posisi, perusahaan, email, nohp).toString());
+        respBuilder.append(String.format("%4s%4s%31s%2s", "\n6.", " Request", ": ", request));
+        respBuilder.append(String.format("%4s%4s%27s%2s", "\n7.", " Kebutuhan", ": ", kebutuhan));
+        respBuilder.append(String.format("%4s%4s%35s%2s", "\n8.", " Waktu", ": ", waktu));
+        respBuilder.append(getFooterEmail().toString());
 
-        respBuilder.append("Kepada Yth.\n");
-        respBuilder.append(namaatasan);
-        respBuilder.append("\nDengan Hormat,");
-        respBuilder.append("\n\nNama : " + nama);
-        respBuilder.append("\nLembaga : " + lembaga);
-        respBuilder.append("\nPosisi : " + posisi);
-        respBuilder.append("\nEmail : " + email);
-        respBuilder.append("\nNo HP : " + nohp);
-        respBuilder.append("\nRequest : " + request);
-        respBuilder.append("\nKebutuhan : " + kebutuhan);
-        respBuilder.append("\nWaktu : " + waktu);
-        respBuilder.append("\n\nDemikian Surat request ini dibuat.");
-        respBuilder.append("\nterima kasih");
-
-        respBuilder2.append("Kepada Yth.\n");
-        respBuilder2.append(namaHrd);
-        respBuilder2.append("\nDengan Hormat,");
-        respBuilder2.append("\n\nNama : " + nama);
-        respBuilder2.append("\nLembaga : " + lembaga);
-        respBuilder2.append("\nPosisi : " + posisi);
-        respBuilder2.append("\nEmail : " + email);
-        respBuilder2.append("\nNo HP : " + nohp);
-        respBuilder2.append("\nRequest : " + request);
-        respBuilder2.append("\nKebutuhan : " + kebutuhan);
-        respBuilder2.append("\nWaktu : " + waktu);
-        respBuilder2.append("\n\nDemikian Surat request ini dibuat.");
-        respBuilder2.append("\nterima kasih");
+        respBuilder2.append(getHeaderEmail("Request", nama, posisi, perusahaan, email, nohp).toString());
+        respBuilder2.append(String.format("%4s%4s%31s%2s", "\n6.", " Request", ": ", request));
+        respBuilder2.append(String.format("%4s%4s%27s%2s", "\n7.", " Kebutuhan", ": ", kebutuhan));
+        respBuilder2.append(String.format("%4s%4s%35s%2s", "\n8.", " Waktu", ": ", waktu));
+        respBuilder2.append(getFooterEmail().toString());
 
         String bodyAtasan = respBuilder.toString();
         String bodyHrd = respBuilder2.toString();
@@ -1715,8 +1684,8 @@ public class ServiceImp implements IService {
         System.out.println("recipient 1 : " + recipient1);
         System.out.println("recipient 2 : " + recipient2);
 
-        MailModel mailModel = new MailModel(recipient1, "[Request]", bodyAtasan);
-        MailModel mailModel2 = new MailModel(recipient2, "[Request]", bodyHrd);
+        MailModel mailModel = new MailModel(recipient1, "SAMI - Tiket - Request", bodyAtasan);
+        MailModel mailModel2 = new MailModel(recipient2, "SAMI - Tiket - Request", bodyHrd);
         String sendMailResult = svcMailService.sendMail(mailModel);
         String sendMailResult2 = svcMailService.sendMail(mailModel2);
         System.out.println("hasil kirim email" + sendMailResult);
@@ -1747,22 +1716,19 @@ public class ServiceImp implements IService {
         StringBuilder respBuilder = new StringBuilder();
         StringBuilder respBuilder2 = new StringBuilder();
         String pertanyaan = getEasyMapValueByName(extensionRequest, "pertanyaan");
-        String namaatasan = appProperties.getNamerecipient1();
-        String namaHrd = appProperties.getNamerecipient2();
+        String nama = getEasyMapValueByName(extensionRequest, "person");
+        String perusahaan = getEasyMapValueByName(extensionRequest, "company");
+        String posisi = getEasyMapValueByName(extensionRequest, "position");
+        String email = getEasyMapValueByName(extensionRequest, "email");
+        String nohp = getEasyMapValueByName(extensionRequest, "phone");
 
-        respBuilder.append("Kepada Yth.\n");
-        respBuilder.append(namaatasan);
-        respBuilder.append("\nDengan Hormat,");
-        respBuilder.append("\n\nPertanyaan : " + pertanyaan);
-        respBuilder.append("\n\nDemikian Surat solution ini dibuat.");
-        respBuilder.append("\nterima kasih");
+        respBuilder.append(getHeaderEmail("Solution", nama, posisi, perusahaan, email, nohp).toString());
+        respBuilder.append(String.format("%4s%4s%26s%2s", "\n6.", " Pertanyaan", ": ", pertanyaan));
+        respBuilder.append(getFooterEmail().toString());
 
-        respBuilder2.append("Kepada Yth.\n");
-        respBuilder2.append(namaHrd);
-        respBuilder2.append("\nDengan Hormat,");
-        respBuilder2.append("\n\nPertanyaan : " + pertanyaan);
-        respBuilder2.append("\n\nDemikian Surat solution ini dibuat.");
-        respBuilder2.append("\nterima kasih");
+        respBuilder2.append(getHeaderEmail("Solution", nama, posisi, perusahaan, email, nohp).toString());
+        respBuilder2.append(String.format("%4s%4s%26s%2s", "\n6.", " Pertanyaan", ": ", pertanyaan));
+        respBuilder2.append(getFooterEmail().toString());
 
         String bodyAtasan = respBuilder.toString();
         String bodyHrd = respBuilder2.toString();
@@ -1773,8 +1739,8 @@ public class ServiceImp implements IService {
         System.out.println("recipient 1 : " + recipient1);
         System.out.println("recipient 2 : " + recipient2);
 
-        MailModel mailModel = new MailModel(recipient1, "[Solution]", bodyAtasan);
-        MailModel mailModel2 = new MailModel(recipient2, "[Solution]", bodyHrd);
+        MailModel mailModel = new MailModel(recipient1, "SAMI - Tiket - Solution", bodyAtasan);
+        MailModel mailModel2 = new MailModel(recipient2, "SAMI - Tiket - Solution", bodyHrd);
         String sendMailResult = svcMailService.sendMail(mailModel);
         String sendMailResult2 = svcMailService.sendMail(mailModel2);
         System.out.println("hasil kirim email" + sendMailResult);
@@ -1805,22 +1771,19 @@ public class ServiceImp implements IService {
         StringBuilder respBuilder = new StringBuilder();
         StringBuilder respBuilder2 = new StringBuilder();
         String promo = getEasyMapValueByName(extensionRequest, "promo");
-        String namaatasan = appProperties.getNamerecipient1();
-        String namaHrd = appProperties.getNamerecipient2();
+        String nama = getEasyMapValueByName(extensionRequest, "person");
+        String perusahaan = getEasyMapValueByName(extensionRequest, "company");
+        String posisi = getEasyMapValueByName(extensionRequest, "position");
+        String email = getEasyMapValueByName(extensionRequest, "email");
+        String nohp = getEasyMapValueByName(extensionRequest, "phone");
 
-        respBuilder.append("Kepada Yth.\n");
-        respBuilder.append(namaatasan);
-        respBuilder.append("\nDengan Hormat,");
-        respBuilder.append("\n\nPromo : " + promo);
-        respBuilder.append("\n\nDemikian Surat promo ini dibuat.");
-        respBuilder.append("\nterima kasih");
+        respBuilder.append(getHeaderEmail("Promo", nama, posisi, perusahaan, email, nohp).toString());
+        respBuilder.append(String.format("%4s%4s%34s%2s", "\n6.", " Promo", ": ", promo));
+        respBuilder.append(getFooterEmail().toString());
 
-        respBuilder2.append("Kepada Yth.\n");
-        respBuilder2.append(namaHrd);
-        respBuilder2.append("\nDengan Hormat,");
-        respBuilder2.append("\n\nPromo : " + promo);
-        respBuilder2.append("\n\nDemikian Surat promo ini dibuat.");
-        respBuilder2.append("\nterima kasih");
+        respBuilder2.append(getHeaderEmail("Promo", nama, posisi, perusahaan, email, nohp).toString());
+        respBuilder2.append(String.format("%4s%4s%34s%2s", "\n6.", " Promo", ": ", promo));
+        respBuilder2.append(getFooterEmail().toString());
 
         String bodyAtasan = respBuilder.toString();
         String bodyHrd = respBuilder2.toString();
@@ -1831,8 +1794,8 @@ public class ServiceImp implements IService {
         System.out.println("recipient 1 : " + recipient1);
         System.out.println("recipient 2 : " + recipient2);
 
-        MailModel mailModel = new MailModel(recipient1, "[Promo]", bodyAtasan);
-        MailModel mailModel2 = new MailModel(recipient2, "[Promo]", bodyHrd);
+        MailModel mailModel = new MailModel(recipient1, "SAMI - Tiket - Promo", bodyAtasan);
+        MailModel mailModel2 = new MailModel(recipient2, "SAMI - Tiket - Promo", bodyHrd);
         String sendMailResult = svcMailService.sendMail(mailModel);
         String sendMailResult2 = svcMailService.sendMail(mailModel2);
         System.out.println("hasil kirim email" + sendMailResult);
@@ -1870,13 +1833,40 @@ public class ServiceImp implements IService {
         if (phone.matches("^[+0-9]*$") && !phone.equals("")) {
             String preZero8 = phone.substring(0, 2);
             String prePlus62 = phone.substring(0, 3);
-            if ((phone.length() < 10 || phone.length() > 14) && (preZero8.equals("08") || prePlus62.equals("+62"))) {
+            if ((phone.length() < 10 || phone.length() > 14) && (!preZero8.equals("08") || !prePlus62.equals("+62"))) {
                 clearEntities.put("phone", null);
                 extensionResult.setEntities(clearEntities);
             }
         } else if (!phone.equals("")) {
             clearEntities.put("phone", null);
             extensionResult.setEntities(clearEntities);
+        }
+
+        return extensionResult;
+    }
+    @Override
+    public ExtensionResult doValidatePhoneSetNextEntity(ExtensionRequest extensionRequest) {
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+
+        Map<String, String> clearEntities = new HashMap<>();
+        String phone = getEasyMapValueByName(extensionRequest, "phone");
+
+        if (phone.matches("^[+0-9]*$") && !phone.equals("")) {
+            String preZero8 = phone.substring(0, 2);
+            String prePlus62 = phone.substring(0, 3);
+            if ((phone.length() < 10 || phone.length() > 14) && (!preZero8.equals("08") || !prePlus62.equals("+62"))) {
+                clearEntities.put("phone", null);
+                extensionResult.setEntities(clearEntities);
+            }
+        } else if (!phone.equals("")) {
+            clearEntities.put("phone", null);
+            extensionResult.setEntities(clearEntities);
+        }else{
+            clearEntities.put("confirm", "confirmation data");
         }
 
         return extensionResult;
@@ -2000,15 +1990,15 @@ public class ServiceImp implements IService {
                 chc--;
                 clearEntities.put("code", null);
                 clearEntities.put("chance", chc + "");
-            }else{
+            } else {
                 clearEntities.put("conf", "yes");
             }
             extensionResult.setEntities(clearEntities);
-        }else{
+        } else {
             clearEntities.put("conf", "yes");
             extensionResult.setEntities(clearEntities);
         }
-        
+
         extensionResult.setAgent(false);
         extensionResult.setRepeat(false);
         extensionResult.setSuccess(true);
@@ -2054,18 +2044,17 @@ public class ServiceImp implements IService {
     public ExtensionResult mauGakLocation(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
         String mauLocation = getEasyMapValueByName(extensionRequest, "maugak");
-        
+
         QuickReplyBuilder quickReplyBuilder = null;
-        Map<String,String> clearEntities= new HashMap<>();
+        Map<String, String> clearEntities = new HashMap<>();
         ExtensionResult extensionResult = new ExtensionResult();
-        
-        if(mauLocation.equalsIgnoreCase("mau"))
-        {
+
+        if (mauLocation.equalsIgnoreCase("mau")) {
             quickReplyBuilder = new QuickReplyBuilder.Builder("Kirim lokasi kakak ya")
-                .add("location", "location").build();
+                    .add("location", "location").build();
             output.put(OUTPUT, quickReplyBuilder.string());
             extensionResult.setValue(output);
-        }else{
+        } else {
             clearEntities.put("city", "Jakarta");
             extensionResult.setEntities(clearEntities);
         }
@@ -2076,4 +2065,66 @@ public class ServiceImp implements IService {
         return extensionResult;
     }
 
+    @Override
+    public ExtensionResult latLongToCity(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        String city = getEasyMapValueByName(extensionRequest, "city");
+
+        Map<String, String> clearEntities = new HashMap<>();
+        ExtensionResult extensionResult = new ExtensionResult();
+//        GoogleResponse googleResponse = new GoogleResponse();
+        if (!city.equalsIgnoreCase("jakarta")) {
+            String[] explodedLoc = city.split(";");
+            String lati = explodedLoc[0];
+            String longi = explodedLoc[1];
+            String loc = lati + "," + longi;
+//            try {
+//                googleResponse = latlngToCity(loc);
+//                for (Result result : googleResponse.getResults()) {
+//                    System.out.println("Lattitude of address is :" + result.getGeometry().getLocation().getLat());
+//                    System.out.println("Longitude of address is :" + result.getGeometry().getLocation().getLng());
+//                    System.out.println("Location is " + result.getGeometry().getLocation_type());
+//                }
+//            } catch (IOException ex) {
+//                Logger.getLogger(ServiceImp.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+        }
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        return extensionResult;
+    }
+
+    private StringBuilder getHeaderEmail(String jenisEmail, String nama, String posisi, String namaPerusahaan, String email, String hp) {
+        StringBuilder respBuilder = new StringBuilder();
+        respBuilder.append("Dear Kakak CX,");
+        respBuilder.append("\nSAMI mohon bantuannya untuk memproses tiket ini ya.");
+
+        respBuilder.append("\n\nJenis : " + jenisEmail);
+        respBuilder.append("\n\nData : ");
+//        respBuilder.append("\n1. Nama                   : " + nama);
+//        respBuilder.append("\n2. Posisi                 : " + posisi);
+//        respBuilder.append("\n3. Nama Perusahaan        : " + namaPerusahaan);
+//        respBuilder.append("\n4. Email                  : " + email);
+//        respBuilder.append("\n5. No Telpon Selular (Hp) : " + hp);
+        
+        respBuilder.append(String.format("%4s%4s%35s%2s", "\n1.", " Nama", ": ", nama));
+        respBuilder.append(String.format("%4s%4s%35s%2s", "\n2.", " Posisi", ": ", posisi));
+        respBuilder.append(String.format("%4s%4s%13s%2s", "\n3.", " Nama Perusahaan", ": ", namaPerusahaan));
+        respBuilder.append(String.format("%4s%4s%36s%2s", "\n4.", " Email", ": ", email));
+        respBuilder.append(String.format("%4s%4s%6s%2s", "\n5.", " No Telpon Selular (Hp)", ": ", hp));
+        return respBuilder;
+    }
+
+    private StringBuilder getFooterEmail() {
+        StringBuilder respBuilder = new StringBuilder();
+        
+        respBuilder.append("\n\nTerima kasih, Kakak CX.");
+        
+        respBuilder.append("\n\nSalam Sahabat,");
+        respBuilder.append("\nSAMI");
+        
+        return respBuilder;
+    }
 }

@@ -279,4 +279,10 @@ public class Controller {
         public ExtensionResult mauGakLocation(@RequestBody ExtensionRequest extensionRequest){
             return svcService.mauGakLocation(extensionRequest);
         }
+        
+        @RequestMapping("/latlongcity")
+        @PostMapping
+        public ExtensionResult latLongToCity(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.latLongToCity(extensionRequest);
+        }
 }

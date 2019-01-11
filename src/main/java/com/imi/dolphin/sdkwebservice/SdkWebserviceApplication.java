@@ -35,12 +35,12 @@ public class SdkWebserviceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SdkWebserviceApplication.class, args);
                 
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        iService.ping();
-                    }
-                },0,1000L * 60L * 30L);
+//                Timer timer = new Timer();
+//                timer.schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        iService.ping();
+//                    }
+//                },0,1000L * 60L * 30L);
 	}
 }

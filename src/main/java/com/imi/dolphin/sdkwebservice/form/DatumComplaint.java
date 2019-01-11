@@ -14,11 +14,11 @@ import com.google.gson.annotations.SerializedName;
  */
 public class DatumComplaint {
     
-    @SerializedName("silahkan_menjelaskan_apa_yang_menjadi_keluhan_kakak")
+    @SerializedName("kakak_ada_masalah_apa__")
     @Expose
     private String keluhan;
     
-    @SerializedName("silahkan_memberikan_masukan__apa_yang_kakak_harapkan_supaya_permasalahan_ini_selesai")
+    @SerializedName("silahkan_masukannya_kak___kakak_ingin_sami_bagaimana___sami_mohon_maaf_sebelumnya_ya__kak_")
     @Expose
     private String masukan;
     

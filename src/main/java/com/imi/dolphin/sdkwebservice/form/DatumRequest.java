@@ -13,15 +13,15 @@ import com.google.gson.annotations.SerializedName;
  * @author Nande
  */
 public class DatumRequest {
-    @SerializedName("apa_yang_dapat_sami_bantu_untuk_request_nya__kak__")
+    @SerializedName("silahkan_pilih_kak__apa_yang_dapat_sami_bantu__")
     @Expose
     private String request;
     
-    @SerializedName("silahkan_menginformasikan_daftar_lengkap_kebutuhan_kakak_untuk_request_nya")
+    @SerializedName("kakak_yuk_cerita__apa_saja_yang_kakak_sedang_butuhkan__")
     @Expose
     private String kebutuhan;
     
-    @SerializedName("silahkan_menginformasikan_tenggat_waktu_kakak_untuk_request_nya")
+    @SerializedName("boleh_tahu_kak_tenggat_waktu_untuk_request_nya")
     @Expose
     private String tanggal;
     
