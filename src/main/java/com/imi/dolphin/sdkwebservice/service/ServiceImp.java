@@ -1866,10 +1866,10 @@ public class ServiceImp implements IService {
             clearEntities.put("phone", null);
             extensionResult.setEntities(clearEntities);
         } 
-        if(clearEntities.size() < 1){
-            clearEntities.put("confirm3", "yes");
-            extensionResult.setEntities(clearEntities);
-        }
+//        if(clearEntities.size() < 1){
+//            clearEntities.put("confirm3", "yes");
+//            extensionResult.setEntities(clearEntities);
+//        }
 
         return extensionResult;
     }
