@@ -1867,6 +1867,7 @@ public class ServiceImp implements IService {
             extensionResult.setEntities(clearEntities);
         }else{
             clearEntities.put("confirm", "confirmation data");
+            extensionResult.setEntities(clearEntities);
         }
 
         return extensionResult;
