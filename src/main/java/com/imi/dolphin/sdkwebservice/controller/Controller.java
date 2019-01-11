@@ -190,7 +190,7 @@ public class Controller {
         public ExtensionResult doGetCarModels(@RequestBody ExtensionRequest extensionRequest){
             return svcService.doGetModelMobils(extensionRequest);
         }
-         @RequestMapping("/complaint")
+         @RequestMapping("/emailcomplaint")
         @PostMapping
         public ExtensionResult doComplaint(@RequestBody ExtensionRequest extensionRequest){
             return svcService.doSendComplaint(extensionRequest);
