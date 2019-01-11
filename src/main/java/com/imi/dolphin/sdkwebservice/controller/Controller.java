@@ -232,6 +232,12 @@ public class Controller {
             return svcService.doValidatePhone(extensionRequest);
         }
         
+        @RequestMapping("/validatephoneb4form")
+        @PostMapping
+        public ExtensionResult doValidatePhoneB4Form(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doValidatePhoneSetNextEntity(extensionRequest);
+        }
+        
         @RequestMapping("/validateemail")
         @PostMapping
         public ExtensionResult doValidateEmail(@RequestBody ExtensionRequest extensionRequest){
