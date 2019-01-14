@@ -109,5 +109,7 @@ public interface IService {
         
         ExtensionResult doValidatePhoneSetNextEntity(ExtensionRequest extensionRequest);
         
+        ExtensionResult doConfirmPromo(ExtensionRequest extensionRequest);
+        
         
 }

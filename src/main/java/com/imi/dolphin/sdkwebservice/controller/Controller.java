@@ -250,6 +250,12 @@ public class Controller {
             return svcService.yesNoConfirm(extensionRequest);
         }
         
+        @RequestMapping("/confirmpromo")
+        @PostMapping
+        public ExtensionResult confirmPromo(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doConfirmPromo(extensionRequest);
+        }
+        
         @RequestMapping("/merk17")
         @PostMapping
         public ExtensionResult merk17(@RequestBody ExtensionRequest extensionRequest){

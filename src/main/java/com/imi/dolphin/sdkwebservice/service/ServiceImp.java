@@ -2129,4 +2129,29 @@ public class ServiceImp implements IService {
         
         return respBuilder;
     }
+
+    @Override
+    public ExtensionResult doConfirmPromo(ExtensionRequest extensionRequest) {
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+
+        Map<String, String> clearEntities = new HashMap<>();
+        String conf = getEasyMapValueByName(extensionRequest, "confirm");
+
+        if (conf.equalsIgnoreCase("salah")) {
+            clearEntities.put("person", null);
+            clearEntities.put("company", null);
+            clearEntities.put("position", null);
+            clearEntities.put("email", null);
+            clearEntities.put("phone", null);
+            clearEntities.put("promo", null);
+            clearEntities.put("confirm", null);
+        } else {
+            clearEntities.put("confirm2", "Yes");
+        }
+        extensionResult.setEntities(clearEntities);
+        return extensionResult;
+    }
 }
