@@ -1469,7 +1469,7 @@ public class ServiceImp implements IService {
         String ticketNumber = extensionRequest.getIntent().getTicket().getTicketNumber();
 
         String Bearer = "";
-        String nama = getEasyMapValueByName(extensionRequest, "person");    
+        String nama = getEasyMapValueByName(extensionRequest, "person");
         String perusahaan = getEasyMapValueByName(extensionRequest, "company");
         String posisi = getEasyMapValueByName(extensionRequest, "position");
         String email = getEasyMapValueByName(extensionRequest, "email");
@@ -1829,21 +1829,40 @@ public class ServiceImp implements IService {
 
         Map<String, String> clearEntities = new HashMap<>();
         String phone = getEasyMapValueByName(extensionRequest, "phone");
-
-        if (phone.matches("^[+0-9]*$") && !phone.equals("")) {
+        phone = phone.replace(" ", "");
+        phone = phone.replace("(", "");
+        phone = phone.replace(")", "");
+        phone = phone.replace("-", "");
+        phone = phone.replace(".", "");
+        
+        if (phone.matches("^[+0-9]*$")) {
             String preZero8 = phone.substring(0, 2);
-            String prePlus62 = phone.substring(0, 3);
-            if ((phone.length() < 10 || phone.length() > 14) && (!preZero8.equals("08") || !prePlus62.equals("+62"))) {
+            String prePlus62 = phone.substring(0, 4);
+
+            if (phone.length() > 9 || phone.length() < 16) {
+                if (prePlus62.equals("+628")) {
+                    phone = phone.replace("+628", "08");
+                    clearEntities.put("phone", phone);
+                    extensionResult.setEntities(clearEntities);
+                } else if (!preZero8.equals("08")) {
+                    clearEntities.put("phone", null);
+                    extensionResult.setEntities(clearEntities);
+                } else {
+                    clearEntities.put("phone", phone);
+                    extensionResult.setEntities(clearEntities);
+                }
+            } else {
                 clearEntities.put("phone", null);
                 extensionResult.setEntities(clearEntities);
             }
-        } else if (!phone.equals("")) {
+        } else {
             clearEntities.put("phone", null);
             extensionResult.setEntities(clearEntities);
         }
 
         return extensionResult;
     }
+
     @Override
     public ExtensionResult doValidatePhoneSetNextEntity(ExtensionRequest extensionRequest) {
         ExtensionResult extensionResult = new ExtensionResult();
@@ -1854,22 +1873,38 @@ public class ServiceImp implements IService {
 
         Map<String, String> clearEntities = new HashMap<>();
         String phone = getEasyMapValueByName(extensionRequest, "phone");
-
-        if (phone.matches("^[+0-9]*$") && !phone.equals("")) {
+        phone = phone.replace(" ", "");
+        phone = phone.replace("(", "");
+        phone = phone.replace(")", "");
+        phone = phone.replace("-", "");
+        phone = phone.replace(".", "");
+        
+        if (phone.matches("^[+0-9]*$")) {
             String preZero8 = phone.substring(0, 2);
-            String prePlus62 = phone.substring(0, 3);
-            if ((phone.length() < 10 || phone.length() > 14) && (!preZero8.equals("08") || !prePlus62.equals("+62"))) {
+            String prePlus62 = phone.substring(0, 4);
+
+            if (phone.length() > 9 || phone.length() < 16) {
+                if (prePlus62.equals("+628")) {
+                    phone = phone.replace("+628", "08");
+                    clearEntities.put("phone", phone);
+                    clearEntities.put("confirm", "mantul");
+                    extensionResult.setEntities(clearEntities);
+                } else if (!preZero8.equals("08")) {
+                    clearEntities.put("phone", null);
+                    extensionResult.setEntities(clearEntities);
+                } else {
+                    clearEntities.put("phone", phone);
+                    clearEntities.put("confirm", "mantul");
+                    extensionResult.setEntities(clearEntities);
+                }
+            } else {
                 clearEntities.put("phone", null);
                 extensionResult.setEntities(clearEntities);
             }
-        } else if (!phone.equals("")) {
+        } else {
             clearEntities.put("phone", null);
             extensionResult.setEntities(clearEntities);
-        } 
-//        if(clearEntities.size() < 1){
-//            clearEntities.put("confirm3", "yes");
-//            extensionResult.setEntities(clearEntities);
-//        }
+        }
 
         return extensionResult;
     }
@@ -2110,7 +2145,7 @@ public class ServiceImp implements IService {
 //        respBuilder.append("\n3. Nama Perusahaan        : " + namaPerusahaan);
 //        respBuilder.append("\n4. Email                  : " + email);
 //        respBuilder.append("\n5. No Telpon Selular (Hp) : " + hp);
-        
+
         respBuilder.append(String.format("%4s%4s%35s%2s", "\n1.", " Nama", ": ", nama));
         respBuilder.append(String.format("%4s%4s%35s%2s", "\n2.", " Posisi", ": ", posisi));
         respBuilder.append(String.format("%4s%4s%13s%2s", "\n3.", " Nama Perusahaan", ": ", namaPerusahaan));
@@ -2121,12 +2156,12 @@ public class ServiceImp implements IService {
 
     private StringBuilder getFooterEmail() {
         StringBuilder respBuilder = new StringBuilder();
-        
+
         respBuilder.append("\n\nTerima kasih, Kakak CX.");
-        
+
         respBuilder.append("\n\nSalam Sahabat,");
         respBuilder.append("\nSAMI");
-        
+
         return respBuilder;
     }
 
@@ -2147,6 +2182,31 @@ public class ServiceImp implements IService {
             clearEntities.put("email", null);
             clearEntities.put("phone", null);
             clearEntities.put("promo", null);
+            clearEntities.put("confirm", null);
+        } else {
+            clearEntities.put("confirm2", "Yes");
+        }
+        extensionResult.setEntities(clearEntities);
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doConfirmSolution(ExtensionRequest extensionRequest) {
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+
+        Map<String, String> clearEntities = new HashMap<>();
+        String conf = getEasyMapValueByName(extensionRequest, "confirm");
+
+        if (conf.equalsIgnoreCase("salah")) {
+            clearEntities.put("person", null);
+            clearEntities.put("company", null);
+            clearEntities.put("position", null);
+            clearEntities.put("email", null);
+            clearEntities.put("phone", null);
+            clearEntities.put("pertanyaan", null);
             clearEntities.put("confirm", null);
         } else {
             clearEntities.put("confirm2", "Yes");

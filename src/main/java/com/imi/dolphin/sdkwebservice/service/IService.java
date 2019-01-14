@@ -111,5 +111,6 @@ public interface IService {
         
         ExtensionResult doConfirmPromo(ExtensionRequest extensionRequest);
         
+        ExtensionResult doConfirmSolution(ExtensionRequest extensionRequest);
         
 }
