@@ -122,4 +122,5 @@ public interface IService {
         ExtensionResult doCalculate(ExtensionRequest extensionRequest);
         
         ExtensionResult doValidateDate(ExtensionRequest extensionRequest);
+        
 }

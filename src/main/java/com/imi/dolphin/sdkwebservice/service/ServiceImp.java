@@ -2461,6 +2461,7 @@ public class ServiceImp implements IService {
                     result += "-";
                 }
             }
+            clearEntities.put("tanggal", result);
             clearEntities.put("confirm", "confirm");
             extensionResult.setEntities(clearEntities);
         } catch (Exception e) {
