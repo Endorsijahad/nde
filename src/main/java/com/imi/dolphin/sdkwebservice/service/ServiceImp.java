@@ -2508,7 +2508,7 @@ public class ServiceImp implements IService {
         extensionResult.setRepeat(false);
         extensionResult.setSuccess(true);
         extensionResult.setNext(true);
-        
+        extensionResult.setEntities(clearEntities);
         return extensionResult;
     }
 
