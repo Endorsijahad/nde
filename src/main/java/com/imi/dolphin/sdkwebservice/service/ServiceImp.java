@@ -2423,6 +2423,7 @@ public class ServiceImp implements IService {
     public ExtensionResult doValidateDate(ExtensionRequest extensionRequest) {
         ExtensionResult extensionResult = new ExtensionResult();
         String sdate = getEasyMapValueByName(extensionRequest, "tanggal");
+        Map<String, String> clearEntities = new HashMap<>();
         String result = "";
         sdate = sdate.replaceAll("/", "-");
         sdate = sdate.replaceAll(" ", "-");
@@ -2430,38 +2431,43 @@ public class ServiceImp implements IService {
         String[] temp = new String[3];
         int dex = 1;
         int obj;
-        for (int i = 0; i < arrDate.length; i++) {
-            obj = Integer.parseInt(arrDate[i]);
-            
-            // memposisikan tahun di index ke 0
-            if (arrDate[i].length() == 4) {
-                temp[0] = arrDate[i];
-            } 
-            
-            // mengubah date 1 angka jadi 2 angka
-            else if (arrDate[i].length() < 2) {
-                temp[dex] = "0" + arrDate[i];
-                dex++;
-            } 
-            
-            // memposisikan tanggal dan bulan di index selain 0
-            else {
-                // cek hari
-                if (obj > 12) {
-                    temp[2] = arrDate[i];
-                } else {
-                    temp[dex] = arrDate[i];
+        try {
+            for (int i = 0; i < arrDate.length; i++) {
+                obj = Integer.parseInt(arrDate[i]);
+
+                // memposisikan tahun di index ke 0
+                if (arrDate[i].length() == 4) {
+                    temp[0] = arrDate[i];
+                } // mengubah date 1 angka jadi 2 angka
+                else if (arrDate[i].length() < 2) {
+                    temp[dex] = "0" + arrDate[i];
                     dex++;
+                } // memposisikan tanggal dan bulan di index selain 0
+                else {
+                    // cek hari
+                    if (obj > 12) {
+                        temp[2] = arrDate[i];
+                    } else {
+                        temp[dex] = arrDate[i];
+                        dex++;
+                    }
                 }
             }
-        }
-        
-        // membuat format tanggal yyyy-mm-dd
-        for (int i = 0; i < temp.length; i++) {
-            result += temp[i];
-            if (i < temp.length - 1) {
-                result += "-";
+
+            // membuat format tanggal yyyy-mm-dd
+            for (int i = 0; i < temp.length; i++) {
+                result += temp[i];
+                if (i < temp.length - 1) {
+                    result += "-";
+                }
             }
+            clearEntities.put("confirm", "confirm");
+            extensionResult.setEntities(clearEntities);
+        } catch (Exception e) {
+            clearEntities = new HashMap<>();
+            clearEntities.put("confirm", null);
+            clearEntities.put("tanggal", null);
+            extensionResult.setEntities(clearEntities);
         }
 
         extensionResult.setAgent(false);
