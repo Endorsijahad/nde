@@ -18,15 +18,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.crypto.Data;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.DatabindContext;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -52,11 +48,9 @@ import com.imi.dolphin.sdkwebservice.token.Token;
 import com.imi.dolphin.sdkwebservice.util.OkHttpUtil;
 import fr.plaisance.bitly.Bit;
 import fr.plaisance.bitly.Bitly;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
@@ -72,7 +66,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import org.slf4j.LoggerFactory;
-import java.net.URLEncoder;
+import okio.ByteString;
+import com.sendgrid.*;
 
 /**
  *
@@ -487,7 +482,7 @@ public class ServiceImp implements IService {
     @Override
     public ExtensionResult doSendLocation(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
-        QuickReplyBuilder quickReplyBuilder = new QuickReplyBuilder.Builder("Kirim lokasi kakak ya")
+        QuickReplyBuilder quickReplyBuilder = new QuickReplyBuilder.Builder("")
                 .add("location", "location").build();
         output.put(OUTPUT, quickReplyBuilder.string());
         ExtensionResult extensionResult = new ExtensionResult();
@@ -748,7 +743,7 @@ public class ServiceImp implements IService {
 
     public String getToken() {
         String bearer = "";
-        String username = "agent4@mii.co.id";
+        String username = "kurnia.nugraha@mii.co.id";
         String password = "P@ssw0rd";
 //        String baseUrl = appProperties.getBaseUrl();
         String baseUrl = appProperties.getUrl();
@@ -1463,8 +1458,7 @@ public class ServiceImp implements IService {
     public ExtensionResult doSendComplaint(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
         ExtensionResult extensionResult = new ExtensionResult();
-        StringBuilder respBuilder = new StringBuilder();
-        StringBuilder respBuilder2 = new StringBuilder();
+        StringBuilder sbCX = new StringBuilder();
 
         String ticketNumber = extensionRequest.getIntent().getTicket().getTicketNumber();
 
@@ -1490,44 +1484,25 @@ public class ServiceImp implements IService {
 
         keluhan = data.getKeluhan();
         masukan = data.getMasukan();
+        sbCX.append("<html>").append("<body>");
+        sbCX.append(getHeaderEmail("Complaint", nama, posisi, perusahaan, email, nohp).toString());
+        sbCX
+                .append("<td>6.</td>").append("<td>Keluhan</td>").append("<td>:</td>").append("<td>" + keluhan + "</td>")
+                .append("</tr><tr>")
+                .append("<td>7.</td>").append("<td>Masukan</td>").append("<td>:</td>").append("<td>" + masukan + "</td>")
+                .append("</tr>");
+        sbCX.append("</table>");
 
-        respBuilder.append(getHeaderEmail("Complaint", nama, posisi, perusahaan, email, nohp).toString());
-//        respBuilder.append("\n6. Keluhan                : " + keluhan);
-//        respBuilder.append("\n7. Masukan                : " + masukan);
-        respBuilder.append(String.format("%4s%4s%31s%2s", "\n6.", " Keluhan", ": ", keluhan));
-        respBuilder.append(String.format("%4s%4s%29s%2s", "\n7.", " Masukan", ": ", masukan));
-        respBuilder.append(getFooterEmail().toString());
+        sbCX.append(getFooterEmail().toString())
+                .append("</body>").append("</html>");
 
-        respBuilder2.append(getHeaderEmail("Complaint", nama, posisi, perusahaan, email, nohp).toString());
-        respBuilder2.append(String.format("%4s%4s%31s%2s", "\n6.", " Keluhan", ": ", keluhan));
-        respBuilder2.append(String.format("%4s%4s%29s%2s", "\n7.", " Masukan", ": ", masukan));
-        respBuilder2.append(getFooterEmail().toString());
-
-        String bodyAtasan = respBuilder.toString();
-        String bodyHrd = respBuilder2.toString();
-
-        // 3. kirim email
-        String recipient1 = appProperties.getEmailrecipient1();
-        String recipient2 = appProperties.getEmailrecipient2();
-        System.out.println("recipient 1 : " + recipient1);
-        System.out.println("recipient 2 : " + recipient2);
-
-        //String recipient1 = appProperties.getEmailrecipient1();
-        // String recipient2 = appProperties.getEmailrecipient2();
-        MailModel mailModel = new MailModel(recipient1, "SAMI - Tiket - Complaint", bodyAtasan);
-        MailModel mailModel2 = new MailModel(recipient2, "SAMI - Tiket - Complaint", bodyHrd);
-        String sendMailResult = svcMailService.sendMail(mailModel);
-        String sendMailResult2 = svcMailService.sendMail(mailModel2);
-        System.out.println("hasil kirim email" + sendMailResult);
-        System.out.println("hasil kirim email" + sendMailResult2);
+        int codeCX = sendGridEmail(sbCX, email, "Kakak CX", "SAMI - Complaint (" + keluhan + ")");
 
         String result = "";
-        if (sendMailResult.toLowerCase().contains("success") && sendMailResult2.toLowerCase().contains("success")) {
+        if (codeCX == 202) {
             result = "Baik kak silahkan tunggu konfirmasi ya kak";
-        } else if (sendMailResult.toLowerCase().contains("fail") && sendMailResult2.toLowerCase().contains("fail")) {
-            result = "Maaf kak pengiriman email gagal. Boleh diulangi kak";
         } else {
-            result = "Maaf kak {bot_name} belum mengerti. Bisa tolong ulangi lagi kak.";
+            result = "Maaf kak pengiriman email gagal. Boleh diulangi kak";
         }
 
         output.put(OUTPUT, result);
@@ -1628,7 +1603,7 @@ public class ServiceImp implements IService {
     public ExtensionResult doSendEmailRequest(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
         ExtensionResult extensionResult = new ExtensionResult();
-        StringBuilder respBuilder = new StringBuilder();
+        StringBuilder sbCX = new StringBuilder();
         StringBuilder respBuilder2 = new StringBuilder();
 
         String ticketNumber = extensionRequest.getIntent().getTicket().getTicketNumber();
@@ -1662,42 +1637,28 @@ public class ServiceImp implements IService {
         String[] times = waktu.split(" ");
 
         waktu = times[2] + " " + times[1] + " " + times[times.length - 1];
+        sbCX.append("<html>").append("<body>");
+        sbCX.append(getHeaderEmail("Request", nama, posisi, perusahaan, email, nohp).toString());
+        sbCX
+                .append("<td>6.</td>").append("<td>Request</td>").append("<td>:</td>").append("<td>" + request + "</td>")
+                .append("</tr><tr>")
+                .append("<td>7.</td>").append("<td>Kebutuhan</td>").append("<td>:</td>").append("<td>" + kebutuhan + "</td>")
+                .append("</tr><tr>")
+                .append("<td>8.</td>").append("<td>Waktu</td>").append("<td>:</td>").append("<td>" + waktu + "</td>")
+                .append("</tr>");
+        sbCX.append("</table>");
 
-        respBuilder.append(getHeaderEmail("Request", nama, posisi, perusahaan, email, nohp).toString());
-        respBuilder.append(String.format("%4s%4s%31s%2s", "\n6.", " Request", ": ", request));
-        respBuilder.append(String.format("%4s%4s%27s%2s", "\n7.", " Kebutuhan", ": ", kebutuhan));
-        respBuilder.append(String.format("%4s%4s%35s%2s", "\n8.", " Waktu", ": ", waktu));
-        respBuilder.append(getFooterEmail().toString());
-
-        respBuilder2.append(getHeaderEmail("Request", nama, posisi, perusahaan, email, nohp).toString());
-        respBuilder2.append(String.format("%4s%4s%31s%2s", "\n6.", " Request", ": ", request));
-        respBuilder2.append(String.format("%4s%4s%27s%2s", "\n7.", " Kebutuhan", ": ", kebutuhan));
-        respBuilder2.append(String.format("%4s%4s%35s%2s", "\n8.", " Waktu", ": ", waktu));
-        respBuilder2.append(getFooterEmail().toString());
-
-        String bodyAtasan = respBuilder.toString();
-        String bodyHrd = respBuilder2.toString();
+        sbCX.append(getFooterEmail().toString())
+                .append("</body>").append("</html>");
 
         // 3. kirim email
-        String recipient1 = appProperties.getEmailrecipient1();
-        String recipient2 = appProperties.getEmailrecipient2();
-        System.out.println("recipient 1 : " + recipient1);
-        System.out.println("recipient 2 : " + recipient2);
-
-        MailModel mailModel = new MailModel(recipient1, "SAMI - Tiket - Request", bodyAtasan);
-        MailModel mailModel2 = new MailModel(recipient2, "SAMI - Tiket - Request", bodyHrd);
-        String sendMailResult = svcMailService.sendMail(mailModel);
-        String sendMailResult2 = svcMailService.sendMail(mailModel2);
-        System.out.println("hasil kirim email" + sendMailResult);
-        System.out.println("hasil kirim email" + sendMailResult2);
+        int codeCX = sendGridEmail(sbCX, email, nama, "SAMI - Request (" + request + ")");
 
         String result = "";
-        if (sendMailResult.toLowerCase().contains("success") && sendMailResult2.toLowerCase().contains("success")) {
+        if (codeCX == 202) {
             result = "Baik kak silahkan tunggu konfirmasi ya kak";
-        } else if (sendMailResult.toLowerCase().contains("fail") && sendMailResult2.toLowerCase().contains("fail")) {
-            result = "Maaf kak pengiriman email gagal. Boleh diulangi kak";
         } else {
-            result = "Maaf kak {bot_name} belum mengerti. Bisa tolong ulangi lagi kak.";
+            result = "Maaf kak pengiriman email gagal. Boleh diulangi kak";
         }
 
         output.put(OUTPUT, result);
@@ -1713,8 +1674,8 @@ public class ServiceImp implements IService {
     public ExtensionResult doSendEmailSolution(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
         ExtensionResult extensionResult = new ExtensionResult();
-        StringBuilder respBuilder = new StringBuilder();
-        StringBuilder respBuilder2 = new StringBuilder();
+        StringBuilder sbCX = new StringBuilder();
+        StringBuilder sbCustomer = new StringBuilder();
         String pertanyaan = getEasyMapValueByName(extensionRequest, "pertanyaan");
         String nama = getEasyMapValueByName(extensionRequest, "person");
         String perusahaan = getEasyMapValueByName(extensionRequest, "company");
@@ -1722,37 +1683,23 @@ public class ServiceImp implements IService {
         String email = getEasyMapValueByName(extensionRequest, "email");
         String nohp = getEasyMapValueByName(extensionRequest, "phone");
 
-        respBuilder.append(getHeaderEmail("Solution", nama, posisi, perusahaan, email, nohp).toString());
-        respBuilder.append(String.format("%4s%4s%26s%2s", "\n6.", " Pertanyaan", ": ", pertanyaan));
-        respBuilder.append(getFooterEmail().toString());
+        sbCX.append("<html>").append("<body>");
+        sbCX.append(getHeaderEmail("Solution", nama, posisi, perusahaan, email, nohp).toString());
+        sbCX
+                .append("<td>6.</td>").append("<td>Pertanyaan</td>").append("<td>:</td>").append("<td>" + pertanyaan + "</td>")
+                .append("</tr>");
+        sbCX.append("</table>");
 
-        respBuilder2.append(getHeaderEmail("Solution", nama, posisi, perusahaan, email, nohp).toString());
-        respBuilder2.append(String.format("%4s%4s%26s%2s", "\n6.", " Pertanyaan", ": ", pertanyaan));
-        respBuilder2.append(getFooterEmail().toString());
+        sbCX.append(getFooterEmail().toString())
+                .append("</body>").append("</html>");
 
-        String bodyAtasan = respBuilder.toString();
-        String bodyHrd = respBuilder2.toString();
-
-        // 3. kirim email
-        String recipient1 = appProperties.getEmailrecipient1();
-        String recipient2 = appProperties.getEmailrecipient2();
-        System.out.println("recipient 1 : " + recipient1);
-        System.out.println("recipient 2 : " + recipient2);
-
-        MailModel mailModel = new MailModel(recipient1, "SAMI - Tiket - Solution", bodyAtasan);
-        MailModel mailModel2 = new MailModel(recipient2, "SAMI - Tiket - Solution", bodyHrd);
-        String sendMailResult = svcMailService.sendMail(mailModel);
-        String sendMailResult2 = svcMailService.sendMail(mailModel2);
-        System.out.println("hasil kirim email" + sendMailResult);
-        System.out.println("hasil kirim email" + sendMailResult2);
+        int codeCX = sendGridEmail(sbCX, email, nama, "SAMI - Solution (" + pertanyaan + ")");
 
         String result = "";
-        if (sendMailResult.toLowerCase().contains("success") && sendMailResult2.toLowerCase().contains("success")) {
+        if (codeCX == 202) {
             result = "Baik kak silahkan tunggu konfirmasi ya kak";
-        } else if (sendMailResult.toLowerCase().contains("fail") && sendMailResult2.toLowerCase().contains("fail")) {
-            result = "Maaf kak pengiriman email gagal. Boleh diulangi kak";
         } else {
-            result = "Maaf kak {bot_name} belum mengerti. Bisa tolong ulangi lagi kak.";
+            result = "Maaf kak pengiriman email gagal. Boleh diulangi kak";
         }
 
         output.put(OUTPUT, result);
@@ -1768,8 +1715,8 @@ public class ServiceImp implements IService {
     public ExtensionResult doSendEmailPromo(ExtensionRequest extensionRequest) {
         Map<String, String> output = new HashMap<>();
         ExtensionResult extensionResult = new ExtensionResult();
-        StringBuilder respBuilder = new StringBuilder();
-        StringBuilder respBuilder2 = new StringBuilder();
+        StringBuilder sbCX = new StringBuilder();
+        StringBuilder sbCustomer = new StringBuilder();
         String promo = getEasyMapValueByName(extensionRequest, "promo");
         String nama = getEasyMapValueByName(extensionRequest, "person");
         String perusahaan = getEasyMapValueByName(extensionRequest, "company");
@@ -1777,37 +1724,25 @@ public class ServiceImp implements IService {
         String email = getEasyMapValueByName(extensionRequest, "email");
         String nohp = getEasyMapValueByName(extensionRequest, "phone");
 
-        respBuilder.append(getHeaderEmail("Promo", nama, posisi, perusahaan, email, nohp).toString());
-        respBuilder.append(String.format("%4s%4s%34s%2s", "\n6.", " Promo", ": ", promo));
-        respBuilder.append(getFooterEmail().toString());
+        sbCX.append("<html>").append("<body>");
+        sbCX.append(getHeaderEmail("Promo", nama, posisi, perusahaan, email, nohp).toString());
+        sbCX
+                .append("<td>6.</td>").append("<td>Promo</td>").append("<td>:</td>").append("<td>" + promo + "</td>")
+                .append("</tr>");
+        sbCX.append("</table>");
 
-        respBuilder2.append(getHeaderEmail("Promo", nama, posisi, perusahaan, email, nohp).toString());
-        respBuilder2.append(String.format("%4s%4s%34s%2s", "\n6.", " Promo", ": ", promo));
-        respBuilder2.append(getFooterEmail().toString());
+        sbCX.append(getFooterEmail().toString())
+                .append("</body>").append("</html>");
 
-        String bodyAtasan = respBuilder.toString();
-        String bodyHrd = respBuilder2.toString();
-
-        // 3. kirim email
-        String recipient1 = appProperties.getEmailrecipient1();
-        String recipient2 = appProperties.getEmailrecipient2();
-        System.out.println("recipient 1 : " + recipient1);
-        System.out.println("recipient 2 : " + recipient2);
-
-        MailModel mailModel = new MailModel(recipient1, "SAMI - Tiket - Promo", bodyAtasan);
-        MailModel mailModel2 = new MailModel(recipient2, "SAMI - Tiket - Promo", bodyHrd);
-        String sendMailResult = svcMailService.sendMail(mailModel);
-        String sendMailResult2 = svcMailService.sendMail(mailModel2);
-        System.out.println("hasil kirim email" + sendMailResult);
-        System.out.println("hasil kirim email" + sendMailResult2);
+        //Kirim email
+        int codeCX = sendGridEmail(sbCX, email, nama, "SAMI - Promo (" + promo + ")");
+//        int codeCustomer = sendGridEmail(sbCustomer, email, nama, "SAMI - Tiket - Promo");
 
         String result = "";
-        if (sendMailResult.toLowerCase().contains("success") && sendMailResult2.toLowerCase().contains("success")) {
+        if (codeCX == 202) {
             result = "Baik kak silahkan tunggu konfirmasi ya kak";
-        } else if (sendMailResult.toLowerCase().contains("fail") && sendMailResult2.toLowerCase().contains("fail")) {
-            result = "Maaf kak pengiriman email gagal. Boleh diulangi kak";
         } else {
-            result = "Maaf kak {bot_name} belum mengerti. Bisa tolong ulangi lagi kak.";
+            result = "Maaf kak pengiriman email gagal. Boleh diulangi kak";
         }
 
         output.put(OUTPUT, result);
@@ -1834,12 +1769,12 @@ public class ServiceImp implements IService {
         phone = phone.replace(")", "");
         phone = phone.replace("-", "");
         phone = phone.replace(".", "");
-        
+
         if (phone.matches("^[+0-9]*$")) {
             String preZero8 = phone.substring(0, 2);
             String prePlus62 = phone.substring(0, 4);
 
-            if (phone.length() > 9 || phone.length() < 16) {
+            if (phone.length() > 9 && phone.length() < 16) {
                 if (prePlus62.equals("+628")) {
                     phone = phone.replace("+628", "08");
                     clearEntities.put("phone", phone);
@@ -1878,12 +1813,12 @@ public class ServiceImp implements IService {
         phone = phone.replace(")", "");
         phone = phone.replace("-", "");
         phone = phone.replace(".", "");
-        
+
         if (phone.matches("^[+0-9]*$")) {
             String preZero8 = phone.substring(0, 2);
             String prePlus62 = phone.substring(0, 4);
 
-            if (phone.length() > 9 || phone.length() < 16) {
+            if (phone.length() > 9 && phone.length() < 16) {
                 if (prePlus62.equals("+628")) {
                     phone = phone.replace("+628", "08");
                     clearEntities.put("phone", phone);
@@ -2074,6 +2009,7 @@ public class ServiceImp implements IService {
         Map<String, String> clearEntities = new HashMap<>();
         clearEntities.put("chance", "2");
         extensionResult.setEntities(clearEntities);
+
         return extensionResult;
     }
 
@@ -2136,31 +2072,33 @@ public class ServiceImp implements IService {
     private StringBuilder getHeaderEmail(String jenisEmail, String nama, String posisi, String namaPerusahaan, String email, String hp) {
         StringBuilder respBuilder = new StringBuilder();
         respBuilder.append("Dear Kakak CX,");
-        respBuilder.append("\nSAMI mohon bantuannya untuk memproses tiket ini ya.");
+        respBuilder.append("<br>SAMI mohon bantuannya untuk memproses tiket ini ya.");
 
-        respBuilder.append("\n\nJenis : " + jenisEmail);
-        respBuilder.append("\n\nData : ");
-//        respBuilder.append("\n1. Nama                   : " + nama);
-//        respBuilder.append("\n2. Posisi                 : " + posisi);
-//        respBuilder.append("\n3. Nama Perusahaan        : " + namaPerusahaan);
-//        respBuilder.append("\n4. Email                  : " + email);
-//        respBuilder.append("\n5. No Telpon Selular (Hp) : " + hp);
+        respBuilder.append("<br><br>Jenis : " + jenisEmail);
+        respBuilder.append("<br><br>Data : ");
 
-        respBuilder.append(String.format("%4s%4s%35s%2s", "\n1.", " Nama", ": ", nama));
-        respBuilder.append(String.format("%4s%4s%35s%2s", "\n2.", " Posisi", ": ", posisi));
-        respBuilder.append(String.format("%4s%4s%13s%2s", "\n3.", " Nama Perusahaan", ": ", namaPerusahaan));
-        respBuilder.append(String.format("%4s%4s%36s%2s", "\n4.", " Email", ": ", email));
-        respBuilder.append(String.format("%4s%4s%6s%2s", "\n5.", " No Telpon Selular (Hp)", ": ", hp));
+        respBuilder.append("<table><tr>")
+                .append("<td>1.</td>").append("<td>Nama</td>").append("<td>:</td>").append("<td>" + nama + "</td>")
+                .append("</tr><tr>")
+                .append("<td>2.</td>").append("<td>Posisi</td>").append("<td>:</td>").append("<td>" + posisi + "</td>")
+                .append("</tr><tr>")
+                .append("<td>3.</td>").append("<td>Nama Perusahaan</td>").append("<td>:</td>").append("<td>" + namaPerusahaan + "</td>")
+                .append("</tr><tr>")
+                .append("<td>4.</td>").append("<td>Email</td>").append("<td>:</td>").append("<td>" + email + "</td>")
+                .append("</tr><tr>")
+                .append("<td>5.</td>").append("<td>No Telpon Selular (Hp)</td>").append("<td>:</td>").append("<td>" + hp + "</td>")
+                .append("</tr><tr>");
+
         return respBuilder;
     }
 
     private StringBuilder getFooterEmail() {
         StringBuilder respBuilder = new StringBuilder();
 
-        respBuilder.append("\n\nTerima kasih, Kakak CX.");
+        respBuilder.append("<br>Terima kasih, Kakak CX.");
 
-        respBuilder.append("\n\nSalam Sahabat,");
-        respBuilder.append("\nSAMI");
+        respBuilder.append("<br><br>Salam Sahabat,");
+        respBuilder.append("<br>SAMI");
 
         return respBuilder;
     }
@@ -2212,6 +2150,328 @@ public class ServiceImp implements IService {
             clearEntities.put("confirm2", "Yes");
         }
         extensionResult.setEntities(clearEntities);
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doConfirmReqCom(ExtensionRequest extensionRequest) {
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+
+        Map<String, String> clearEntities = new HashMap<>();
+        String conf = getEasyMapValueByName(extensionRequest, "confirm");
+
+        if (conf.equalsIgnoreCase("salah")) {
+            clearEntities.put("person", null);
+            clearEntities.put("company", null);
+            clearEntities.put("position", null);
+            clearEntities.put("email", null);
+            clearEntities.put("phone", null);
+            clearEntities.put("confirm", null);
+        } else {
+            clearEntities.put("confirm2", "Yes");
+        }
+        extensionResult.setEntities(clearEntities);
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doGetAboutSami(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+
+        String jabatan = getEasyMapValueByName(extensionRequest, "jabatan");
+        String perusahaan = getEasyMapValueByName(extensionRequest, "perusahaan");
+        StringBuilder stringBuilder = new StringBuilder();
+        ButtonBuilder buttonBuilder = null;
+        switch (perusahaan) {
+            case "mii":
+            case "Mii":
+            case "MII":
+                if (jabatan.contains("Presiden Direktur")) {
+                    ButtonTemplate button = new ButtonTemplate();
+                    button.setPictureLink(appProperties.getImgSjafril2());
+                    button.setPicturePath(appProperties.getImgSjafril2());
+                    button.setTitle("Ir. Sjafril Effendi");
+                    button.setSubTitle("Presiden direktur Mitra Integrasi Informatika itu adalah Bapak Ir. Sjafril Effendi.");
+                    buttonBuilder = new ButtonBuilder(button);
+                }
+                break;
+            case "metrodata":
+            case "Metrodata":
+            case "METRODATA":
+                switch (jabatan) {
+                    case "Presiden Direktur":
+                    case "Presiden direktur":
+                    case "presiden direktur":
+                    case "PRESIDEN DIREKTUR":
+                        ButtonTemplate button = new ButtonTemplate();
+                        button.setPictureLink(appProperties.getImgSusanto());
+                        button.setPicturePath(appProperties.getImgSusanto());
+                        button.setTitle("Susanto Djaja, SE, MH");
+                        button.setSubTitle("Presiden direktur Metrodata itu adalah Bapak Susanto Djaja, SE, MH.");
+                        buttonBuilder = new ButtonBuilder(button);
+                        break;
+                }
+                break;
+        }
+        String btnBuilders = buttonBuilder.build() + "&split&";
+        CarouselBuilder carouselBuilder = new CarouselBuilder(btnBuilders);
+        output.put(OUTPUT, carouselBuilder.build());
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doSendgridEmailEx(ExtensionRequest extensionRequest) {
+        Map<String, String> output = new HashMap<>();
+        int code = 0;
+        StringBuilder sb = new StringBuilder();
+        StringBuilder respBuilder = new StringBuilder();
+
+        respBuilder.append("<html>").append("<body>");
+        respBuilder.append(getHeaderEmail("Complaint", "nama", "posisi", "perusahaan", "email", "nohp").toString());
+        respBuilder
+                .append("<td>6.</td>").append("<td>Keluhan</td>").append("<td>:</td>").append("<td>" + "keluhan" + "</td>")
+                .append("</tr><tr>")
+                .append("<td>7.</td>").append("<td>Masukan</td>").append("<td>:</td>").append("<td>" + "masukan" + "</td>")
+                .append("</tr>");
+        respBuilder.append("</table>");
+
+        respBuilder.append(getFooterEmail().toString())
+                .append("</body>").append("</html>");
+
+        sb.append(""
+                + " {\"personalizations\":[{ "
+                + " \"to\":[{ "
+                + " \"email\":\"7nandemonai@gmail.com\", " //dinamis
+                + " \"name\":\"Kurnia Sandy\"}]," //dinamis
+                + " \"subject\":\"Santosa Group Recruitment\"}]," //dinamis
+                + " \"from\":{\"email\":\"no-reply@santosagroup.com\","
+                + " \"name\":\"Santosa Group\"},"
+                //                + " \"reply_to\":{\"email\":\"sandykur77@gmail.com\","
+                //                + " \"name\":\"Sandykur\"},"
+                + " \"content\":[{"
+                + " \"type\":\"text/html\","
+                + " \"value\":\"" + respBuilder.toString() + "\"}]}"
+                + "");
+        try {
+            String url = "https://api.sendgrid.com/v3/mail/send";
+            OkHttpUtil okHttpUtil = new OkHttpUtil();
+            okHttpUtil.init(true);
+            RequestBody body = RequestBody.create(JSON, sb.toString());
+            Request request = new Request.Builder().url(url).post(body).addHeader("Content-Type", "application/json")
+                    .addHeader("Authorization", "Bearer " + appProperties.getMailApiKey()).build();
+            Response response = okHttpUtil.getClient().newCall(request).execute();
+            code = response.code();
+        } catch (IOException ioe) {
+            System.out.println(ioe.getMessage());
+        }
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+
+        output.put(OUTPUT, code + "");
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+
+    int sendGridEmail(StringBuilder resBuilder, String sender, String name, String subject) {
+        StringBuilder sb = new StringBuilder();
+        int code = 0;
+        sb.append(""
+                + " {\"personalizations\":[{ "
+                + " \"to\":[{ "
+                + " \"email\":\"sami@mii-zendesk.zendesk.com\", "
+                //                + " \"email\":\"support@mii-zendesk.zendesk.com\", "
+                //                + " \"email\":\"7nandemonai@gmail.com\", "
+                + " \"name\":\"Kakak CX\"}]," //dinamis
+                + " \"subject\":\"" + subject + "\"}]," //dinamis
+                //                + " \"from\":{\"email\":\"no-reply@mii.co.id\","
+                + " \"from\":{\"email\":\"" + sender + "\","
+                + " \"name\":\"" + name + "\"},"
+                + " \"content\":[{"
+                + " \"type\":\"text/html\","
+                + " \"value\":\"" + resBuilder.toString() + "\"}]}"
+                + "");
+        try {
+            String url = "https://api.sendgrid.com/v3/mail/send";
+            OkHttpUtil okHttpUtil = new OkHttpUtil();
+            okHttpUtil.init(true);
+            RequestBody body = RequestBody.create(JSON, sb.toString());
+            Request request = new Request.Builder().url(url).post(body).addHeader("Content-Type", "application/json")
+                    .addHeader("Authorization", "Bearer " + appProperties.getMailApiKey()).build();
+            Response response = okHttpUtil.getClient().newCall(request).execute();
+            code = response.code();
+        } catch (IOException ioe) {
+            System.out.println(ioe.getMessage());
+        }
+        return code;
+    }
+
+    @Override
+    public ExtensionResult doCalculate(ExtensionRequest extensionRequest) {
+//        String operasi = "3 +2-16/2* 2*4";
+//        String operasi = "3 +2-16";
+        String result = "Maaf Kak. ada kesalahan :( Mohon dicek lagi inputannya!";
+        String operasi = getEasyMapValueByName(extensionRequest, "hitung");
+        operasi = operasi.replaceAll("\\s+", "");
+        operasi = operasi.replaceAll("multiply", "*");
+        operasi = operasi.replaceAll("Multiply", "*");
+        operasi = operasi.replaceAll("bagi", "/");
+        operasi = operasi.replaceAll("Bagi", "/");
+        String[] arr = operasi.split("(?<=[-+*/])|(?=[-+*/])");
+        double res = 0;
+        try {
+
+            //ubah - jadi + dan merubah next index jd angka negatif
+            for (int i = 0; i < arr.length; i++) {
+                if (arr[i].equals("-")) {
+                    arr[i] = "+";
+                    arr[i + 1] = "-" + arr[i + 1];
+                }
+            }
+
+            //temporary
+            List<String> temp = new ArrayList<>();
+            for (String obj : arr) {
+                temp.add(obj);
+            }
+
+            if (operasi.contains("*")) {
+                //perkalian
+                for (int i = 1; i < temp.size(); i++) {
+                    if (temp.get(i).equals("*")) {
+                        double angka1 = new Double(temp.get(i - 1));
+                        double angka2 = new Double(temp.get(i + 1));
+                        String operator = temp.get(i);
+                        double hasil = calculate(angka1, operator, angka2);
+
+                        temp.remove(i);
+                        temp.remove(i);
+                        temp.set(i - 1, hasil + "");
+                        i--;
+                    }
+                }
+            }
+            if (operasi.contains("/")) {
+                //pembagian
+                for (int i = 1; i < temp.size(); i++) {
+                    if (temp.get(i).equals("/")) {
+                        double angka1 = new Double(temp.get(i - 1));
+                        double angka2 = new Double(temp.get(i + 1));
+                        String operator = temp.get(i);
+                        double hasil = calculate(angka1, operator, angka2);
+
+                        temp.remove(i);
+                        temp.remove(i);
+                        temp.set(i - 1, hasil + "");
+                        i--;
+                    }
+                }
+            }
+
+            //menjumlahkan semua angka
+            for (int i = 0; i < temp.size(); i += 2) {
+                double d = new Double(temp.get(i));
+                res = res + d;
+            }
+            result = "Hasilnya " + res + " Kak.";
+        } catch (Exception e) {
+
+        }
+        ExtensionResult extensionResult = new ExtensionResult();
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        Map<String, String> output = new HashMap<>();
+
+        output.put(OUTPUT, result);
+        extensionResult.setValue(output);
+        return extensionResult;
+    }
+
+    private double calculate(double angka1, String operator, double angka2) {
+        double result = 0;
+        switch (operator) {
+            case "*":
+                result = angka1 * angka2;
+                break;
+            case "/":
+                result = angka1 / angka2;
+                break;
+            case "+":
+                result = angka1 + angka2;
+                break;
+            case "-":
+                result = angka1 - angka2;
+                break;
+        }
+        return result;
+    }
+
+    @Override
+    public ExtensionResult doValidateDate(ExtensionRequest extensionRequest) {
+        ExtensionResult extensionResult = new ExtensionResult();
+        String sdate = getEasyMapValueByName(extensionRequest, "tanggal");
+        String result = "";
+        sdate = sdate.replaceAll("/", "-");
+        sdate = sdate.replaceAll(" ", "-");
+        String[] arrDate = sdate.split("-");
+        String[] temp = new String[3];
+        int dex = 1;
+        int obj;
+        for (int i = 0; i < arrDate.length; i++) {
+            obj = Integer.parseInt(arrDate[i]);
+            
+            // memposisikan tahun di index ke 0
+            if (arrDate[i].length() == 4) {
+                temp[0] = arrDate[i];
+            } 
+            
+            // mengubah date 1 angka jadi 2 angka
+            else if (arrDate[i].length() < 2) {
+                temp[dex] = "0" + arrDate[i];
+                dex++;
+            } 
+            
+            // memposisikan tanggal dan bulan di index selain 0
+            else {
+                // cek hari
+                if (obj > 12) {
+                    temp[2] = arrDate[i];
+                } else {
+                    temp[dex] = arrDate[i];
+                    dex++;
+                }
+            }
+        }
+        
+        // membuat format tanggal yyyy-mm-dd
+        for (int i = 0; i < temp.length; i++) {
+            result += temp[i];
+            if (i < temp.length - 1) {
+                result += "-";
+            }
+        }
+
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        Map<String, String> output = new HashMap<>();
+
+        output.put(OUTPUT, result);
+        extensionResult.setValue(output);
         return extensionResult;
     }
 }

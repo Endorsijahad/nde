@@ -113,4 +113,13 @@ public interface IService {
         
         ExtensionResult doConfirmSolution(ExtensionRequest extensionRequest);
         
+        ExtensionResult doConfirmReqCom(ExtensionRequest extensionRequest);
+        
+        ExtensionResult doGetAboutSami(ExtensionRequest extensionRequest);
+        
+        ExtensionResult doSendgridEmailEx(ExtensionRequest extensionRequest);
+        
+        ExtensionResult doCalculate(ExtensionRequest extensionRequest);
+        
+        ExtensionResult doValidateDate(ExtensionRequest extensionRequest);
 }

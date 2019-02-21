@@ -139,6 +139,69 @@ public class AppProperties {
 
     @Value("${dolphin.call.appointment}")
     String callAppointment;
+    
+    @Value("${img.sami}")
+    String imgSami;
+    
+    @Value("${img.metrodata}")
+    String imgMetrodata;
+    
+    @Value("${img.miibigger}")
+    String imgMiiBigger;
+    
+    @Value("${img.synnex}")
+    String imgSynnex;
+    
+    @Value("${img.xerindo}")
+    String imgXerindo;
+    
+    @Value("${img.packetsystems}")
+    String imgPacketSystems;
+    
+    @Value("${img.soltius}")
+    String imgSoltius;
+    
+    @Value("${img.mii}")
+    String imgMii;
+    
+    @Value("${img.candra}")
+    String imgCandra;
+    
+    @Value("${img.ben}")
+    String imgBen;
+    
+    @Value("${img.agus}")
+    String imgAgus;
+    
+    @Value("${img.lulu}")
+    String imgLulu;
+    
+    @Value("${img.randy}")
+    String imgRandy;
+    
+    @Value("${img.susanto}")
+    String imgSusanto;
+    
+    @Value("${img.sjafril}")
+    String imgSjafril;
+    
+    @Value("${img.susanto2}")
+    String imgSusanto2;
+    
+    @Value("${img.sjafril2}")
+    String imgSjafril2;
+    
+    @Value("${img.ira}")
+    String imgIra;
+    
+    @Value("${img.titi}")
+    String imgTiti;
+    
+    @Value("${img.alex}")
+    String imgAlex;
+    
+    @Value("${mail.apikey}")
+    String mailApiKey;
 
     public String getButtonTitlePayload() {
         return buttonTitlePayload;
@@ -450,6 +513,174 @@ public class AppProperties {
 
     public void setCallAppointment(String callAppointment) {
         this.callAppointment = callAppointment;
+    }
+
+    public String getImgSami() {
+        return imgSami;
+    }
+
+    public void setImgSami(String imgSami) {
+        this.imgSami = imgSami;
+    }
+
+    public String getImgMetrodata() {
+        return imgMetrodata;
+    }
+
+    public void setImgMetrodata(String imgMetrodata) {
+        this.imgMetrodata = imgMetrodata;
+    }
+
+    public String getImgMiiBigger() {
+        return imgMiiBigger;
+    }
+
+    public void setImgMiiBigger(String imgMiiBigger) {
+        this.imgMiiBigger = imgMiiBigger;
+    }
+
+    public String getImgSynnex() {
+        return imgSynnex;
+    }
+
+    public void setImgSynnex(String imgSynnex) {
+        this.imgSynnex = imgSynnex;
+    }
+
+    public String getImgXerindo() {
+        return imgXerindo;
+    }
+
+    public void setImgXerindo(String imgXerindo) {
+        this.imgXerindo = imgXerindo;
+    }
+
+    public String getImgPacketSystems() {
+        return imgPacketSystems;
+    }
+
+    public void setImgPacketSystems(String imgPacketSystems) {
+        this.imgPacketSystems = imgPacketSystems;
+    }
+
+    public String getImgSoltius() {
+        return imgSoltius;
+    }
+
+    public void setImgSoltius(String imgSoltius) {
+        this.imgSoltius = imgSoltius;
+    }
+
+    public String getImgMii() {
+        return imgMii;
+    }
+
+    public void setImgMii(String imgMii) {
+        this.imgMii = imgMii;
+    }
+
+    public String getImgCandra() {
+        return imgCandra;
+    }
+
+    public void setImgCandra(String imgCandra) {
+        this.imgCandra = imgCandra;
+    }
+
+    public String getImgBen() {
+        return imgBen;
+    }
+
+    public void setImgBen(String imgBen) {
+        this.imgBen = imgBen;
+    }
+
+    public String getImgAgus() {
+        return imgAgus;
+    }
+
+    public void setImgAgus(String imgAgus) {
+        this.imgAgus = imgAgus;
+    }
+
+    public String getImgLulu() {
+        return imgLulu;
+    }
+
+    public void setImgLulu(String imgLulu) {
+        this.imgLulu = imgLulu;
+    }
+
+    public String getImgRandy() {
+        return imgRandy;
+    }
+
+    public void setImgRandy(String imgRandy) {
+        this.imgRandy = imgRandy;
+    }
+
+    public String getImgSusanto() {
+        return imgSusanto;
+    }
+
+    public void setImgSusanto(String imgSusanto) {
+        this.imgSusanto = imgSusanto;
+    }
+
+    public String getImgSjafril() {
+        return imgSjafril;
+    }
+
+    public void setImgSjafril(String imgSjafril) {
+        this.imgSjafril = imgSjafril;
+    }
+
+    public String getImgSusanto2() {
+        return imgSusanto2;
+    }
+
+    public void setImgSusanto2(String imgSusanto2) {
+        this.imgSusanto2 = imgSusanto2;
+    }
+
+    public String getImgSjafril2() {
+        return imgSjafril2;
+    }
+
+    public void setImgSjafril2(String imgSjafril2) {
+        this.imgSjafril2 = imgSjafril2;
+    }
+
+    public String getImgIra() {
+        return imgIra;
+    }
+
+    public void setImgIra(String imgIra) {
+        this.imgIra = imgIra;
+    }
+
+    public String getImgTiti() {
+        return imgTiti;
+    }
+
+    public void setImgTiti(String imgTiti) {
+        this.imgTiti = imgTiti;
+    }
+
+    public String getImgAlex() {
+        return imgAlex;
+    }
+
+    public void setImgAlex(String imgAlex) {
+        this.imgAlex = imgAlex;
+    }
+
+    public String getMailApiKey() {
+        return mailApiKey;
+    }
+
+    public void setMailApiKey(String mailApiKey) {
+        this.mailApiKey = mailApiKey;
     }
     
     

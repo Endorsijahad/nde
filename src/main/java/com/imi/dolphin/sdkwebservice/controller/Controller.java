@@ -262,6 +262,12 @@ public class Controller {
             return svcService.doConfirmSolution(extensionRequest);
         }
         
+        @RequestMapping("/confirmreqcom")
+        @PostMapping
+        public ExtensionResult confirmReqCom(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doConfirmReqCom(extensionRequest);
+        }
+        
         @RequestMapping("/merk17")
         @PostMapping
         public ExtensionResult merk17(@RequestBody ExtensionRequest extensionRequest){
@@ -302,5 +308,29 @@ public class Controller {
         @PostMapping
         public ExtensionResult latLongToCity(@RequestBody ExtensionRequest extensionRequest){
             return svcService.latLongToCity(extensionRequest);
+        }
+        
+        @RequestMapping("/aboutsami")
+        @PostMapping
+        public ExtensionResult aboutSami(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doGetAboutSami(extensionRequest);
+        }
+        
+        @RequestMapping("/sendgrid")
+        @PostMapping
+        public ExtensionResult sendgrid(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doSendgridEmailEx(extensionRequest);
+        }
+        
+        @RequestMapping("/calculate")
+        @PostMapping
+        public ExtensionResult calculate(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doCalculate(extensionRequest);
+        }
+        
+        @RequestMapping("/valdate")
+        @PostMapping
+        public ExtensionResult doValidateDate(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doValidateDate(extensionRequest);
         }
 }

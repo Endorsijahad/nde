@@ -47,12 +47,13 @@ public class MailServiceImp implements IMailService {
 			message.setFrom(new InternetAddress(appProperties.getMailUsername()));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mailModel.getRecipient()));
 			message.setSubject(mailModel.getSubject());
-			message.setText(mailModel.getText());
+//			message.setText(mailModel.getText());
+                        message.setContent(mailModel.getText(), "text/html; charset=utf-8");
 			Transport.send(message);
 
 			return "Sent message successfully....";
 		} catch (MessagingException e) {
-
+                    System.out.println(e.getMessage());
 		}
 		return "Sent message failed...";
 	}
