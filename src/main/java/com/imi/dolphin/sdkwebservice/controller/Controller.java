@@ -333,4 +333,10 @@ public class Controller {
         public ExtensionResult doValidateDate(@RequestBody ExtensionRequest extensionRequest){
             return svcService.doValidateDate(extensionRequest);
         }
+        
+        @RequestMapping("/cleardate")
+        @PostMapping
+        public ExtensionResult doClearDate(@RequestBody ExtensionRequest extensionRequest){
+            return svcService.doClearDate(extensionRequest);
+        }
 }

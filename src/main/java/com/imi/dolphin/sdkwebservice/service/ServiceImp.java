@@ -2431,6 +2431,8 @@ public class ServiceImp implements IService {
         sdate = sdate.replaceAll(" ", "-");
         String[] arrDate = sdate.split("-");
         boolean isNumeric;
+
+        // mengubah nama bulan ke dalam angka
         for (int i = 0; i < arrDate.length; i++) {
             isNumeric = arrDate[i].chars().allMatch(Character::isDigit);
             if (isNumeric == false) {
@@ -2472,11 +2474,9 @@ public class ServiceImp implements IService {
                 }
             }
             clearEntities.put("tanggal", result);
-            clearEntities.put("confirm", "confirm");
             extensionResult.setEntities(clearEntities);
         } catch (Exception e) {
             clearEntities = new HashMap<>();
-            clearEntities.put("confirm", null);
             clearEntities.put("tanggal", null);
             extensionResult.setEntities(clearEntities);
         }
@@ -2489,6 +2489,22 @@ public class ServiceImp implements IService {
 
         output.put(OUTPUT, result);
         extensionResult.setValue(output);
+        return extensionResult;
+    }
+
+    @Override
+    public ExtensionResult doClearDate(ExtensionRequest extensionRequest) {
+        ExtensionResult extensionResult = new ExtensionResult();
+        Map<String, String> clearEntities = new HashMap<>();
+
+        String confirm = getEasyMapValueByName(extensionRequest, "confirm");
+        if (confirm.equalsIgnoreCase("tidak")) {
+            clearEntities.put("tanggal", null);
+            clearEntities.put("confirm", null);
+        } else {
+            clearEntities.put("confirm2", "confirm2");
+        }
+
         return extensionResult;
     }
 

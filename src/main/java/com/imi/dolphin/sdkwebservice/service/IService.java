@@ -123,4 +123,6 @@ public interface IService {
         
         ExtensionResult doValidateDate(ExtensionRequest extensionRequest);
         
+        ExtensionResult doClearDate(ExtensionRequest extensionRequest);
+        
 }
