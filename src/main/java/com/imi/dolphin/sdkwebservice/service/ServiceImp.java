@@ -2504,7 +2504,11 @@ public class ServiceImp implements IService {
         } else {
             clearEntities.put("confirm2", "confirm2");
         }
-
+        extensionResult.setAgent(false);
+        extensionResult.setRepeat(false);
+        extensionResult.setSuccess(true);
+        extensionResult.setNext(true);
+        
         return extensionResult;
     }
 
