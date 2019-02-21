@@ -42,6 +42,7 @@ import com.imi.dolphin.sdkwebservice.model.EasyMap;
 import com.imi.dolphin.sdkwebservice.model.ExtensionRequest;
 import com.imi.dolphin.sdkwebservice.model.ExtensionResult;
 import com.imi.dolphin.sdkwebservice.model.MailModel;
+import com.imi.dolphin.sdkwebservice.model.MonthBuilder;
 import com.imi.dolphin.sdkwebservice.param.ParamSdk;
 import com.imi.dolphin.sdkwebservice.property.AppProperties;
 import com.imi.dolphin.sdkwebservice.token.Token;
@@ -2424,10 +2425,19 @@ public class ServiceImp implements IService {
         ExtensionResult extensionResult = new ExtensionResult();
         String sdate = getEasyMapValueByName(extensionRequest, "tanggal");
         Map<String, String> clearEntities = new HashMap<>();
+        MonthBuilder monthBuilder = new MonthBuilder();
         String result = "";
         sdate = sdate.replaceAll("/", "-");
         sdate = sdate.replaceAll(" ", "-");
         String[] arrDate = sdate.split("-");
+        boolean isNumeric;
+        for (int i = 0; i < arrDate.length; i++) {
+            isNumeric = arrDate[i].chars().allMatch(Character::isDigit);
+            if (isNumeric == false) {
+                arrDate[i] = monthBuilder.toMonthNumber(arrDate[i]);
+            }
+        }
+
         String[] temp = new String[3];
         int dex = 1;
         int obj;
@@ -2481,4 +2491,5 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
+
 }
