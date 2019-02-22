@@ -2268,7 +2268,7 @@ public class ServiceImp implements IService {
             okHttpUtil.init(true);
             RequestBody body = RequestBody.create(JSON, sb.toString());
             Request request = new Request.Builder().url(url).post(body).addHeader("Content-Type", "application/json")
-                    .addHeader("Authorization", "Bearer " + appProperties.getMailApiKey()).build();
+                    .addHeader("Authorization", "Bearer " + "api key").build();
             Response response = okHttpUtil.getClient().newCall(request).execute();
             code = response.code();
         } catch (IOException ioe) {
@@ -2309,7 +2309,7 @@ public class ServiceImp implements IService {
             okHttpUtil.init(true);
             RequestBody body = RequestBody.create(JSON, sb.toString());
             Request request = new Request.Builder().url(url).post(body).addHeader("Content-Type", "application/json")
-                    .addHeader("Authorization", "Bearer " + appProperties.getMailApiKey()).build();
+                    .addHeader("Authorization", "Bearer " + "api key").build();
             Response response = okHttpUtil.getClient().newCall(request).execute();
             code = response.code();
         } catch (IOException ioe) {

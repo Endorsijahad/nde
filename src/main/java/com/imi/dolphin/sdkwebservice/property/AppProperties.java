@@ -200,8 +200,6 @@ public class AppProperties {
     @Value("${img.alex}")
     String imgAlex;
     
-    @Value("${mail.apikey}")
-    String mailApiKey;
 
     public String getButtonTitlePayload() {
         return buttonTitlePayload;
@@ -674,15 +672,5 @@ public class AppProperties {
     public void setImgAlex(String imgAlex) {
         this.imgAlex = imgAlex;
     }
-
-    public String getMailApiKey() {
-        return mailApiKey;
-    }
-
-    public void setMailApiKey(String mailApiKey) {
-        this.mailApiKey = mailApiKey;
-    }
-    
-    
 
 }
