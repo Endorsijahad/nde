@@ -1771,7 +1771,7 @@ public class ServiceImp implements IService {
         extensionResult.setNext(true);
 
         Map<String, String> clearEntities = new HashMap<>();
-        String phone = getEasyMapValueByName(extensionRequest, "phone");
+        String phone = getEasyMapValueByName(extensionRequest, "notelp");
         phone = phone.replace(" ", "");
         phone = phone.replace("(", "");
         phone = phone.replace(")", "");
@@ -1785,23 +1785,23 @@ public class ServiceImp implements IService {
             if (phone.length() > 9 && phone.length() < 16) {
                 if (prePlus62.equals("+628")) {
                     phone = phone.replace("+628", "08");
-                    clearEntities.put("phone", addWordPhone(phone));
+                    clearEntities.put("notelp", addWordPhone(phone));
 //                    clearEntities.put("confirm", "confirm dong");
                     extensionResult.setEntities(clearEntities);
                 } else if (!preZero8.equals("08")) {
-                    clearEntities.put("phone", null);
+                    clearEntities.put("notelp", null);
                     extensionResult.setEntities(clearEntities);
                 } else {
-                    clearEntities.put("phone", addWordPhone(phone));
+                    clearEntities.put("notelp", addWordPhone(phone));
 //                    clearEntities.put("confirm", "confirm dong");
                     extensionResult.setEntities(clearEntities);
                 }
             } else {
-                clearEntities.put("phone", null);
+                clearEntities.put("notelp", null);
                 extensionResult.setEntities(clearEntities);
             }
         } else {
-            clearEntities.put("phone", null);
+            clearEntities.put("notelp", null);
             extensionResult.setEntities(clearEntities);
         }
 
