@@ -1779,12 +1779,14 @@ public class ServiceImp implements IService {
                 if (prePlus62.equals("+628")) {
                     phone = phone.replace("+628", "08");
                     clearEntities.put("phone", phone);
+                    clearEntities.put("confirm", "confirm");
                     extensionResult.setEntities(clearEntities);
                 } else if (!preZero8.equals("08")) {
                     clearEntities.put("phone", null);
                     extensionResult.setEntities(clearEntities);
                 } else {
                     clearEntities.put("phone", phone);
+                    clearEntities.put("confirm", "confirm");
                     extensionResult.setEntities(clearEntities);
                 }
             } else {
@@ -2423,7 +2425,7 @@ public class ServiceImp implements IService {
     @Override
     public ExtensionResult doValidateDate(ExtensionRequest extensionRequest) {
         ExtensionResult extensionResult = new ExtensionResult();
-        String sdate = getEasyMapValueByName(extensionRequest, "tanggal");
+        String sdate = getEasyMapValueByName(extensionRequest, "tanggallahir");
         Map<String, String> clearEntities = new HashMap<>();
         MonthBuilder monthBuilder = new MonthBuilder();
         String result = "";
@@ -2473,11 +2475,11 @@ public class ServiceImp implements IService {
                     result += "-";
                 }
             }
-            clearEntities.put("tanggal", result);
+            clearEntities.put("tanggallahir", result);
             extensionResult.setEntities(clearEntities);
         } catch (Exception e) {
             clearEntities = new HashMap<>();
-            clearEntities.put("tanggal", null);
+            clearEntities.put("tanggallahir", null);
             extensionResult.setEntities(clearEntities);
         }
 
