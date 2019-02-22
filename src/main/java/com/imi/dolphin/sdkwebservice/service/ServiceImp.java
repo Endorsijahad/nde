@@ -1785,14 +1785,16 @@ public class ServiceImp implements IService {
             if (phone.length() > 9 && phone.length() < 16) {
                 if (prePlus62.equals("+628")) {
                     phone = phone.replace("+628", "08");
-                    clearEntities.put("notelp", addWordPhone(phone));
+                    clearEntities.put("notelp", phone);
+//                    clearEntities.put("notelp", addWordPhone(phone));
 //                    clearEntities.put("confirm", "confirm dong");
                     extensionResult.setEntities(clearEntities);
                 } else if (!preZero8.equals("08")) {
                     clearEntities.put("notelp", null);
                     extensionResult.setEntities(clearEntities);
                 } else {
-                    clearEntities.put("notelp", addWordPhone(phone));
+                    clearEntities.put("notelp", phone);
+//                    clearEntities.put("notelp", addWordPhone(phone));
 //                    clearEntities.put("confirm", "confirm dong");
                     extensionResult.setEntities(clearEntities);
                 }
