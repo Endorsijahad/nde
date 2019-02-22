@@ -1754,7 +1754,14 @@ public class ServiceImp implements IService {
         extensionResult.setValue(output);
         return extensionResult;
     }
-
+    
+    private String addWordPhone(String phone){
+        String result = phone;
+        if(phone.chars().allMatch(Character::isDigit)){
+            result = phone + " nomorku";
+        }
+        return result;
+    }
     @Override
     public ExtensionResult doValidatePhone(ExtensionRequest extensionRequest) {
         ExtensionResult extensionResult = new ExtensionResult();
@@ -1778,14 +1785,14 @@ public class ServiceImp implements IService {
             if (phone.length() > 9 && phone.length() < 16) {
                 if (prePlus62.equals("+628")) {
                     phone = phone.replace("+628", "08");
-                    clearEntities.put("phone", phone);
+                    clearEntities.put("phone", addWordPhone(phone));
 //                    clearEntities.put("confirm", "confirm dong");
                     extensionResult.setEntities(clearEntities);
                 } else if (!preZero8.equals("08")) {
                     clearEntities.put("phone", null);
                     extensionResult.setEntities(clearEntities);
                 } else {
-                    clearEntities.put("phone", phone);
+                    clearEntities.put("phone", addWordPhone(phone));
 //                    clearEntities.put("confirm", "confirm dong");
                     extensionResult.setEntities(clearEntities);
                 }
